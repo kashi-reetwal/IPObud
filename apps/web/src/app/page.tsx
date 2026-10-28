@@ -14,11 +14,12 @@ import { AllotmentModal } from '../components/AllotmentModal';
 import { BidCalculatorModal } from '../components/BidCalculatorModal';
 import { MultiAccountManagerModal } from '../components/MultiAccountManagerModal';
 import { DossierProspectusModal } from '../components/DossierProspectusModal';
-import { TrendingUp, Layers, CheckCircle2 } from 'lucide-react';
+import { TrendingUp, Layers, CheckCircle2, ChevronDown } from 'lucide-react';
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeFilter, setActiveFilter] = useState('ALL');
+  const [marketTypeFilter, setMarketTypeFilter] = useState<'ALL' | 'MAINBOARD' | 'SME'>('ALL');
   const [activeTheme, setActiveTheme] = useState<'GROWW' | 'ANGEL_ONE'>('GROWW');
 
   // Active highlighted IPO for timeline and graph on page
@@ -42,13 +43,16 @@ export default function Home() {
 
       if (!matchesSearch) return false;
 
-      if (activeFilter === 'ALL') return true;
-      if (activeFilter === 'MAINBOARD' || activeFilter === 'SME') {
-        return ipo.marketType === activeFilter;
+      // Segment / Category filter: MAINBOARD or SME
+      if (marketTypeFilter !== 'ALL' && ipo.marketType !== marketTypeFilter) {
+        return false;
       }
+
+      // Status filter
+      if (activeFilter === 'ALL') return true;
       return ipo.status === activeFilter;
     });
-  }, [searchTerm, activeFilter]);
+  }, [searchTerm, activeFilter, marketTypeFilter]);
 
   // Key KPI stats
   const stats = useMemo(() => {
@@ -80,6 +84,8 @@ export default function Home() {
         setSearchTerm={setSearchTerm}
         activeFilter={activeFilter}
         setActiveFilter={setActiveFilter}
+        marketTypeFilter={marketTypeFilter}
+        setMarketTypeFilter={setMarketTypeFilter}
         activeTheme={activeTheme}
         setActiveTheme={setActiveTheme}
       />
@@ -164,22 +170,47 @@ export default function Home() {
 
         {/* 5. IPO Grid Cards */}
         <section className="space-y-3.5 pt-1">
-          <div className="flex items-center justify-between">
-            <h2 className="text-base font-bold text-[#0f172a] flex items-center space-x-2">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-[#f1f5f9] pb-3">
+            <div className="flex items-center space-x-2">
               <Layers className="h-4 w-4 text-[#00d09c]" />
-              <span>Current Public Issues ({filteredIpos.length})</span>
-            </h2>
-            <span className="text-xs text-[#64748b] font-medium">Live Market Feed</span>
+              <h2 className="text-base font-bold text-[#0f172a]">
+                All Public Issues & IPOs ({filteredIpos.length})
+              </h2>
+              {marketTypeFilter !== 'ALL' && (
+                <span className="rounded-full bg-[#e6faf5] border border-[#b3f0df] px-2.5 py-0.5 text-[11px] font-bold text-[#008767]">
+                  {marketTypeFilter === 'MAINBOARD' ? 'Mainboard' : 'SME'}
+                </span>
+              )}
+            </div>
+
+            {/* Segment Dropdown in the All IPOs Section */}
+            <div className="flex items-center space-x-2.5">
+              <span className="text-xs text-[#64748b] font-medium hidden sm:inline">Segment:</span>
+              <div className="relative">
+                <select
+                  value={marketTypeFilter}
+                  onChange={(e) => setMarketTypeFilter(e.target.value as 'ALL' | 'MAINBOARD' | 'SME')}
+                  className="rounded-xl border border-[#e2e8f0] bg-white pl-3 pr-8 py-1.5 text-xs font-bold text-[#0f172a] shadow-xs focus:border-[#00d09c] focus:outline-none cursor-pointer appearance-none"
+                >
+                  <option value="ALL">All IPOs (Mainboard & SME)</option>
+                  <option value="MAINBOARD">Mainboard Only</option>
+                  <option value="SME">SME Only</option>
+                </select>
+                <ChevronDown className="absolute right-2.5 top-2.5 h-3.5 w-3.5 text-[#64748b] pointer-events-none" />
+              </div>
+              <span className="text-xs text-[#94a3b8] font-medium hidden md:inline">• Live Feed</span>
+            </div>
           </div>
 
           {filteredIpos.length === 0 ? (
             <div className="rounded-2xl border border-[#e2e8f0] bg-white p-10 text-center text-xs text-[#64748b] shadow-xs">
-              No IPOs matched your selected search criteria.
+              No IPOs matched your selected search or segment criteria.
               <div className="mt-2">
                 <button
                   onClick={() => {
                     setSearchTerm('');
                     setActiveFilter('ALL');
+                    setMarketTypeFilter('ALL');
                   }}
                   className="font-bold text-[#008767] underline"
                 >

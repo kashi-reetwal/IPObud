@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { Search, ShieldCheck, Bell, TrendingUp, Users } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Search, ShieldCheck, Bell, TrendingUp, Users, ChevronDown, Check } from 'lucide-react';
 
 interface HeaderProps {
   onOpenAllotment: () => void;
@@ -10,6 +10,8 @@ interface HeaderProps {
   setSearchTerm: (val: string) => void;
   activeFilter: string;
   setActiveFilter: (val: string) => void;
+  marketTypeFilter?: 'ALL' | 'MAINBOARD' | 'SME';
+  setMarketTypeFilter?: (val: 'ALL' | 'MAINBOARD' | 'SME') => void;
   activeTheme?: 'GROWW' | 'ANGEL_ONE';
   setActiveTheme?: (theme: 'GROWW' | 'ANGEL_ONE') => void;
 }
@@ -21,10 +23,24 @@ export const Header: React.FC<HeaderProps> = ({
   setSearchTerm,
   activeFilter,
   setActiveFilter,
+  marketTypeFilter = 'ALL',
+  setMarketTypeFilter,
   activeTheme = 'GROWW',
   setActiveTheme,
 }) => {
   const isAngel = activeTheme === 'ANGEL_ONE';
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-[#e2e8f0] bg-white/95 backdrop-blur-md shadow-xs">
@@ -140,16 +156,98 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* Filter Tabs Bar (Groww clean pills) */}
+      {/* Filter Tabs Bar (Groww clean pills) with Segment Dropdown */}
       <div className="mx-auto flex max-w-7xl items-center space-x-2 px-4 py-2.5 sm:px-6 overflow-x-auto text-xs border-t border-[#f1f5f9]">
+        {/* All IPOs Dropdown Menu */}
+        <div className="relative inline-block text-left shrink-0" ref={dropdownRef}>
+          <button
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+            className={`flex items-center space-x-1.5 whitespace-nowrap rounded-lg px-3 py-1.5 font-medium transition-all ${
+              activeFilter === 'ALL'
+                ? isAngel
+                  ? 'bg-[#1849a9] text-white font-bold shadow-xs'
+                  : 'bg-[#00d09c] text-white font-bold shadow-xs'
+                : 'text-[#64748b] hover:text-[#0f172a] hover:bg-[#f1f5f9]'
+            }`}
+          >
+            <span>
+              {activeFilter === 'ALL' && marketTypeFilter === 'MAINBOARD'
+                ? 'Mainboard IPOs'
+                : activeFilter === 'ALL' && marketTypeFilter === 'SME'
+                ? 'SME IPOs'
+                : 'All IPOs'}
+            </span>
+            <ChevronDown
+              className={`h-3.5 w-3.5 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`}
+            />
+          </button>
+
+          {dropdownOpen && (
+            <div className="absolute left-0 mt-1.5 w-52 rounded-xl border border-[#e2e8f0] bg-white p-1.5 shadow-xl z-50 animate-in fade-in zoom-in-95">
+              <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#94a3b8]">
+                Segment Selection
+              </div>
+              <button
+                onClick={() => {
+                  setActiveFilter('ALL');
+                  setMarketTypeFilter?.('ALL');
+                  setDropdownOpen(false);
+                }}
+                className={`flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-xs font-semibold ${
+                  activeFilter === 'ALL' && marketTypeFilter === 'ALL'
+                    ? 'bg-[#e6faf5] text-[#008767]'
+                    : 'text-[#0f172a] hover:bg-[#f8fafc]'
+                }`}
+              >
+                <span>All (Mainboard & SME)</span>
+                {activeFilter === 'ALL' && marketTypeFilter === 'ALL' && (
+                  <Check className="h-3.5 w-3.5 text-[#008767]" />
+                )}
+              </button>
+              <button
+                onClick={() => {
+                  setActiveFilter('ALL');
+                  setMarketTypeFilter?.('MAINBOARD');
+                  setDropdownOpen(false);
+                }}
+                className={`flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-xs font-semibold ${
+                  activeFilter === 'ALL' && marketTypeFilter === 'MAINBOARD'
+                    ? 'bg-[#e6faf5] text-[#008767]'
+                    : 'text-[#0f172a] hover:bg-[#f8fafc]'
+                }`}
+              >
+                <span>Mainboard Only</span>
+                {activeFilter === 'ALL' && marketTypeFilter === 'MAINBOARD' && (
+                  <Check className="h-3.5 w-3.5 text-[#008767]" />
+                )}
+              </button>
+              <button
+                onClick={() => {
+                  setActiveFilter('ALL');
+                  setMarketTypeFilter?.('SME');
+                  setDropdownOpen(false);
+                }}
+                className={`flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-xs font-semibold ${
+                  activeFilter === 'ALL' && marketTypeFilter === 'SME'
+                    ? 'bg-[#e6faf5] text-[#008767]'
+                    : 'text-[#0f172a] hover:bg-[#f8fafc]'
+                }`}
+              >
+                <span>SME Only</span>
+                {activeFilter === 'ALL' && marketTypeFilter === 'SME' && (
+                  <Check className="h-3.5 w-3.5 text-[#008767]" />
+                )}
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Stage Filter Tabs */}
         {[
-          { id: 'ALL', label: 'All IPOs' },
           { id: 'ACTIVE', label: 'Open Now' },
           { id: 'UPCOMING', label: 'Upcoming' },
           { id: 'ALLOTTED', label: 'Allotment Out' },
           { id: 'LISTED', label: 'Recently Listed' },
-          { id: 'MAINBOARD', label: 'Mainboard' },
-          { id: 'SME', label: 'SME' },
         ].map((tab) => {
           const isActive = activeFilter === tab.id;
           return (
