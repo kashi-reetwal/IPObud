@@ -22,25 +22,24 @@
 ```
 myGithub/IPObud/
 ├── apps/
-│   └── web/                   # Next.js 14+ App Router, React, Tailwind CSS, Lucide, Recharts
-│       ├── public/            # Static assets, branding, broker logos
-│       ├── src/
-│       │   ├── app/           # Routes: /, /ipo/[slug], /allotment, /gmp-tracker, /watchlist
-│       │   ├── components/    # Glassmorphic UI components, IPO cards, Sparklines, AI modal
-│       │   ├── lib/           # Supabase client, Gemini API client, utils, formatters
-│       │   └── types/         # TypeScript interfaces for IPOs, GMP, and Subscriptions
-│       ├── package.json
-│       └── tailwind.config.ts
+│   ├── mobile/                # Android-First React Native & Expo Terminal
+│   │   ├── src/
+│   │   │   ├── screens/       # HomeScreen, GmpRadarScreen, AiInsightsScreen, AllotmentScreen, MyBidsScreen
+│   │   │   ├── components/    # IpoCard, TickerBar, AiAnalysisModal, BidCalculatorModal
+│   │   │   ├── types/         # TypeScript interfaces
+│   │   │   └── data/          # Seed IPO & GMP feeds
+│   │   ├── App.tsx            # AMOLED dark theme & bottom navigation
+│   │   └── app.json           # Android package: com.ipobud.terminal
+│   └── web/                   # Next.js 14+ App Router, React, Tailwind CSS
+│       ├── src/app/
+│       └── src/components/
 ├── services/
 │   └── scraper/               # Python 3.11+ crawler & data pipeline
 │       ├── crawlers/          # Scrapers for NSE/BSE feeds, Chittorgarh, InvestorGain
 │       ├── ai_analyzer/       # Gemini AI RHP parser and rating generator
-│       ├── config.py          # Crawler intervals and Supabase connection
-│       ├── main.py            # Entry point / scheduled crawler orchestrator
-│       └── requirements.txt
+│       └── main.py            # Entry point / scheduled crawler orchestrator
 ├── supabase/
 │   ├── migrations/            # SQL schemas, RLS policies, trigger functions
-│   │   └── 001_initial_schema.sql
 │   └── seed.sql               # Seed data for immediate local dev & demo
 ├── ARCHITECTURE.md            # This specification
 └── README.md                  # Project overview and quickstart

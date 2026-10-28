@@ -25,7 +25,8 @@
 ```
 myGithub/IPObud/
 ├── apps/
-│   └── web/                   # Next.js 14+ Frontend (High-tech Dark Financial Terminal)
+│   ├── mobile/                # Android-First React Native Expo Terminal (AMOLED Dark)
+│   └── web/                   # Next.js 14+ Web Terminal
 ├── services/
 │   └── scraper/               # Python Crawler for live IPO, GMP, and subscription feeds
 ├── supabase/
@@ -39,11 +40,12 @@ myGithub/IPObud/
 
 ## 🚀 Quickstart
 
-### 1. Database Setup (Supabase / PostgreSQL)
-Apply the initial schema:
+### 1. Run on Android Phone (Expo Go)
 ```bash
-# In supabase/migrations/
-psql -h <SUPABASE_HOST> -U postgres -d postgres -f supabase/migrations/001_initial_schema.sql
+cd apps/mobile
+npm install
+npx expo start
+# Scan the printed QR code with Expo Go on your Android device!
 ```
 
 ### 2. Run the Web Terminal
