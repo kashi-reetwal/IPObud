@@ -61,14 +61,8 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="text-xl font-bold tracking-tight text-[#0f172a]">
                 IPObud
               </span>
-              <span
-                className={`rounded-full px-2.5 py-0.5 text-[11px] font-semibold border ${
-                  isAngel
-                    ? 'bg-[#eff6ff] text-[#1849a9] border-[#bfdbfe]'
-                    : 'bg-[#e6faf5] text-[#008767] border-[#b3f0df]'
-                }`}
-              >
-                {isAngel ? 'Angel One Mode' : 'Groww Mode'}
+              <span className="rounded-full bg-[#e6faf5] text-[#008767] border border-[#b3f0df] px-2.5 py-0.5 text-[11px] font-semibold">
+                Live Terminal
               </span>
             </div>
             <p className="text-[12px] text-[#64748b] font-medium">
@@ -77,7 +71,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* Search, Allotment & Theme Switcher */}
+        {/* Search & Actions Bar */}
         <div className="flex items-center space-x-3">
           {/* Search Bar */}
           <div className="relative hidden md:block w-72">
@@ -91,44 +85,15 @@ export const Header: React.FC<HeaderProps> = ({
             />
           </div>
 
-          {/* Theme Quick Switcher */}
-          {setActiveTheme && (
-            <div className="hidden sm:flex items-center rounded-xl border border-[#e2e8f0] bg-[#f8fafc] p-0.5 text-[11px] font-semibold">
-              <button
-                onClick={() => setActiveTheme('GROWW')}
-                className={`px-2.5 py-1 rounded-lg transition-all ${
-                  !isAngel
-                    ? 'bg-[#00d09c] text-white shadow-xs font-bold'
-                    : 'text-[#64748b] hover:text-[#0f172a]'
-                }`}
-              >
-                Groww
-              </button>
-              <button
-                onClick={() => setActiveTheme('ANGEL_ONE')}
-                className={`px-2.5 py-1 rounded-lg transition-all ${
-                  isAngel
-                    ? 'bg-[#1849a9] text-white shadow-xs font-bold'
-                    : 'text-[#64748b] hover:text-[#0f172a]'
-                }`}
-              >
-                Angel One
-              </button>
-            </div>
-          )}
-
-          {/* Narada Multi-Account Family Manager */}
+          {/* Family Multi-Account Manager */}
           {onOpenMultiAccount && (
             <button
               onClick={onOpenMultiAccount}
               className="flex items-center space-x-1.5 rounded-xl border border-[#b3f0df] bg-[#e6faf5] hover:bg-[#cbf5eb] px-3.5 py-2 text-xs font-bold text-[#008767] transition-all shadow-xs"
-              title="Narada Multi-Account Family Allotment Engine"
+              title="Family Demat Multi-Account Allotment Engine"
             >
               <Users className="h-4 w-4 text-[#00d09c]" />
               <span className="hidden sm:inline">Family Accounts</span>
-              <span className="rounded-full bg-white px-1.5 py-0.2 text-[10px] font-extrabold text-[#008767] border border-[#b3f0df]">
-                Narada
-              </span>
             </button>
           )}
 
@@ -156,17 +121,16 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* Filter Tabs Bar (Groww clean pills) with Segment Dropdown */}
-      <div className="mx-auto flex max-w-7xl items-center space-x-2 px-4 py-2.5 sm:px-6 overflow-x-auto text-xs border-t border-[#f1f5f9]">
+      {/* Filter Tabs Bar with Unobstructed Segment Dropdown */}
+      <div className="mx-auto flex max-w-7xl items-center space-x-2 px-4 py-2 sm:px-6 text-xs border-t border-[#f1f5f9] overflow-visible">
         {/* All IPOs Dropdown Menu */}
         <div className="relative inline-block text-left shrink-0" ref={dropdownRef}>
           <button
+            type="button"
             onClick={() => setDropdownOpen(!dropdownOpen)}
             className={`flex items-center space-x-1.5 whitespace-nowrap rounded-lg px-3 py-1.5 font-medium transition-all ${
               activeFilter === 'ALL'
-                ? isAngel
-                  ? 'bg-[#1849a9] text-white font-bold shadow-xs'
-                  : 'bg-[#00d09c] text-white font-bold shadow-xs'
+                ? 'bg-[#00d09c] text-white font-bold shadow-xs'
                 : 'text-[#64748b] hover:text-[#0f172a] hover:bg-[#f1f5f9]'
             }`}
           >
@@ -178,64 +142,67 @@ export const Header: React.FC<HeaderProps> = ({
                 : 'All IPOs'}
             </span>
             <ChevronDown
-              className={`h-3.5 w-3.5 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`}
+              className={`h-3.5 w-3.5 transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`}
             />
           </button>
 
           {dropdownOpen && (
-            <div className="absolute left-0 mt-1.5 w-52 rounded-xl border border-[#e2e8f0] bg-white p-1.5 shadow-xl z-50 animate-in fade-in zoom-in-95">
+            <div className="absolute left-0 top-full mt-2 w-56 rounded-2xl border border-[#e2e8f0] bg-white p-2 shadow-2xl z-[100] ring-1 ring-slate-900/10 animate-in fade-in zoom-in-95">
               <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#94a3b8]">
                 Segment Selection
               </div>
               <button
+                type="button"
                 onClick={() => {
                   setActiveFilter('ALL');
                   setMarketTypeFilter?.('ALL');
                   setDropdownOpen(false);
                 }}
-                className={`flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-xs font-semibold ${
+                className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold transition-all ${
                   activeFilter === 'ALL' && marketTypeFilter === 'ALL'
-                    ? 'bg-[#e6faf5] text-[#008767]'
+                    ? 'bg-[#e6faf5] text-[#008767] font-bold'
                     : 'text-[#0f172a] hover:bg-[#f8fafc]'
                 }`}
               >
                 <span>All (Mainboard & SME)</span>
                 {activeFilter === 'ALL' && marketTypeFilter === 'ALL' && (
-                  <Check className="h-3.5 w-3.5 text-[#008767]" />
+                  <Check className="h-4 w-4 text-[#008767]" />
                 )}
               </button>
               <button
+                type="button"
                 onClick={() => {
                   setActiveFilter('ALL');
                   setMarketTypeFilter?.('MAINBOARD');
                   setDropdownOpen(false);
                 }}
-                className={`flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-xs font-semibold ${
+                className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold transition-all ${
                   activeFilter === 'ALL' && marketTypeFilter === 'MAINBOARD'
-                    ? 'bg-[#e6faf5] text-[#008767]'
+                    ? 'bg-[#e6faf5] text-[#008767] font-bold'
                     : 'text-[#0f172a] hover:bg-[#f8fafc]'
                 }`}
               >
                 <span>Mainboard Only</span>
                 {activeFilter === 'ALL' && marketTypeFilter === 'MAINBOARD' && (
-                  <Check className="h-3.5 w-3.5 text-[#008767]" />
+                  <Check className="h-4 w-4 text-[#008767]" />
                 )}
               </button>
               <button
+                type="button"
                 onClick={() => {
                   setActiveFilter('ALL');
                   setMarketTypeFilter?.('SME');
                   setDropdownOpen(false);
                 }}
-                className={`flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-xs font-semibold ${
+                className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold transition-all ${
                   activeFilter === 'ALL' && marketTypeFilter === 'SME'
-                    ? 'bg-[#e6faf5] text-[#008767]'
+                    ? 'bg-[#e6faf5] text-[#008767] font-bold'
                     : 'text-[#0f172a] hover:bg-[#f8fafc]'
                 }`}
               >
                 <span>SME Only</span>
                 {activeFilter === 'ALL' && marketTypeFilter === 'SME' && (
-                  <Check className="h-3.5 w-3.5 text-[#008767]" />
+                  <Check className="h-4 w-4 text-[#008767]" />
                 )}
               </button>
             </div>

@@ -48,7 +48,7 @@ export const DossierProspectusModal: React.FC<DossierProspectusModalProps> = ({
                   {ipo.symbol}
                 </span>
                 <span className="rounded-full bg-[#eff6ff] border border-[#bfdbfe] px-2 py-0.5 text-[10px] font-bold text-[#1849a9]">
-                  IPO Guru Dossier
+                  SEBI Filings & Balance Sheet
                 </span>
               </div>
               <p className="text-xs text-[#64748b]">

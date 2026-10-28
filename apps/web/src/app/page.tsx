@@ -67,11 +67,25 @@ export default function Home() {
     };
   }, []);
 
-  const isAngel = activeTheme === 'ANGEL_ONE';
+  // Split into categorized sections
+  const openIpos = useMemo(() => filteredIpos.filter((i) => i.status === 'ACTIVE'), [filteredIpos]);
+  const upcomingIpos = useMemo(() => filteredIpos.filter((i) => i.status === 'UPCOMING'), [filteredIpos]);
+  const closedOrAllottedIpos = useMemo(
+    () => filteredIpos.filter((i) => i.status === 'ALLOTTED' || i.status === 'CLOSED' || i.status === 'LISTED'),
+    [filteredIpos]
+  );
+
+  const handleCardTimelineClick = (target: IPO) => {
+    setFeaturedIpo(target);
+    const el = document.getElementById('issue-deep-dive');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-[#0f172a] flex flex-col font-sans">
-      {/* 1. Groww & Angel One Header */}
+      {/* 1. Header */}
       <Header
         onOpenAllotment={() => {
           setSelectedAllotmentIpo(null);
@@ -86,15 +100,13 @@ export default function Home() {
         setActiveFilter={setActiveFilter}
         marketTypeFilter={marketTypeFilter}
         setMarketTypeFilter={setMarketTypeFilter}
-        activeTheme={activeTheme}
-        setActiveTheme={setActiveTheme}
       />
 
       {/* 2. Market Trend Ticker */}
       <TickerBar ipos={mockIpos} />
 
       {/* 3. Main Dashboard */}
-      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 space-y-6">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 space-y-8">
         {/* Top Market Overview Summary */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-[#e2e8f0] pb-5">
           <div>
@@ -106,7 +118,7 @@ export default function Home() {
             </p>
           </div>
 
-          {/* KPI Stat Cards (Groww Style) */}
+          {/* KPI Stat Cards */}
           <div className="grid grid-cols-3 gap-3 shrink-0">
             <div className="rounded-xl border border-[#e2e8f0] bg-white p-3 shadow-xs">
               <span className="text-[11px] font-semibold text-[#64748b] block">Live Bidding</span>
@@ -123,8 +135,209 @@ export default function Home() {
           </div>
         </div>
 
-        {/* 4. Featured Issue Calendar & Trend Chart (Interactive Viewer) */}
-        <section className="rounded-2xl border border-[#e2e8f0] bg-white p-5 space-y-4 shadow-xs">
+        {/* Global Segment Selector Bar */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white p-4 rounded-2xl border border-[#e2e8f0] shadow-xs">
+          <div className="flex items-center space-x-2.5">
+            <Layers className="h-5 w-5 text-[#00d09c]" />
+            <div>
+              <h2 className="text-base font-bold text-[#0f172a] leading-tight">
+                {activeFilter === 'ALL'
+                  ? 'All IPO Issues'
+                  : activeFilter === 'ACTIVE'
+                  ? 'Open for Bidding'
+                  : activeFilter === 'UPCOMING'
+                  ? 'Upcoming IPOs'
+                  : activeFilter === 'ALLOTTED'
+                  ? 'Allotment Finalized'
+                  : 'Recently Listed'}
+              </h2>
+              <span className="text-xs text-[#64748b]">
+                Showing {filteredIpos.length} public {filteredIpos.length === 1 ? 'issue' : 'issues'} on NSE & BSE
+              </span>
+            </div>
+          </div>
+
+          {/* Segment Dropdown in Section */}
+          <div className="flex items-center space-x-2.5">
+            <span className="text-xs text-[#64748b] font-medium hidden sm:inline">Market Segment:</span>
+            <div className="relative">
+              <select
+                value={marketTypeFilter}
+                onChange={(e) => setMarketTypeFilter(e.target.value as 'ALL' | 'MAINBOARD' | 'SME')}
+                className="rounded-xl border border-[#e2e8f0] bg-[#f8fafc] hover:bg-white pl-3.5 pr-8 py-2 text-xs font-bold text-[#0f172a] shadow-xs focus:border-[#00d09c] focus:outline-none cursor-pointer appearance-none transition-all"
+              >
+                <option value="ALL">All Segments (Mainboard & SME)</option>
+                <option value="MAINBOARD">Mainboard Issues Only</option>
+                <option value="SME">SME Issues Only</option>
+              </select>
+              <ChevronDown className="absolute right-3 top-3 h-3.5 w-3.5 text-[#64748b] pointer-events-none" />
+            </div>
+          </div>
+        </div>
+
+        {/* CARDS FIRST: Categorized Sections */}
+        {filteredIpos.length === 0 ? (
+          <div className="rounded-2xl border border-[#e2e8f0] bg-white p-12 text-center text-sm text-[#64748b] shadow-xs">
+            <p className="font-semibold text-[#0f172a] text-base">No IPOs matched your search or segment filter.</p>
+            <p className="text-xs text-[#94a3b8] mt-1">Try resetting the search keyword or selecting All Segments.</p>
+            <div className="mt-4">
+              <button
+                onClick={() => {
+                  setSearchTerm('');
+                  setActiveFilter('ALL');
+                  setMarketTypeFilter('ALL');
+                }}
+                className="rounded-xl bg-[#00d09c] text-white px-4 py-2 font-bold text-xs shadow-xs hover:bg-[#00b887] transition-all"
+              >
+                Reset All Filters
+              </button>
+            </div>
+          </div>
+        ) : activeFilter === 'ALL' ? (
+          <div className="space-y-8">
+            {/* 1. Open for Bidding (Live Now) */}
+            {openIpos.length > 0 && (
+              <section className="space-y-3.5">
+                <div className="flex items-center justify-between border-b border-[#e2e8f0] pb-2.5">
+                  <div className="flex items-center space-x-2">
+                    <span className="flex h-2.5 w-2.5 rounded-full bg-[#00d09c] animate-pulse" />
+                    <h3 className="text-lg font-bold text-[#0f172a]">
+                      Open for Bidding (Live Now)
+                    </h3>
+                    <span className="rounded-full bg-[#e6faf5] border border-[#b3f0df] px-2.5 py-0.5 text-xs font-bold text-[#008767]">
+                      {openIpos.length}
+                    </span>
+                  </div>
+                  <span className="text-xs font-semibold text-[#008767]">Bidding Window Active</span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {openIpos.map((ipo) => (
+                    <IpoCard
+                      key={ipo.id}
+                      ipo={ipo}
+                      onOpenDetails={handleCardTimelineClick}
+                      onOpenAiModal={(target) => setSelectedAiIpo(target)}
+                      onOpenBidCalc={(target) => setSelectedBidIpo(target)}
+                      onOpenAllotment={(target) => {
+                        setSelectedAllotmentIpo(target);
+                        setAllotmentModalOpen(true);
+                      }}
+                      onOpenDossier={(target) => setSelectedDossierIpo(target)}
+                      onOpenFamilyAllotment={(target) => {
+                        setSelectedAllotmentIpo(target);
+                        setMultiAccountModalOpen(true);
+                      }}
+                    />
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* 2. Upcoming Issues */}
+            {upcomingIpos.length > 0 && (
+              <section className="space-y-3.5">
+                <div className="flex items-center justify-between border-b border-[#e2e8f0] pb-2.5">
+                  <div className="flex items-center space-x-2">
+                    <span className="flex h-2.5 w-2.5 rounded-full bg-[#1849a9]" />
+                    <h3 className="text-lg font-bold text-[#0f172a]">
+                      Upcoming Public Issues
+                    </h3>
+                    <span className="rounded-full bg-[#eff6ff] border border-[#bfdbfe] px-2.5 py-0.5 text-xs font-bold text-[#1849a9]">
+                      {upcomingIpos.length}
+                    </span>
+                  </div>
+                  <span className="text-xs font-medium text-[#64748b]">Opening Soon</span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {upcomingIpos.map((ipo) => (
+                    <IpoCard
+                      key={ipo.id}
+                      ipo={ipo}
+                      onOpenDetails={handleCardTimelineClick}
+                      onOpenAiModal={(target) => setSelectedAiIpo(target)}
+                      onOpenBidCalc={(target) => setSelectedBidIpo(target)}
+                      onOpenAllotment={(target) => {
+                        setSelectedAllotmentIpo(target);
+                        setAllotmentModalOpen(true);
+                      }}
+                      onOpenDossier={(target) => setSelectedDossierIpo(target)}
+                      onOpenFamilyAllotment={(target) => {
+                        setSelectedAllotmentIpo(target);
+                        setMultiAccountModalOpen(true);
+                      }}
+                    />
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* 3. Closed & Allotment Out / Listed */}
+            {closedOrAllottedIpos.length > 0 && (
+              <section className="space-y-3.5">
+                <div className="flex items-center justify-between border-b border-[#e2e8f0] pb-2.5">
+                  <div className="flex items-center space-x-2">
+                    <CheckCircle2 className="h-4 w-4 text-[#475569]" />
+                    <h3 className="text-lg font-bold text-[#0f172a]">
+                      Closed & Allotment Out / Listed
+                    </h3>
+                    <span className="rounded-full bg-[#f1f5f9] border border-[#e2e8f0] px-2.5 py-0.5 text-xs font-bold text-[#475569]">
+                      {closedOrAllottedIpos.length}
+                    </span>
+                  </div>
+                  <span className="text-xs font-medium text-[#64748b]">Check Allotment & Past Gains</span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {closedOrAllottedIpos.map((ipo) => (
+                    <IpoCard
+                      key={ipo.id}
+                      ipo={ipo}
+                      onOpenDetails={handleCardTimelineClick}
+                      onOpenAiModal={(target) => setSelectedAiIpo(target)}
+                      onOpenBidCalc={(target) => setSelectedBidIpo(target)}
+                      onOpenAllotment={(target) => {
+                        setSelectedAllotmentIpo(target);
+                        setAllotmentModalOpen(true);
+                      }}
+                      onOpenDossier={(target) => setSelectedDossierIpo(target)}
+                      onOpenFamilyAllotment={(target) => {
+                        setSelectedAllotmentIpo(target);
+                        setMultiAccountModalOpen(true);
+                      }}
+                    />
+                  ))}
+                </div>
+              </section>
+            )}
+          </div>
+        ) : (
+          /* Filtered view for single status tab (Open Now, Upcoming, etc.) */
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {filteredIpos.map((ipo) => (
+              <IpoCard
+                key={ipo.id}
+                ipo={ipo}
+                onOpenDetails={handleCardTimelineClick}
+                onOpenAiModal={(target) => setSelectedAiIpo(target)}
+                onOpenBidCalc={(target) => setSelectedBidIpo(target)}
+                onOpenAllotment={(target) => {
+                  setSelectedAllotmentIpo(target);
+                  setAllotmentModalOpen(true);
+                }}
+                onOpenDossier={(target) => setSelectedDossierIpo(target)}
+                onOpenFamilyAllotment={(target) => {
+                  setSelectedAllotmentIpo(target);
+                  setMultiAccountModalOpen(true);
+                }}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* 4. Issue Deep Dive & Settlement Schedule (Placed BELOW Cards) */}
+        <section id="issue-deep-dive" className="rounded-2xl border border-[#e2e8f0] bg-white p-5 space-y-4 shadow-xs scroll-mt-24">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-[#f1f5f9] pb-3.5">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-[#008767]">
@@ -144,9 +357,7 @@ export default function Home() {
                   onClick={() => setFeaturedIpo(ipo)}
                   className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition-all ${
                     featuredIpo.id === ipo.id
-                      ? isAngel
-                        ? 'bg-[#1849a9] text-white shadow-xs font-bold'
-                        : 'bg-[#00d09c] text-white shadow-xs font-bold'
+                      ? 'bg-[#00d09c] text-white shadow-xs font-bold'
                       : 'text-[#64748b] hover:text-[#0f172a] bg-[#f8fafc] border border-[#e2e8f0]'
                   }`}
                 >
@@ -167,86 +378,9 @@ export default function Home() {
             pastResults={featuredIpo.pastResults}
           />
         </section>
-
-        {/* 5. IPO Grid Cards */}
-        <section className="space-y-3.5 pt-1">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-[#f1f5f9] pb-3">
-            <div className="flex items-center space-x-2">
-              <Layers className="h-4 w-4 text-[#00d09c]" />
-              <h2 className="text-base font-bold text-[#0f172a]">
-                All Public Issues & IPOs ({filteredIpos.length})
-              </h2>
-              {marketTypeFilter !== 'ALL' && (
-                <span className="rounded-full bg-[#e6faf5] border border-[#b3f0df] px-2.5 py-0.5 text-[11px] font-bold text-[#008767]">
-                  {marketTypeFilter === 'MAINBOARD' ? 'Mainboard' : 'SME'}
-                </span>
-              )}
-            </div>
-
-            {/* Segment Dropdown in the All IPOs Section */}
-            <div className="flex items-center space-x-2.5">
-              <span className="text-xs text-[#64748b] font-medium hidden sm:inline">Segment:</span>
-              <div className="relative">
-                <select
-                  value={marketTypeFilter}
-                  onChange={(e) => setMarketTypeFilter(e.target.value as 'ALL' | 'MAINBOARD' | 'SME')}
-                  className="rounded-xl border border-[#e2e8f0] bg-white pl-3 pr-8 py-1.5 text-xs font-bold text-[#0f172a] shadow-xs focus:border-[#00d09c] focus:outline-none cursor-pointer appearance-none"
-                >
-                  <option value="ALL">All IPOs (Mainboard & SME)</option>
-                  <option value="MAINBOARD">Mainboard Only</option>
-                  <option value="SME">SME Only</option>
-                </select>
-                <ChevronDown className="absolute right-2.5 top-2.5 h-3.5 w-3.5 text-[#64748b] pointer-events-none" />
-              </div>
-              <span className="text-xs text-[#94a3b8] font-medium hidden md:inline">• Live Feed</span>
-            </div>
-          </div>
-
-          {filteredIpos.length === 0 ? (
-            <div className="rounded-2xl border border-[#e2e8f0] bg-white p-10 text-center text-xs text-[#64748b] shadow-xs">
-              No IPOs matched your selected search or segment criteria.
-              <div className="mt-2">
-                <button
-                  onClick={() => {
-                    setSearchTerm('');
-                    setActiveFilter('ALL');
-                    setMarketTypeFilter('ALL');
-                  }}
-                  className="font-bold text-[#008767] underline"
-                >
-                  Reset All Filters
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {filteredIpos.map((ipo) => (
-                <IpoCard
-                  key={ipo.id}
-                  ipo={ipo}
-                  onOpenDetails={(target) => {
-                    setFeaturedIpo(target);
-                    setSelectedTimelineIpo(target);
-                  }}
-                  onOpenAiModal={(target) => setSelectedAiIpo(target)}
-                  onOpenBidCalc={(target) => setSelectedBidIpo(target)}
-                  onOpenAllotment={(target) => {
-                    setSelectedAllotmentIpo(target);
-                    setAllotmentModalOpen(true);
-                  }}
-                  onOpenDossier={(target) => setSelectedDossierIpo(target)}
-                  onOpenFamilyAllotment={(target) => {
-                    setSelectedAllotmentIpo(target);
-                    setMultiAccountModalOpen(true);
-                  }}
-                />
-              ))}
-            </div>
-          )}
-        </section>
       </main>
 
-      {/* 6. Groww Style Footer */}
+      {/* 5. Clean Institutional Footer */}
       <footer className="border-t border-[#e2e8f0] bg-white py-6 text-center text-xs text-[#64748b]">
         <p className="font-semibold text-[#0f172a]">
           IPObud • Built for Indian Stock Market Investors & Traders
@@ -256,7 +390,7 @@ export default function Home() {
         </p>
       </footer>
 
-      {/* 7. Modals */}
+      {/* 6. Modals */}
       <TimelineModal
         ipo={selectedTimelineIpo}
         onClose={() => setSelectedTimelineIpo(null)}

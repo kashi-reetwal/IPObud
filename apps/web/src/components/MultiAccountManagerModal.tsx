@@ -160,7 +160,7 @@ export const MultiAccountManagerModal: React.FC<MultiAccountManagerModalProps> =
                   Multi-Account Allotment Engine
                 </h2>
                 <span className="rounded-full bg-[#e6faf5] border border-[#b3f0df] px-2 py-0.5 text-[10px] font-bold text-[#008767]">
-                  Narada Feature
+                  Family Portfolio
                 </span>
               </div>
               <p className="text-xs text-[#64748b]">
@@ -424,7 +424,7 @@ export const MultiAccountManagerModal: React.FC<MultiAccountManagerModalProps> =
 
         {/* Footer */}
         <div className="mt-5 pt-3.5 border-t border-[#f1f5f9] flex items-center justify-between text-xs text-[#64748b]">
-          <span>Narada Engine • Zero PAN Data Leaves Your Device</span>
+          <span>Private & Secure • Zero PAN Data Leaves Your Device</span>
           <button
             onClick={onClose}
             className="rounded-xl bg-[#00d09c] hover:bg-[#00b887] px-4 py-2 font-bold text-white shadow-xs transition-colors"
