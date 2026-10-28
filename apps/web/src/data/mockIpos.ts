@@ -14,21 +14,28 @@ export const mockIpos: IPO[] = [
     issueSizeCr: 11327.43,
     freshIssueCr: 4499.00,
     ofsCr: 6828.43,
-    openDate: '06 Nov 2024',
-    closeDate: '08 Nov 2024',
-    allotmentDate: '11 Nov 2024',
-    listingDate: '13 Nov 2024',
     registrarName: 'Link Intime India Pvt Ltd',
     registrarUrl: 'https://linkintime.co.in/initial_offer/public-issues.html',
     currentGmp: 32,
     estimatedListingPrice: 422,
     gainPercentage: 8.21,
+    timeline: {
+      biddingOpen: '06 Nov 2024',
+      biddingClose: '08 Nov 2024',
+      allotmentFinalization: '11 Nov 2024',
+      refundsInitiation: '12 Nov 2024',
+      dematTransfer: '12 Nov 2024',
+      listingOnExchange: '13 Nov 2024',
+      currentStage: 'BIDDING_OPEN',
+    },
     gmpHistory: [
-      { date: '03 Nov', gmp: 12, gainPercent: 3.08 },
-      { date: '04 Nov', gmp: 18, gainPercent: 4.62 },
-      { date: '05 Nov', gmp: 22, gainPercent: 5.64 },
-      { date: '06 Nov', gmp: 25, gainPercent: 6.41 },
-      { date: '07 Nov', gmp: 32, gainPercent: 8.21 },
+      { date: '02 Nov', gmp: 10, gainPercent: 2.56, estListingPrice: 400 },
+      { date: '03 Nov', gmp: 14, gainPercent: 3.59, estListingPrice: 404 },
+      { date: '04 Nov', gmp: 18, gainPercent: 4.62, estListingPrice: 408 },
+      { date: '05 Nov', gmp: 22, gainPercent: 5.64, estListingPrice: 412 },
+      { date: '06 Nov', gmp: 25, gainPercent: 6.41, estListingPrice: 415 },
+      { date: '07 Nov', gmp: 30, gainPercent: 7.69, estListingPrice: 420 },
+      { date: '08 Nov', gmp: 32, gainPercent: 8.21, estListingPrice: 422 },
     ],
     subscription: {
       day: 2,
@@ -43,21 +50,21 @@ export const mockIpos: IPO[] = [
       riskScore: 64,
       peRatio: undefined,
       industryPe: 98.4,
-      summary: 'High brand moat in quick commerce & delivery with narrowing contribution losses, yet facing stiff competition from Zomato and Zepto with negative bottom-line earnings.',
+      summary: 'High brand moat in quick commerce and food delivery with narrowing contribution losses, yet facing intense competition from Zomato and Zepto with negative bottom-line earnings.',
       strengths: [
-        'Instamart GOV expanding at 58% CAGR with strong dark store density',
-        'Duopoly market presence with loyal high-AOV urban user base',
-        'Substantial net cash balance runway post primary capital raise'
+        'Instamart gross order value expanding at 58% compound annual growth rate',
+        'Duopoly market presence with substantial urban customer density',
+        'Adequate post-issue liquidity buffer for dark-store network buildout'
       ],
       risks: [
-        'Negative PAT and high cash burn in the 10-minute grocery delivery race',
-        'Significant OFS component (₹6,828 Cr) by early venture investors',
-        'Intense wage inflation and gig-worker attrition pressures'
+        'Operating losses and negative return on equity in 10-minute delivery segment',
+        'Significant secondary OFS component of INR 6,828 Cr by venture funds',
+        'Ongoing cost pressures in delivery partner retention and customer acquisition'
       ],
       financials: {
-        revenue: '₹11,247 Cr (FY24)',
-        pat: '-₹2,350 Cr (FY24)',
-        growth: '+36% YoY GOV',
+        revenue: 'INR 11,247 Cr (FY24)',
+        pat: '-INR 2,350 Cr (FY24)',
+        growth: '+36% YoY Order Value',
         debtToEquity: '0.08x'
       }
     }
@@ -75,21 +82,35 @@ export const mockIpos: IPO[] = [
     issueSizeCr: 4321.44,
     freshIssueCr: 3600.00,
     ofsCr: 721.44,
-    openDate: '21 Oct 2024',
-    closeDate: '23 Oct 2024',
-    allotmentDate: '24 Oct 2024',
-    listingDate: '28 Oct 2024',
     registrarName: 'Link Intime India Pvt Ltd',
     registrarUrl: 'https://linkintime.co.in/initial_offer/public-issues.html',
     currentGmp: 1520,
     estimatedListingPrice: 3023,
     gainPercentage: 101.13,
+    timeline: {
+      biddingOpen: '21 Oct 2024',
+      biddingClose: '23 Oct 2024',
+      allotmentFinalization: '24 Oct 2024',
+      refundsInitiation: '25 Oct 2024',
+      dematTransfer: '25 Oct 2024',
+      listingOnExchange: '28 Oct 2024',
+      currentStage: 'ALLOTMENT_OUT',
+    },
+    pastResults: {
+      issuePrice: 1503,
+      listingPrice: 2550,
+      listingGainPercent: 69.66,
+      listingDayClose: 2341,
+      allotmentRatioRetail: '1 out of 10 applicants',
+    },
     gmpHistory: [
-      { date: '19 Oct', gmp: 1100, gainPercent: 73.18 },
-      { date: '21 Oct', gmp: 1250, gainPercent: 83.17 },
-      { date: '22 Oct', gmp: 1380, gainPercent: 91.82 },
-      { date: '23 Oct', gmp: 1475, gainPercent: 98.14 },
-      { date: '24 Oct', gmp: 1520, gainPercent: 101.13 },
+      { date: '18 Oct', gmp: 950, gainPercent: 63.21, estListingPrice: 2453 },
+      { date: '19 Oct', gmp: 1100, gainPercent: 73.18, estListingPrice: 2603 },
+      { date: '20 Oct', gmp: 1200, gainPercent: 79.84, estListingPrice: 2703 },
+      { date: '21 Oct', gmp: 1280, gainPercent: 85.16, estListingPrice: 2783 },
+      { date: '22 Oct', gmp: 1390, gainPercent: 92.48, estListingPrice: 2893 },
+      { date: '23 Oct', gmp: 1475, gainPercent: 98.14, estListingPrice: 2978 },
+      { date: '24 Oct', gmp: 1520, gainPercent: 101.13, estListingPrice: 3023 },
     ],
     subscription: {
       day: 3,
@@ -104,20 +125,20 @@ export const mockIpos: IPO[] = [
       riskScore: 22,
       peRatio: 33.2,
       industryPe: 58.7,
-      summary: 'India’s largest solar PV module maker with phenomenal order visibility, superior return on equity, and reasonable valuation compared to Premier Energies.',
+      summary: 'Market-leading solar photovoltaic module producer in India with multi-year order backlog visibility, strong operating margins, and defensive balance sheet positioning.',
       strengths: [
-        '#1 Solar module manufacturer in India with 12 GW operational capacity',
-        'Massive order book of 16.6 GW providing 2-3 years revenue visibility',
-        'Surging 110% YoY PAT with industry-leading EBITDA margins (15.6%)'
+        'Largest solar module manufacturing capacity in India at 12 GW scale',
+        'Export and domestic order book of 16.6 GW providing revenue predictability',
+        '110% YoY growth in net profit after tax with 15.6% EBITDA margin'
       ],
       risks: [
-        'Reliance on imported raw material wafers and silicon ingots',
-        'Policy shifts in US/EU tariffs on solar module exports'
+        'Reliance on imported upstream raw components including polysilicon wafers',
+        'Potential policy and tariff changes in export markets including the United States'
       ],
       financials: {
-        revenue: '₹11,397 Cr (FY24)',
-        pat: '₹1,274 Cr (FY24)',
-        growth: '+69% YoY Revenue',
+        revenue: 'INR 11,397 Cr (FY24)',
+        pat: 'INR 1,274 Cr (FY24)',
+        growth: '+69% YoY Topline',
         debtToEquity: '0.12x'
       }
     }
@@ -135,20 +156,25 @@ export const mockIpos: IPO[] = [
     issueSizeCr: 10000.00,
     freshIssueCr: 10000.00,
     ofsCr: 0.00,
-    openDate: '19 Nov 2024',
-    closeDate: '22 Nov 2024',
-    allotmentDate: '25 Nov 2024',
-    listingDate: '27 Nov 2024',
     registrarName: 'KFin Technologies Limited',
     registrarUrl: 'https://kosmic.kfintech.com/ipostatus/',
     currentGmp: 21,
     estimatedListingPrice: 129,
     gainPercentage: 19.44,
+    timeline: {
+      biddingOpen: '19 Nov 2024',
+      biddingClose: '22 Nov 2024',
+      allotmentFinalization: '25 Nov 2024',
+      refundsInitiation: '26 Nov 2024',
+      dematTransfer: '26 Nov 2024',
+      listingOnExchange: '27 Nov 2024',
+      currentStage: 'UPCOMING',
+    },
     gmpHistory: [
-      { date: '12 Nov', gmp: 12, gainPercent: 11.11 },
-      { date: '14 Nov', gmp: 15, gainPercent: 13.89 },
-      { date: '16 Nov', gmp: 18, gainPercent: 16.67 },
-      { date: '18 Nov', gmp: 21, gainPercent: 19.44 },
+      { date: '12 Nov', gmp: 10, gainPercent: 9.26, estListingPrice: 118 },
+      { date: '14 Nov', gmp: 14, gainPercent: 12.96, estListingPrice: 122 },
+      { date: '16 Nov', gmp: 18, gainPercent: 16.67, estListingPrice: 126 },
+      { date: '18 Nov', gmp: 21, gainPercent: 19.44, estListingPrice: 129 },
     ],
     subscription: {
       day: 0,
@@ -156,27 +182,27 @@ export const mockIpos: IPO[] = [
       nii: 0.00,
       retail: 0.00,
       total: 0.00,
-      updatedAt: 'Bidding opens soon',
+      updatedAt: 'Bidding opens 19 Nov',
     },
     aiAnalysis: {
       verdict: 'APPLY',
       riskScore: 35,
       peRatio: 52.4,
       industryPe: 46.8,
-      summary: 'Backed by Maharatna parent NTPC with a pristine balance sheet and 100% fresh issue proceeds earmarked for debt prepayment and solar/wind asset additions.',
+      summary: 'Wholly owned green energy arm of Maharatna NTPC. Entire INR 10,000 Cr is primary issue with zero promoter dilution, structured for solar and wind asset creation and debt deleveraging.',
       strengths: [
-        'Backed by NTPC with tier-1 access to sovereign-grade power PPAs',
-        '100% Fresh Issue — Zero promoter OFS dumping',
-        'Targeting 60 GW renewable capacity by 2032'
+        'Backed by sovereign utility parentage with direct power purchase agreements',
+        '100% fresh issue proceeds with proceeds utilized for long-term capacity buildout',
+        'Pipeline target of 60 GW operational clean energy by calendar 2032'
       ],
       risks: [
-        'Higher capital expenditure gestation period',
-        'Execution delays in state-level power evacuation transmission grids'
+        'Higher capital expenditure gestation period in transmission link connectivity',
+        'Exposure to state distribution company payment cycle variations'
       ],
       financials: {
-        revenue: '₹1,962 Cr (FY24)',
-        pat: '₹344 Cr (FY24)',
-        growth: '+109% YoY Renewable Output',
+        revenue: 'INR 1,962 Cr (FY24)',
+        pat: 'INR 344 Cr (FY24)',
+        growth: '+109% Renewable Output',
         debtToEquity: '0.45x'
       }
     }
@@ -194,21 +220,34 @@ export const mockIpos: IPO[] = [
     issueSizeCr: 27870.16,
     freshIssueCr: 0.00,
     ofsCr: 27870.16,
-    openDate: '15 Oct 2024',
-    closeDate: '17 Oct 2024',
-    allotmentDate: '18 Oct 2024',
-    listingDate: '22 Oct 2024',
     registrarName: 'KFin Technologies Limited',
     registrarUrl: 'https://kosmic.kfintech.com/ipostatus/',
     currentGmp: -15,
     estimatedListingPrice: 1945,
     gainPercentage: -0.77,
+    timeline: {
+      biddingOpen: '15 Oct 2024',
+      biddingClose: '17 Oct 2024',
+      allotmentFinalization: '18 Oct 2024',
+      refundsInitiation: '21 Oct 2024',
+      dematTransfer: '21 Oct 2024',
+      listingOnExchange: '22 Oct 2024',
+      currentStage: 'LISTED',
+    },
+    pastResults: {
+      issuePrice: 1960,
+      listingPrice: 1934,
+      listingGainPercent: -1.32,
+      listingDayClose: 1819,
+      allotmentRatioRetail: 'Full allotment (0.50x subscribed)',
+    },
     gmpHistory: [
-      { date: '12 Oct', gmp: 60, gainPercent: 3.06 },
-      { date: '14 Oct', gmp: 35, gainPercent: 1.78 },
-      { date: '16 Oct', gmp: 10, gainPercent: 0.51 },
-      { date: '18 Oct', gmp: -10, gainPercent: -0.51 },
-      { date: '21 Oct', gmp: -15, gainPercent: -0.77 },
+      { date: '10 Oct', gmp: 120, gainPercent: 6.12, estListingPrice: 2080 },
+      { date: '12 Oct', gmp: 65, gainPercent: 3.32, estListingPrice: 2025 },
+      { date: '14 Oct', gmp: 35, gainPercent: 1.78, estListingPrice: 1995 },
+      { date: '16 Oct', gmp: 10, gainPercent: 0.51, estListingPrice: 1970 },
+      { date: '18 Oct', gmp: -5, gainPercent: -0.26, estListingPrice: 1955 },
+      { date: '21 Oct', gmp: -15, gainPercent: -0.77, estListingPrice: 1945 },
     ],
     subscription: {
       day: 3,
@@ -216,27 +255,27 @@ export const mockIpos: IPO[] = [
       nii: 0.60,
       retail: 0.50,
       total: 2.37,
-      updatedAt: 'Closed & Listed',
+      updatedAt: 'Listing Complete',
     },
     aiAnalysis: {
       verdict: 'AVOID',
       riskScore: 78,
       peRatio: 26.3,
       industryPe: 23.5,
-      summary: 'Mega ₹27,870 Cr 100% OFS issue with zero money coming into the Indian operating entity, combined with sluggish auto demand and heavy royalty outflow to Korean parent.',
+      summary: '100% secondary offer-for-sale of INR 27,870 Cr with zero fresh capital inflow into the Indian entity, priced at parity with market leader Maruti Suzuki amid cyclical moderation in passenger vehicle demand.',
       strengths: [
-        'Second-largest passenger vehicle maker in India with Creta/Venue dominance',
-        'Strong rural distribution and EV expansion pipeline via Talegaon plant'
+        'Second-ranked passenger car manufacturer in India with robust SUV market share',
+        'Export infrastructure and planned electric vehicle platform rollouts'
       ],
       risks: [
-        '100% OFS — Zero fresh funds injected into Indian company',
-        'Retail quota remained undersubscribed (0.50x), reflecting muted interest',
-        'Higher royalty payout (3.5%) to South Korean parent entity'
+        'Entire issue proceeds repatriated to Korean parent with zero capital addition to balance sheet',
+        'Retail tranche remained undersubscribed at 0.50x',
+        'Ongoing royalty commitments to overseas parent at 3.5% of revenue'
       ],
       financials: {
-        revenue: '₹69,829 Cr (FY24)',
-        pat: '₹6,060 Cr (FY24)',
-        growth: '+15.8% YoY PAT',
+        revenue: 'INR 69,829 Cr (FY24)',
+        pat: 'INR 6,060 Cr (FY24)',
+        growth: '+15.8% YoY Net Profit',
         debtToEquity: '0.04x'
       }
     }
@@ -254,20 +293,26 @@ export const mockIpos: IPO[] = [
     issueSizeCr: 25.54,
     freshIssueCr: 25.54,
     ofsCr: 0.00,
-    openDate: '27 Nov 2024',
-    closeDate: '29 Nov 2024',
-    allotmentDate: '02 Dec 2024',
-    listingDate: '04 Dec 2024',
     registrarName: 'Bigshare Services Pvt Ltd',
     registrarUrl: 'https://www.bigshareonline.com/ipo_Allotment.html',
     currentGmp: 45,
     estimatedListingPrice: 118,
     gainPercentage: 61.64,
+    timeline: {
+      biddingOpen: '27 Nov 2024',
+      biddingClose: '29 Nov 2024',
+      allotmentFinalization: '02 Dec 2024',
+      refundsInitiation: '03 Dec 2024',
+      dematTransfer: '03 Dec 2024',
+      listingOnExchange: '04 Dec 2024',
+      currentStage: 'BIDDING_OPEN',
+    },
     gmpHistory: [
-      { date: '24 Nov', gmp: 25, gainPercent: 34.25 },
-      { date: '25 Nov', gmp: 35, gainPercent: 47.95 },
-      { date: '26 Nov', gmp: 40, gainPercent: 54.79 },
-      { date: '27 Nov', gmp: 45, gainPercent: 61.64 },
+      { date: '22 Nov', gmp: 18, gainPercent: 24.66, estListingPrice: 91 },
+      { date: '24 Nov', gmp: 25, gainPercent: 34.25, estListingPrice: 98 },
+      { date: '25 Nov', gmp: 35, gainPercent: 47.95, estListingPrice: 108 },
+      { date: '26 Nov', gmp: 40, gainPercent: 54.79, estListingPrice: 113 },
+      { date: '27 Nov', gmp: 45, gainPercent: 61.64, estListingPrice: 118 },
     ],
     subscription: {
       day: 2,
@@ -282,20 +327,20 @@ export const mockIpos: IPO[] = [
       riskScore: 32,
       peRatio: 18.4,
       industryPe: 34.5,
-      summary: 'Fast-growing water & effluent treatment plant engineering firm serving heavy industrial sectors. High SME return on capital with strong listing premium appetite.',
+      summary: 'Industrial water treatment and recycling plant engineering business exhibiting high return on capital employed and strong bid demand in SME segment.',
       strengths: [
-        'Consistent 42% CAGR revenue growth in specialized water recycling systems',
-        'Reasonable valuation at 18.4x P/E with clean debt profile',
-        'Strong SME listing demand with GMP above 60%'
+        '42% CAGR in wastewater zero-liquid discharge system deliveries',
+        'Valuation discount of 18.4x P/E relative to specialty engineering peers',
+        'Substantial retail and non-institutional subscription demand'
       ],
       risks: [
-        'SME lot size liquidity constraints (₹1,16,800 minimum investment)',
-        'Working capital heavy with milestone-based payment cycles'
+        'SME liquidity constraints with higher minimum ticket size requirement (INR 1,16,800)',
+        'Working capital intensive execution cycles tied to client site handovers'
       ],
       financials: {
-        revenue: '₹56.8 Cr (FY24)',
-        pat: '₹6.2 Cr (FY24)',
-        growth: '+44% YoY PAT',
+        revenue: 'INR 56.8 Cr (FY24)',
+        pat: 'INR 6.2 Cr (FY24)',
+        growth: '+44% YoY Net Profit',
         debtToEquity: '0.22x'
       }
     }

@@ -8,6 +8,7 @@ interface IpoCardProps {
   onOpenAi: (ipo: IPO) => void;
   onOpenCalc: (ipo: IPO) => void;
   onOpenAllotment: (ipo: IPO) => void;
+  onOpenTimeline?: (ipo: IPO) => void;
 }
 
 export const IpoCard: React.FC<IpoCardProps> = ({
@@ -15,6 +16,7 @@ export const IpoCard: React.FC<IpoCardProps> = ({
   onOpenAi,
   onOpenCalc,
   onOpenAllotment,
+  onOpenTimeline,
 }) => {
   const isPositive = ipo.gainPercentage >= 0;
   const isMainboard = ipo.marketType === 'MAINBOARD';
@@ -25,13 +27,13 @@ export const IpoCard: React.FC<IpoCardProps> = ({
       case 'STRONG_APPLY':
         return '#10b981';
       case 'APPLY':
-        return '#06b6d4';
+        return '#d4d4d8';
       case 'LISTING_GAINS_ONLY':
         return '#f59e0b';
       case 'AVOID':
         return '#f43f5e';
       default:
-        return '#94a3b8';
+        return '#71717a';
     }
   };
 
@@ -44,43 +46,11 @@ export const IpoCard: React.FC<IpoCardProps> = ({
         <View style={styles.titleArea}>
           <View style={styles.badgeRow}>
             <Text style={styles.symbol}>{ipo.symbol}</Text>
-            <View
-              style={[
-                styles.typePill,
-                isMainboard ? styles.mainboardPill : styles.smePill,
-              ]}
-            >
-              <Text
-                style={[
-                  styles.typeText,
-                  isMainboard ? styles.mainboardText : styles.smeText,
-                ]}
-              >
-                {ipo.marketType}
-              </Text>
+            <View style={styles.typePill}>
+              <Text style={styles.typeText}>{ipo.marketType}</Text>
             </View>
-            <View
-              style={[
-                styles.statusPill,
-                ipo.status === 'ACTIVE'
-                  ? styles.activePill
-                  : ipo.status === 'ALLOTTED'
-                  ? styles.allottedPill
-                  : styles.upcomingPill,
-              ]}
-            >
-              <Text
-                style={[
-                  styles.statusText,
-                  ipo.status === 'ACTIVE'
-                    ? styles.activeText
-                    : ipo.status === 'ALLOTTED'
-                    ? styles.allottedText
-                    : styles.upcomingText,
-                ]}
-              >
-                {ipo.status}
-              </Text>
+            <View style={styles.statusPill}>
+              <Text style={styles.statusText}>{ipo.status}</Text>
             </View>
           </View>
           <Text style={styles.companyName} numberOfLines={1}>
@@ -91,9 +61,8 @@ export const IpoCard: React.FC<IpoCardProps> = ({
         {/* AI Verdict Badge */}
         <TouchableOpacity
           onPress={() => onOpenAi(ipo)}
-          style={[styles.verdictBadge, { borderColor: verdictColor + '40' }]}
+          style={[styles.verdictBadge, { borderColor: verdictColor + '60' }]}
         >
-          <Ionicons name="sparkles" size={11} color={verdictColor} />
           <Text style={[styles.verdictText, { color: verdictColor }]}>
             {ipo.aiAnalysis.verdict.replace(/_/g, ' ')}
           </Text>
@@ -105,51 +74,61 @@ export const IpoCard: React.FC<IpoCardProps> = ({
         <View style={styles.metricColumn}>
           <Text style={styles.metricLabel}>PRICE BAND</Text>
           <Text style={styles.metricValue}>
-            ₹{ipo.priceBandLow} - ₹{ipo.priceBandHigh}
+            INR {ipo.priceBandLow} - {ipo.priceBandHigh}
           </Text>
           <Text style={styles.subMetric}>
-            Lot: {ipo.lotSize} shares (₹{minInvestment.toLocaleString('en-IN')})
+            Lot: {ipo.lotSize} sh (INR {minInvestment.toLocaleString('en-IN')})
           </Text>
         </View>
 
         <View style={[styles.metricColumn, styles.alignRight]}>
-          <Text style={styles.metricLabel}>EST. LISTING GAIN (GMP)</Text>
+          <Text style={styles.metricLabel}>CURRENT GMP</Text>
           <Text
             style={[
               styles.metricValue,
               isPositive ? styles.greenText : styles.redText,
             ]}
           >
-            ₹{ipo.currentGmp} ({ipo.gainPercentage > 0 ? '+' : ''}
+            INR {ipo.currentGmp} ({ipo.gainPercentage > 0 ? '+' : ''}
             {ipo.gainPercentage}%)
           </Text>
           <Text style={styles.subMetric}>
-            Est. Price: <Text style={styles.boldWhite}>₹{ipo.estimatedListingPrice}</Text>
+            Est: <Text style={styles.boldWhite}>INR {ipo.estimatedListingPrice}</Text>
           </Text>
         </View>
       </View>
 
-      {/* Subscription demand teaser */}
-      <View style={styles.subscriptionRow}>
-        <View style={styles.flexRow}>
-          <Ionicons name="time-outline" size={13} color="#06b6d4" />
-          <Text style={styles.subDemandLabel}>Subscription Multiples:</Text>
-        </View>
-        <View style={styles.flexRow}>
-          <Text style={styles.subQuota}>QIB <Text style={styles.boldWhite}>{ipo.subscription.qib}x</Text></Text>
-          <Text style={styles.subQuota}>NII <Text style={styles.boldWhite}>{ipo.subscription.nii}x</Text></Text>
-          <Text style={styles.subQuota}>Ret <Text style={styles.greenText}>{ipo.subscription.retail}x</Text></Text>
+      {/* Calendar Dates Timeline Box */}
+      <View style={styles.datesBox}>
+        <Text style={styles.datesHeader}>KEY SETTLEMENT DATES</Text>
+        <View style={styles.datesGrid}>
+          <View style={styles.dateCol}>
+            <Text style={styles.dateLabel}>Bidding Closes</Text>
+            <Text style={styles.dateVal}>{ipo.timeline.biddingClose}</Text>
+          </View>
+          <View style={styles.dateCol}>
+            <Text style={styles.dateLabel}>Allotment Final</Text>
+            <Text style={styles.dateVal}>{ipo.timeline.allotmentFinalization}</Text>
+          </View>
+          <View style={styles.dateCol}>
+            <Text style={styles.dateLabel}>Refunds Initiate</Text>
+            <Text style={styles.dateVal}>{ipo.timeline.refundsInitiation}</Text>
+          </View>
+          <View style={styles.dateCol}>
+            <Text style={styles.dateLabel}>Listing Day</Text>
+            <Text style={styles.dateValGreen}>{ipo.timeline.listingOnExchange}</Text>
+          </View>
         </View>
       </View>
 
-      {/* Date timeline */}
-      <View style={styles.timelineRow}>
-        <Text style={styles.timelineText}>
-          Close: <Text style={styles.boldWhite}>{ipo.closeDate}</Text>
-        </Text>
-        <Text style={styles.timelineText}>
-          Listing: <Text style={styles.boldWhite}>{ipo.listingDate}</Text>
-        </Text>
+      {/* Subscription Multiples */}
+      <View style={styles.subscriptionRow}>
+        <Text style={styles.subDemandLabel}>Subscription Multiples:</Text>
+        <View style={styles.flexRow}>
+          <Text style={styles.subQuota}>QIB <Text style={styles.boldWhite}>{ipo.subscription.qib}x</Text></Text>
+          <Text style={styles.subQuota}>NII <Text style={styles.boldWhite}>{ipo.subscription.nii}x</Text></Text>
+          <Text style={styles.subQuota}>Retail <Text style={styles.greenText}>{ipo.subscription.retail}x</Text></Text>
+        </View>
       </View>
 
       {/* Bottom Action Buttons */}
@@ -158,16 +137,14 @@ export const IpoCard: React.FC<IpoCardProps> = ({
           onPress={() => onOpenCalc(ipo)}
           style={styles.calcBtn}
         >
-          <Ionicons name="calculator-outline" size={14} color="#06b6d4" />
-          <Text style={styles.calcBtnText}>Bid Calc</Text>
+          <Text style={styles.calcBtnText}>Bid Calculator</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           onPress={() => onOpenAi(ipo)}
           style={styles.aiBtn}
         >
-          <Ionicons name="sparkles-outline" size={14} color="#06b6d4" />
-          <Text style={styles.aiBtnText}>AI Analysis</Text>
+          <Text style={styles.aiBtnText}>Analysis</Text>
         </TouchableOpacity>
 
         {ipo.status === 'ALLOTTED' && (
@@ -175,7 +152,7 @@ export const IpoCard: React.FC<IpoCardProps> = ({
             onPress={() => onOpenAllotment(ipo)}
             style={styles.allotmentBtn}
           >
-            <Ionicons name="shield-checkmark" size={15} color="#10b981" />
+            <Text style={styles.allotmentBtnText}>Allotment</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -185,12 +162,12 @@ export const IpoCard: React.FC<IpoCardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#0c121e',
-    borderRadius: 18,
+    backgroundColor: '#0f1118',
+    borderRadius: 12,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)',
-    padding: 16,
-    marginBottom: 14,
+    borderColor: '#1f2433',
+    padding: 14,
+    marginBottom: 12,
   },
   header: {
     flexDirection: 'row',
@@ -207,89 +184,67 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   symbol: {
-    color: '#06b6d4',
+    color: '#f4f4f5',
     fontSize: 13,
     fontWeight: '800',
     fontFamily: 'monospace',
     marginRight: 6,
   },
   typePill: {
-    paddingHorizontal: 6,
+    backgroundColor: '#181b26',
+    borderWidth: 1,
+    borderColor: '#272c3d',
+    paddingHorizontal: 5,
     paddingVertical: 1,
-    borderRadius: 6,
+    borderRadius: 4,
     marginRight: 6,
-  },
-  mainboardPill: {
-    backgroundColor: 'rgba(99, 102, 241, 0.15)',
-  },
-  smePill: {
-    backgroundColor: 'rgba(168, 85, 247, 0.15)',
   },
   typeText: {
     fontSize: 9,
     fontWeight: '700',
-  },
-  mainboardText: {
-    color: '#a5b4fc',
-  },
-  smeText: {
-    color: '#d8b4fe',
+    color: '#a1a1aa',
+    fontFamily: 'monospace',
   },
   statusPill: {
-    paddingHorizontal: 6,
+    backgroundColor: '#181b26',
+    borderWidth: 1,
+    borderColor: '#272c3d',
+    paddingHorizontal: 5,
     paddingVertical: 1,
-    borderRadius: 6,
-  },
-  activePill: {
-    backgroundColor: 'rgba(244, 63, 94, 0.15)',
-  },
-  allottedPill: {
-    backgroundColor: 'rgba(6, 182, 212, 0.15)',
-  },
-  upcomingPill: {
-    backgroundColor: 'rgba(148, 163, 184, 0.15)',
+    borderRadius: 4,
   },
   statusText: {
     fontSize: 9,
     fontWeight: '700',
-  },
-  activeText: {
-    color: '#fb7185',
-  },
-  allottedText: {
-    color: '#38bdf8',
-  },
-  upcomingText: {
-    color: '#cbd5e1',
+    color: '#a1a1aa',
+    fontFamily: 'monospace',
   },
   companyName: {
     color: '#ffffff',
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '700',
   },
   verdictBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
     borderWidth: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.03)',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
+    backgroundColor: '#181b26',
+    paddingHorizontal: 7,
+    paddingVertical: 3,
+    borderRadius: 6,
   },
   verdictText: {
     fontSize: 10,
     fontWeight: '800',
-    marginLeft: 4,
+    fontFamily: 'monospace',
   },
   metricsBox: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#070a12',
-    borderRadius: 12,
+    backgroundColor: '#08090d',
+    borderRadius: 8,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.04)',
-    padding: 12,
-    marginTop: 12,
+    borderColor: '#1c202d',
+    padding: 10,
+    marginTop: 10,
   },
   metricColumn: {
     flex: 1,
@@ -298,25 +253,27 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   metricLabel: {
-    color: '#64748b',
+    color: '#71717a',
     fontSize: 9,
     fontWeight: '700',
+    fontFamily: 'monospace',
     letterSpacing: 0.5,
   },
   metricValue: {
     color: '#ffffff',
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '800',
     marginTop: 2,
     fontFamily: 'monospace',
   },
   subMetric: {
-    color: '#94a3b8',
+    color: '#71717a',
     fontSize: 10,
-    marginTop: 3,
+    marginTop: 2,
+    fontFamily: 'monospace',
   },
   boldWhite: {
-    color: '#f1f5f9',
+    color: '#f4f4f5',
     fontWeight: '700',
   },
   greenText: {
@@ -327,91 +284,127 @@ const styles = StyleSheet.create({
     color: '#f43f5e',
     fontWeight: '800',
   },
+  datesBox: {
+    backgroundColor: '#08090d',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#1c202d',
+    padding: 9,
+    marginTop: 8,
+  },
+  datesHeader: {
+    color: '#71717a',
+    fontSize: 9,
+    fontWeight: '800',
+    letterSpacing: 0.5,
+    fontFamily: 'monospace',
+    marginBottom: 6,
+  },
+  datesGrid: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  dateCol: {
+    alignItems: 'flex-start',
+  },
+  dateLabel: {
+    color: '#52525b',
+    fontSize: 8,
+    fontFamily: 'monospace',
+  },
+  dateVal: {
+    color: '#d4d4d8',
+    fontSize: 10,
+    fontWeight: '700',
+    fontFamily: 'monospace',
+    marginTop: 1,
+  },
+  dateValGreen: {
+    color: '#10b981',
+    fontSize: 10,
+    fontWeight: '800',
+    fontFamily: 'monospace',
+    marginTop: 1,
+  },
   subscriptionRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.02)',
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 7,
-    marginTop: 10,
+    backgroundColor: '#12151e',
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    marginTop: 8,
   },
   flexRow: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   subDemandLabel: {
-    color: '#94a3b8',
+    color: '#71717a',
     fontSize: 10,
-    marginLeft: 5,
-  },
-  subQuota: {
-    color: '#64748b',
-    fontSize: 10,
-    marginLeft: 8,
     fontFamily: 'monospace',
   },
-  timelineRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 8,
-    paddingHorizontal: 2,
-  },
-  timelineText: {
-    color: '#64748b',
+  subQuota: {
+    color: '#71717a',
     fontSize: 10,
+    marginLeft: 6,
+    fontFamily: 'monospace',
   },
   actionsRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 14,
-    paddingTop: 12,
+    marginTop: 12,
+    paddingTop: 10,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.05)',
+    borderTopColor: '#1a1f2c',
   },
   calcBtn: {
     flex: 1,
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#172033',
-    borderRadius: 10,
-    paddingVertical: 8,
-    marginRight: 8,
+    backgroundColor: '#1c202e',
+    borderRadius: 6,
+    paddingVertical: 7,
+    marginRight: 6,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.06)',
+    borderColor: '#293044',
   },
   calcBtnText: {
-    color: '#e2e8f0',
+    color: '#e4e4e7',
     fontSize: 11,
     fontWeight: '700',
-    marginLeft: 5,
+    fontFamily: 'monospace',
   },
   aiBtn: {
     flex: 1,
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(6, 182, 212, 0.12)',
-    borderRadius: 10,
-    paddingVertical: 8,
+    backgroundColor: '#181b26',
+    borderRadius: 6,
+    paddingVertical: 7,
     borderWidth: 1,
-    borderColor: 'rgba(6, 182, 212, 0.25)',
+    borderColor: '#272c3d',
   },
   aiBtnText: {
-    color: '#38bdf8',
+    color: '#d4d4d8',
     fontSize: 11,
     fontWeight: '700',
-    marginLeft: 5,
+    fontFamily: 'monospace',
   },
   allotmentBtn: {
-    backgroundColor: 'rgba(16, 185, 129, 0.12)',
-    borderRadius: 10,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    marginLeft: 8,
+    backgroundColor: '#06261c',
+    borderRadius: 6,
+    paddingVertical: 7,
+    paddingHorizontal: 10,
+    marginLeft: 6,
     borderWidth: 1,
-    borderColor: 'rgba(16, 185, 129, 0.3)',
+    borderColor: '#0d543e',
+  },
+  allotmentBtnText: {
+    color: '#34d399',
+    fontSize: 11,
+    fontWeight: '700',
+    fontFamily: 'monospace',
   },
 });

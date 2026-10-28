@@ -3,18 +3,18 @@
 import React from 'react';
 import { IPO } from '../types';
 import {
-  TrendingUp,
   Calendar,
-  Sparkles,
+  Layers,
+  Clock,
+  BarChart2,
   Calculator,
   ShieldCheck,
-  ChevronRight,
-  Clock,
-  Layers,
+  FileText,
 } from 'lucide-react';
 
 interface IpoCardProps {
   ipo: IPO;
+  onOpenDetails: (ipo: IPO) => void;
   onOpenAiModal: (ipo: IPO) => void;
   onOpenBidCalc: (ipo: IPO) => void;
   onOpenAllotment: (ipo: IPO) => void;
@@ -22,6 +22,7 @@ interface IpoCardProps {
 
 export const IpoCard: React.FC<IpoCardProps> = ({
   ipo,
+  onOpenDetails,
   onOpenAiModal,
   onOpenBidCalc,
   onOpenAllotment,
@@ -30,177 +31,156 @@ export const IpoCard: React.FC<IpoCardProps> = ({
   const isMainboard = ipo.marketType === 'MAINBOARD';
   const minInvestment = ipo.priceBandHigh * ipo.lotSize;
 
-  // Verdict style mapper
   const getVerdictBadge = (verdict: string) => {
     switch (verdict) {
       case 'STRONG_APPLY':
-        return 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
+        return 'bg-emerald-950/40 text-emerald-300 border-emerald-800/60';
       case 'APPLY':
-        return 'bg-teal-500/20 text-teal-300 border-teal-500/40';
+        return 'bg-zinc-800 text-zinc-200 border-zinc-700';
       case 'LISTING_GAINS_ONLY':
-        return 'bg-amber-500/20 text-amber-300 border-amber-500/40';
+        return 'bg-amber-950/40 text-amber-300 border-amber-800/60';
       case 'AVOID':
-        return 'bg-rose-500/20 text-rose-300 border-rose-500/40';
+        return 'bg-rose-950/40 text-rose-300 border-rose-800/60';
       default:
-        return 'bg-slate-500/20 text-slate-300 border-slate-500/40';
+        return 'bg-zinc-900 text-zinc-400 border-zinc-800';
     }
   };
 
   return (
-    <div className="glass-panel glass-panel-hover rounded-2xl p-5 relative overflow-hidden flex flex-col justify-between group">
+    <div className="fin-card fin-card-hover rounded-xl p-4 flex flex-col justify-between">
       {/* Top Header */}
       <div>
         <div className="flex items-start justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-800/90 border border-white/10 font-mono font-bold text-slate-200 text-sm shadow-inner">
+          <div className="flex items-center space-x-2.5">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-800 bg-zinc-900 font-mono font-bold text-zinc-300 text-xs">
               {ipo.symbol.slice(0, 3)}
             </div>
             <div>
-              <div className="flex items-center space-x-2">
-                <h3 className="font-bold text-white text-base tracking-tight leading-snug">
+              <div className="flex items-center space-x-1.5">
+                <h3 className="font-bold text-white text-sm tracking-tight">
                   {ipo.companyName}
                 </h3>
               </div>
-              <div className="flex items-center space-x-2 mt-0.5">
-                <span className="text-[11px] font-mono text-cyan-400 font-medium">
-                  {ipo.symbol}
-                </span>
-                <span className="text-slate-600">•</span>
-                <span
-                  className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${
-                    isMainboard
-                      ? 'border-indigo-500/30 bg-indigo-500/10 text-indigo-300'
-                      : 'border-purple-500/30 bg-purple-500/10 text-purple-300'
-                  }`}
-                >
-                  {ipo.marketType}
-                </span>
-                <span className="text-slate-600">•</span>
-                <span
-                  className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${
-                    ipo.status === 'ACTIVE'
-                      ? 'border-rose-500/40 bg-rose-500/10 text-rose-400 animate-pulse'
-                      : ipo.status === 'ALLOTTED'
-                      ? 'border-cyan-500/40 bg-cyan-500/10 text-cyan-300'
-                      : 'border-slate-500/30 bg-slate-500/10 text-slate-300'
-                  }`}
-                >
-                  {ipo.status}
-                </span>
+              <div className="flex items-center space-x-2 mt-0.5 font-mono text-[11px]">
+                <span className="text-zinc-300 font-bold">{ipo.symbol}</span>
+                <span className="text-zinc-600">•</span>
+                <span className="text-zinc-400">{ipo.marketType}</span>
+                <span className="text-zinc-600">•</span>
+                <span className="text-zinc-400">{ipo.status}</span>
               </div>
             </div>
           </div>
 
-          {/* AI Verdict Pill */}
+          {/* AI Verdict Badge */}
           <button
             onClick={() => onOpenAiModal(ipo)}
-            className={`flex items-center space-x-1 px-2.5 py-1 rounded-full border text-[11px] font-bold tracking-tight shadow-sm hover:scale-105 transition-all ${getVerdictBadge(
+            className={`px-2 py-0.5 rounded border text-[10px] font-mono font-bold ${getVerdictBadge(
               ipo.aiAnalysis.verdict
             )}`}
           >
-            <Sparkles className="h-3 w-3 text-cyan-300" />
-            <span>{ipo.aiAnalysis.verdict.replace(/_/g, ' ')}</span>
+            {ipo.aiAnalysis.verdict.replace(/_/g, ' ')}
           </button>
         </div>
 
-        {/* Pricing & GMP Section */}
-        <div className="mt-5 grid grid-cols-2 gap-3 rounded-xl bg-slate-950/50 p-3.5 border border-white/5">
-          {/* Price Band */}
+        {/* Pricing & GMP Table */}
+        <div className="mt-3.5 grid grid-cols-2 gap-2 rounded-lg bg-zinc-950/80 p-3 border border-zinc-800/60">
           <div>
-            <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">
+            <p className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
               Price Band
             </p>
-            <p className="text-base font-extrabold text-white mt-0.5 font-mono">
-              ₹{ipo.priceBandLow} - ₹{ipo.priceBandHigh}
+            <p className="text-sm font-bold text-white font-mono mt-0.5">
+              INR {ipo.priceBandLow} - {ipo.priceBandHigh}
             </p>
-            <p className="text-[10px] text-slate-400 mt-1 flex items-center space-x-1">
-              <Layers className="h-3 w-3 text-slate-500" />
-              <span>Lot: {ipo.lotSize} shares (₹{minInvestment.toLocaleString('en-IN')})</span>
+            <p className="text-[10px] font-mono text-zinc-400 mt-1">
+              Lot: {ipo.lotSize} sh (INR {minInvestment.toLocaleString('en-IN')})
             </p>
           </div>
 
-          {/* Grey Market Premium (GMP) */}
           <div className="text-right">
-            <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">
-              Est. Listing Gain (GMP)
+            <p className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
+              Current GMP
             </p>
-            <div className="flex items-center justify-end space-x-1 mt-0.5">
-              <span
-                className={`text-base font-extrabold font-mono ${
-                  isGainPositive ? 'text-emerald-400' : 'text-rose-400'
-                }`}
-              >
-                ₹{ipo.currentGmp} ({ipo.gainPercentage > 0 ? '+' : ''}
-                {ipo.gainPercentage}%)
-              </span>
-            </div>
-            <p className="text-[10px] text-slate-400 mt-1">
-              Est. Price: <span className="font-mono text-slate-200 font-semibold">₹{ipo.estimatedListingPrice}</span>
+            <p
+              className={`text-sm font-bold font-mono mt-0.5 ${
+                isGainPositive ? 'text-emerald-400' : 'text-rose-400'
+              }`}
+            >
+              INR {ipo.currentGmp} ({ipo.gainPercentage > 0 ? '+' : ''}
+              {ipo.gainPercentage}%)
+            </p>
+            <p className="text-[10px] font-mono text-zinc-400 mt-1">
+              Est. Price: <span className="text-zinc-200 font-semibold">INR {ipo.estimatedListingPrice}</span>
             </p>
           </div>
         </div>
 
-        {/* Subscription Demand Preview */}
-        <div className="mt-3.5 flex items-center justify-between rounded-xl bg-white/[0.02] px-3.5 py-2 border border-white/5 text-xs">
-          <div className="flex items-center space-x-1.5 text-slate-400">
-            <Clock className="h-3.5 w-3.5 text-cyan-400" />
-            <span>Subscription Multiple:</span>
+        {/* Detailed Calendar Dates Grid */}
+        <div className="mt-3 rounded-lg border border-zinc-850 bg-zinc-950/40 p-2.5 font-mono text-[11px]">
+          <div className="flex items-center space-x-1.5 text-zinc-400 text-[10px] uppercase font-bold tracking-wider mb-2">
+            <Calendar className="h-3 w-3 text-zinc-400" />
+            <span>Key Calendar Dates</span>
           </div>
-          <div className="flex items-center space-x-3 text-xs font-mono">
-            <div>
-              <span className="text-slate-400 text-[10px]">QIB: </span>
-              <span className="font-bold text-slate-200">{ipo.subscription.qib}x</span>
+
+          <div className="grid grid-cols-2 gap-x-2 gap-y-1.5 text-zinc-400 text-[11px]">
+            <div className="flex justify-between">
+              <span>Bidding Closes:</span>
+              <strong className="text-zinc-200">{ipo.timeline.biddingClose}</strong>
             </div>
-            <div>
-              <span className="text-slate-400 text-[10px]">NII: </span>
-              <span className="font-bold text-slate-200">{ipo.subscription.nii}x</span>
+            <div className="flex justify-between">
+              <span>Allotment Basis:</span>
+              <strong className="text-zinc-200">{ipo.timeline.allotmentFinalization}</strong>
             </div>
-            <div>
-              <span className="text-slate-400 text-[10px]">Retail: </span>
-              <span className="font-bold text-emerald-400">{ipo.subscription.retail}x</span>
+            <div className="flex justify-between">
+              <span>Refunds Unfreeze:</span>
+              <strong className="text-zinc-200">{ipo.timeline.refundsInitiation}</strong>
+            </div>
+            <div className="flex justify-between">
+              <span>Demat Credit:</span>
+              <strong className="text-zinc-200">{ipo.timeline.dematTransfer}</strong>
+            </div>
+            <div className="flex justify-between col-span-2 pt-1 border-t border-zinc-900">
+              <span className="text-emerald-400 font-semibold">Trading Listing Date:</span>
+              <strong className="text-emerald-400">{ipo.timeline.listingOnExchange}</strong>
             </div>
           </div>
         </div>
 
-        {/* Timelines */}
-        <div className="mt-3 grid grid-cols-2 gap-2 text-[11px] text-slate-400">
-          <div className="flex items-center space-x-1.5">
-            <Calendar className="h-3.5 w-3.5 text-slate-500" />
-            <span>Closes: <strong className="text-slate-300 font-semibold">{ipo.closeDate}</strong></span>
-          </div>
-          <div className="flex items-center space-x-1.5 text-right justify-end">
-            <span>Listing: <strong className="text-slate-300 font-semibold">{ipo.listingDate}</strong></span>
+        {/* Subscription Multiples */}
+        <div className="mt-2.5 flex items-center justify-between rounded-lg bg-zinc-900/40 px-3 py-1.5 border border-zinc-850 text-xs font-mono">
+          <span className="text-zinc-500 text-[10px]">Subscription:</span>
+          <div className="flex items-center space-x-3 text-[11px]">
+            <span>QIB <strong className="text-zinc-200">{ipo.subscription.qib}x</strong></span>
+            <span>NII <strong className="text-zinc-200">{ipo.subscription.nii}x</strong></span>
+            <span>Retail <strong className="text-emerald-400">{ipo.subscription.retail}x</strong></span>
           </div>
         </div>
       </div>
 
-      {/* Action Footer */}
-      <div className="mt-5 pt-4 border-t border-white/5 flex items-center justify-between space-x-2">
+      {/* Action Buttons */}
+      <div className="mt-4 pt-3 border-t border-zinc-800/80 flex items-center space-x-2 text-xs">
+        <button
+          onClick={() => onOpenDetails(ipo)}
+          className="flex-1 flex items-center justify-center space-x-1.5 rounded-lg border border-zinc-700 bg-zinc-800/80 py-1.5 font-semibold text-zinc-100 hover:bg-zinc-700 transition-colors"
+        >
+          <BarChart2 className="h-3.5 w-3.5 text-zinc-400" />
+          <span>Timeline & Chart</span>
+        </button>
+
         <button
           onClick={() => onOpenBidCalc(ipo)}
-          className="flex-1 flex items-center justify-center space-x-1.5 rounded-xl border border-white/10 bg-slate-800/60 py-2 text-xs font-semibold text-slate-200 hover:bg-slate-700/60 hover:text-white transition-all"
+          className="flex-1 flex items-center justify-center space-x-1.5 rounded-lg border border-zinc-800 bg-zinc-900/80 py-1.5 font-semibold text-zinc-300 hover:text-white hover:bg-zinc-800 transition-colors"
         >
-          <Calculator className="h-3.5 w-3.5 text-cyan-400" />
+          <Calculator className="h-3.5 w-3.5 text-zinc-400" />
           <span>Bid Calculator</span>
         </button>
 
         <button
           onClick={() => onOpenAiModal(ipo)}
-          className="flex-1 flex items-center justify-center space-x-1.5 rounded-xl border border-cyan-500/30 bg-cyan-500/10 py-2 text-xs font-semibold text-cyan-300 hover:bg-cyan-500/20 transition-all"
+          className="p-1.5 rounded-lg border border-zinc-800 bg-zinc-900/80 text-zinc-300 hover:text-white hover:bg-zinc-800 transition-colors"
+          title="Financial Rationale"
         >
-          <Sparkles className="h-3.5 w-3.5 text-cyan-400" />
-          <span>AI Analysis</span>
+          <FileText className="h-4 w-4" />
         </button>
-
-        {ipo.status === 'ALLOTTED' && (
-          <button
-            onClick={() => onOpenAllotment(ipo)}
-            className="flex items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/20 transition-all"
-            title="Check Allotment"
-          >
-            <ShieldCheck className="h-4 w-4" />
-          </button>
-        )}
       </div>
     </div>
   );

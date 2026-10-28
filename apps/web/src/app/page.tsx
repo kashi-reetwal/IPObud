@@ -6,16 +6,23 @@ import { IPO } from '../types';
 import { Header } from '../components/Header';
 import { TickerBar } from '../components/TickerBar';
 import { IpoCard } from '../components/IpoCard';
+import { TimelineModal } from '../components/TimelineModal';
+import { CalendarTimeline } from '../components/CalendarTimeline';
+import { GmpHistoryChart } from '../components/GmpHistoryChart';
 import { AiAnalysisModal } from '../components/AiAnalysisModal';
 import { AllotmentModal } from '../components/AllotmentModal';
 import { BidCalculatorModal } from '../components/BidCalculatorModal';
-import { Flame, ShieldCheck, Sparkles, TrendingUp, Layers, CheckCircle2 } from 'lucide-react';
+import { Calendar, BarChart2, Layers, TrendingUp, CheckCircle2 } from 'lucide-react';
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeFilter, setActiveFilter] = useState('ALL');
 
+  // Active highlighted IPO for timeline and graph on page
+  const [featuredIpo, setFeaturedIpo] = useState<IPO>(mockIpos[1]); // Default to Waaree Energies
+
   // Modals state
+  const [selectedTimelineIpo, setSelectedTimelineIpo] = useState<IPO | null>(null);
   const [selectedAiIpo, setSelectedAiIpo] = useState<IPO | null>(null);
   const [selectedBidIpo, setSelectedBidIpo] = useState<IPO | null>(null);
   const [allotmentModalOpen, setAllotmentModalOpen] = useState(false);
@@ -42,20 +49,18 @@ export default function Home() {
   const stats = useMemo(() => {
     const activeCount = mockIpos.filter((i) => i.status === 'ACTIVE').length;
     const highestGmpIpo = [...mockIpos].sort((a, b) => b.gainPercentage - a.gainPercentage)[0];
-    const strongApplyCount = mockIpos.filter(
-      (i) => i.aiAnalysis.verdict === 'STRONG_APPLY' || i.aiAnalysis.verdict === 'APPLY'
-    ).length;
+    const totalCapitalRaised = mockIpos.reduce((acc, i) => acc + i.issueSizeCr, 0);
 
     return {
       activeCount,
       topGmpGain: highestGmpIpo ? `+${highestGmpIpo.gainPercentage}% (${highestGmpIpo.symbol})` : 'N/A',
-      strongApplyCount,
+      totalCapitalRaised: `INR ${(totalCapitalRaised / 1000).toFixed(1)}k Cr`,
     };
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#080c14] text-slate-100 flex flex-col">
-      {/* 1. Header with live filters & search */}
+    <div className="min-h-screen bg-[#090a0f] text-zinc-100 flex flex-col font-sans">
+      {/* 1. Institutional Header */}
       <Header
         onOpenAllotment={() => {
           setSelectedAllotmentIpo(null);
@@ -67,91 +72,117 @@ export default function Home() {
         setActiveFilter={setActiveFilter}
       />
 
-      {/* 2. Live GMP Ticker Marquee */}
+      {/* 2. Ticker Marquee Tape */}
       <TickerBar ipos={mockIpos} />
 
-      {/* 3. Hero & High-Level Market KPIs */}
-      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6">
-        <div className="mb-8">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-              <div className="flex items-center space-x-2 text-cyan-400 font-semibold text-xs uppercase tracking-wider">
-                <Sparkles className="h-4 w-4" />
-                <span>Next-Gen Equity Terminal</span>
-              </div>
-              <h1 className="mt-1 text-2xl sm:text-3xl font-black text-white tracking-tight">
-                Indian IPOs & Live Grey Market Intelligence
-              </h1>
-              <p className="mt-1 text-sm text-slate-400 max-w-2xl">
-                Real-time NSE/BSE Mainboard and SME tracking, live subscription multiples,
-                Gemini AI prospectus synthesis, and 1-click registrar allotment lookups.
-              </p>
+      {/* 3. Main Terminal Body */}
+      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 space-y-6">
+        {/* Top Market Overview Stats */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-zinc-800/80 pb-5">
+          <div>
+            <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight font-mono">
+              Indian Public Offerings & Grey Market Analytics
+            </h1>
+            <p className="mt-1 text-xs text-zinc-400 font-mono">
+              NSE / BSE Mainboard and SME schedules, settlement calendar dates, subscription multiples, and past performance.
+            </p>
+          </div>
+
+          {/* Quick Metrics */}
+          <div className="grid grid-cols-3 gap-2.5 shrink-0 font-mono">
+            <div className="rounded-lg border border-zinc-800 bg-zinc-950 p-2.5">
+              <span className="text-[10px] text-zinc-500 uppercase font-semibold">Live Issues</span>
+              <p className="text-base font-bold text-white mt-0.5">{stats.activeCount} Bidding</p>
             </div>
-
-            {/* Quick KPI Stat Widgets */}
-            <div className="grid grid-cols-3 gap-3 shrink-0">
-              <div className="rounded-2xl border border-white/10 bg-slate-900/50 p-3.5 backdrop-blur-md">
-                <div className="flex items-center space-x-1.5 text-slate-400 text-[10px] font-semibold uppercase">
-                  <Flame className="h-3.5 w-3.5 text-rose-400" />
-                  <span>Live Bidding</span>
-                </div>
-                <p className="mt-1 text-xl font-mono font-black text-white">
-                  {stats.activeCount} <span className="text-xs font-normal text-slate-400">Issues</span>
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-emerald-500/20 bg-emerald-950/10 p-3.5 backdrop-blur-md">
-                <div className="flex items-center space-x-1.5 text-emerald-400 text-[10px] font-semibold uppercase">
-                  <TrendingUp className="h-3.5 w-3.5" />
-                  <span>Top GMP Surge</span>
-                </div>
-                <p className="mt-1 text-base sm:text-lg font-mono font-black text-emerald-400 truncate">
-                  {stats.topGmpGain}
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-cyan-500/20 bg-cyan-950/10 p-3.5 backdrop-blur-md">
-                <div className="flex items-center space-x-1.5 text-cyan-400 text-[10px] font-semibold uppercase">
-                  <CheckCircle2 className="h-3.5 w-3.5" />
-                  <span>AI Buy Signals</span>
-                </div>
-                <p className="mt-1 text-xl font-mono font-black text-cyan-400">
-                  {stats.strongApplyCount} <span className="text-xs font-normal text-slate-400">Calls</span>
-                </p>
-              </div>
+            <div className="rounded-lg border border-zinc-800 bg-zinc-950 p-2.5">
+              <span className="text-[10px] text-zinc-500 uppercase font-semibold">Highest GMP</span>
+              <p className="text-base font-bold text-emerald-400 mt-0.5 truncate">{stats.topGmpGain}</p>
+            </div>
+            <div className="rounded-lg border border-zinc-800 bg-zinc-950 p-2.5">
+              <span className="text-[10px] text-zinc-500 uppercase font-semibold">Capital Tracked</span>
+              <p className="text-base font-bold text-zinc-300 mt-0.5">{stats.totalCapitalRaised}</p>
             </div>
           </div>
         </div>
 
-        {/* 4. IPO Grid */}
-        <div className="space-y-4">
+        {/* 4. Featured Issue Calendar & Trend Chart Viewer */}
+        <section className="rounded-xl border border-zinc-800 bg-[#0e1017] p-4 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-zinc-800/80 pb-3">
+            <div>
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-400">
+                Detailed Analysis & Calendar Sequence
+              </span>
+              <h2 className="text-base font-bold text-white font-mono mt-0.5">
+                {featuredIpo.companyName} ({featuredIpo.symbol})
+              </h2>
+            </div>
+
+            {/* Quick IPO Selector */}
+            <div className="flex items-center space-x-1.5 overflow-x-auto">
+              <span className="text-[11px] font-mono text-zinc-500 mr-1 hidden sm:inline">Select Issue:</span>
+              {mockIpos.map((ipo) => (
+                <button
+                  key={ipo.id}
+                  onClick={() => setFeaturedIpo(ipo)}
+                  className={`rounded px-2 py-1 font-mono text-[11px] transition-colors ${
+                    featuredIpo.id === ipo.id
+                      ? 'bg-zinc-800 text-white font-bold border border-zinc-700'
+                      : 'text-zinc-400 hover:text-white bg-zinc-950'
+                  }`}
+                >
+                  {ipo.symbol}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Calendar Sequence with all key dates */}
+          <CalendarTimeline timeline={featuredIpo.timeline} />
+
+          {/* High Precision Historical Trend & Past Performance Chart */}
+          <GmpHistoryChart
+            data={featuredIpo.gmpHistory}
+            symbol={featuredIpo.symbol}
+            issuePrice={featuredIpo.priceBandHigh}
+            pastResults={featuredIpo.pastResults}
+          />
+        </section>
+
+        {/* 5. IPO Grid List */}
+        <section className="space-y-3 pt-2">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center space-x-2">
-              <Layers className="h-4 w-4 text-cyan-400" />
-              <span>Current Issues ({filteredIpos.length})</span>
+            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-300 flex items-center space-x-2">
+              <Layers className="h-3.5 w-3.5 text-zinc-400" />
+              <span>Public Offerings Overview ({filteredIpos.length})</span>
             </h2>
-            <span className="text-xs font-mono text-slate-500">Auto-refresh: 15s</span>
+            <span className="text-[11px] font-mono text-zinc-500">Frequency: Realtime</span>
           </div>
 
           {filteredIpos.length === 0 ? (
-            <div className="rounded-2xl border border-white/10 bg-slate-900/30 p-12 text-center">
-              <p className="text-sm text-slate-400">No IPO issues matched your current search and filters.</p>
-              <button
-                onClick={() => {
-                  setSearchTerm('');
-                  setActiveFilter('ALL');
-                }}
-                className="mt-3 text-xs font-bold text-cyan-400 hover:underline"
-              >
-                Reset filters
-              </button>
+            <div className="rounded-xl border border-zinc-800 bg-zinc-950 p-10 text-center text-xs font-mono text-zinc-500">
+              No public offerings matched the selected filter criteria.
+              <div className="mt-2">
+                <button
+                  onClick={() => {
+                    setSearchTerm('');
+                    setActiveFilter('ALL');
+                  }}
+                  className="font-bold text-zinc-300 underline"
+                >
+                  Reset Filter Parameters
+                </button>
+              </div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {filteredIpos.map((ipo) => (
                 <IpoCard
                   key={ipo.id}
                   ipo={ipo}
+                  onOpenDetails={(target) => {
+                    setFeaturedIpo(target);
+                    setSelectedTimelineIpo(target);
+                  }}
                   onOpenAiModal={(target) => setSelectedAiIpo(target)}
                   onOpenBidCalc={(target) => setSelectedBidIpo(target)}
                   onOpenAllotment={(target) => {
@@ -162,20 +193,29 @@ export default function Home() {
               ))}
             </div>
           )}
-        </div>
+        </section>
       </main>
 
-      {/* 5. Footer */}
-      <footer className="border-t border-white/10 bg-slate-950 py-6 text-center text-xs text-slate-500">
-        <p className="font-medium text-slate-400">
-          IPObud © 2026 — Designed for Smart Retail & HNI IPO Bidders in India
+      {/* 6. Institutional Footer */}
+      <footer className="border-t border-zinc-900 bg-zinc-950 py-5 text-center text-[11px] font-mono text-zinc-500">
+        <p className="text-zinc-400">
+          IPObud Institutional Analytics • National Stock Exchange & Bombay Stock Exchange Data Feed
         </p>
-        <p className="mt-1 text-[11px] text-slate-600">
-          Disclaimer: Grey Market Premium (GMP) is an unregulated market consensus metric. Past listings do not guarantee future gains.
+        <p className="mt-1 text-zinc-600">
+          Disclaimer: Grey market premiums are informal market consensus indicators and do not guarantee actual exchange listing prices.
         </p>
       </footer>
 
-      {/* 6. Interactive Modals */}
+      {/* 7. Modals */}
+      <TimelineModal
+        ipo={selectedTimelineIpo}
+        onClose={() => setSelectedTimelineIpo(null)}
+        onOpenBidCalc={(target) => setSelectedBidIpo(target)}
+        onOpenAllotment={(target) => {
+          setSelectedAllotmentIpo(target);
+          setAllotmentModalOpen(true);
+        }}
+      />
       <AiAnalysisModal ipo={selectedAiIpo} onClose={() => setSelectedAiIpo(null)} />
       <BidCalculatorModal ipo={selectedBidIpo} onClose={() => setSelectedBidIpo(null)} />
       {allotmentModalOpen && (

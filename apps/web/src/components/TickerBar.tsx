@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { IPO } from '../types';
-import { ArrowUpRight, ArrowDownRight, Zap } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight } from 'lucide-react';
 
 interface TickerBarProps {
   ipos: IPO[];
@@ -10,27 +10,26 @@ interface TickerBarProps {
 
 export const TickerBar: React.FC<TickerBarProps> = ({ ipos }) => {
   return (
-    <div className="relative w-full overflow-hidden border-b border-white/5 bg-slate-950/60 py-2">
+    <div className="relative w-full overflow-hidden border-b border-zinc-900 bg-zinc-950 py-1.5">
       <div className="flex items-center">
         {/* Sticky Label */}
-        <div className="z-10 flex items-center space-x-1.5 bg-slate-950 px-4 py-0.5 text-[11px] font-bold uppercase tracking-wider text-cyan-400 shrink-0 border-r border-white/10">
-          <Zap className="h-3.5 w-3.5 text-cyan-400 animate-pulse" />
-          <span>LIVE GMP TICKER</span>
+        <div className="z-10 flex items-center bg-zinc-950 px-3 py-0.5 text-[10px] font-mono font-bold tracking-wider text-zinc-400 shrink-0 border-r border-zinc-800">
+          <span>MARKET GMP TAPE</span>
         </div>
 
-        {/* Marquee */}
+        {/* Marquee Tape */}
         <div className="flex overflow-hidden whitespace-nowrap">
-          <div className="animate-ticker flex space-x-8 text-xs font-mono">
+          <div className="animate-ticker flex space-x-6 text-[11px] font-mono">
             {ipos.concat(ipos).map((ipo, idx) => {
               const isPositive = ipo.gainPercentage >= 0;
               return (
                 <div key={`${ipo.id}-${idx}`} className="flex items-center space-x-2">
-                  <span className="font-semibold text-slate-200">{ipo.symbol}</span>
-                  <span className="text-slate-400">₹{ipo.priceBandHigh}</span>
-                  <span className="text-slate-500">|</span>
-                  <span className="text-slate-300">GMP ₹{ipo.currentGmp}</span>
+                  <span className="font-semibold text-zinc-200">{ipo.symbol}</span>
+                  <span className="text-zinc-500">INR {ipo.priceBandHigh}</span>
+                  <span className="text-zinc-700">|</span>
+                  <span className="text-zinc-300">GMP INR {ipo.currentGmp}</span>
                   <span
-                    className={`flex items-center space-x-0.5 font-bold ${
+                    className={`flex items-center font-bold ${
                       isPositive ? 'text-emerald-400' : 'text-rose-400'
                     }`}
                   >

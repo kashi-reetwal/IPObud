@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { TrendingUp, Bell, Search, ShieldCheck, Sparkles } from 'lucide-react';
+import { Search, ShieldCheck, Bell, Activity } from 'lucide-react';
 
 interface HeaderProps {
   onOpenAllotment: () => void;
@@ -19,80 +19,79 @@ export const Header: React.FC<HeaderProps> = ({
   setActiveFilter,
 }) => {
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-white/10 bg-[#080c14]/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 w-full border-b border-zinc-800 bg-[#090a0f]/95 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
         {/* Brand */}
         <div className="flex items-center space-x-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-cyan-500 to-emerald-400 p-0.5 shadow-lg shadow-cyan-500/20">
-            <div className="flex h-full w-full items-center justify-center rounded-[10px] bg-[#080c14]">
-              <TrendingUp className="h-5 w-5 text-emerald-400" />
-            </div>
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-700 bg-zinc-900 text-zinc-100 font-mono font-bold text-sm">
+            IPO
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <span className="text-xl font-black tracking-tight text-white">
-                IPO<span className="text-cyan-400">bud</span>
+              <span className="text-base font-bold tracking-tight text-white font-mono">
+                IPObud
               </span>
-              <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold text-emerald-400">
-                LIVE TERMINAL
+              <span className="rounded border border-zinc-700 bg-zinc-900 px-1.5 py-0.5 text-[10px] font-mono font-medium text-zinc-300">
+                TERMINAL
               </span>
             </div>
-            <p className="text-[11px] font-medium text-slate-400">
-              Indian Stock Exchanges (NSE & BSE)
+            <p className="text-[11px] font-mono text-zinc-400">
+              National Stock Exchange & Bombay Stock Exchange
             </p>
           </div>
         </div>
 
         {/* Search & Actions */}
-        <div className="flex items-center space-x-3">
-          <div className="relative hidden md:block w-72">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+        <div className="flex items-center space-x-2.5">
+          <div className="relative hidden md:block w-64">
+            <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-zinc-500" />
             <input
               type="text"
-              placeholder="Search by company or ticker..."
+              placeholder="Search company or ticker..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full rounded-xl border border-white/10 bg-slate-900/60 py-2 pl-9 pr-4 text-xs text-white placeholder-slate-400 focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all"
+              className="w-full rounded-lg border border-zinc-800 bg-zinc-900/80 py-1.5 pl-8 pr-3 text-xs text-white placeholder-zinc-500 focus:border-zinc-500 focus:outline-none transition-colors"
             />
           </div>
 
-          {/* Quick Allotment Lookup Button */}
+          {/* Allotment Status Action */}
           <button
             onClick={onOpenAllotment}
-            className="flex items-center space-x-2 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-3.5 py-2 text-xs font-semibold text-cyan-300 hover:bg-cyan-500/20 hover:border-cyan-500/50 transition-all shadow-sm"
+            className="flex items-center space-x-1.5 rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-1.5 text-xs font-semibold text-zinc-200 hover:bg-zinc-800 hover:text-white transition-colors"
           >
-            <ShieldCheck className="h-4 w-4 text-cyan-400" />
-            <span>Check Allotment</span>
+            <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
+            <span>Allotment Query</span>
           </button>
 
-          {/* Live Alert Trigger */}
+          {/* Notifications */}
           <button
-            onClick={() => alert('Alert notifications enabled! You will be notified on bidding closure and allotment dates.')}
-            className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-slate-900/60 text-slate-300 hover:text-white hover:border-white/20 transition-all"
+            onClick={() => alert('Alert notifications enabled for mandate closures and allotment releases.')}
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-zinc-800 bg-zinc-900/80 text-zinc-400 hover:text-white transition-colors"
             title="Notification Alerts"
           >
-            <Bell className="h-4 w-4" />
+            <Bell className="h-3.5 w-3.5" />
           </button>
         </div>
       </div>
 
-      {/* Filter Tabs Bar */}
-      <div className="mx-auto flex max-w-7xl items-center space-x-2 px-4 py-2 sm:px-6 overflow-x-auto text-xs font-medium">
+      {/* Filter Tabs Bar (No emojis) */}
+      <div className="mx-auto flex max-w-7xl items-center space-x-1.5 px-4 py-2 sm:px-6 overflow-x-auto text-xs font-medium border-t border-zinc-900">
         {[
           { id: 'ALL', label: 'All Issues' },
-          { id: 'ACTIVE', label: '🔴 Live Bidding' },
-          { id: 'UPCOMING', label: '⏳ Upcoming' },
-          { id: 'ALLOTTED', label: '🎯 Allotment Out' },
-          { id: 'MAINBOARD', label: '🏢 Mainboard' },
-          { id: 'SME', label: '⚡ SME Sector' },
+          { id: 'ACTIVE', label: 'Bidding Open' },
+          { id: 'UPCOMING', label: 'Upcoming' },
+          { id: 'ALLOTTED', label: 'Allotment Out' },
+          { id: 'LISTED', label: 'Recently Listed' },
+          { id: 'MAINBOARD', label: 'Mainboard' },
+          { id: 'SME', label: 'SME' },
         ].map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveFilter(tab.id)}
-            className={`whitespace-nowrap rounded-lg px-3 py-1.5 transition-all ${
+            className={`whitespace-nowrap rounded px-2.5 py-1 font-mono text-[11px] transition-colors ${
               activeFilter === tab.id
-                ? 'bg-white/15 text-white font-semibold shadow-inner border border-white/10'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-white/5'
+                ? 'bg-zinc-800 text-white font-bold border border-zinc-700'
+                : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900'
             }`}
           >
             {tab.label}

@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { IPO } from '../types';
-import { Ionicons } from '@expo/vector-icons';
 
 interface GmpRadarScreenProps {
   ipos: IPO[];
@@ -20,9 +19,7 @@ export const GmpRadarScreen: React.FC<GmpRadarScreenProps> = ({
   onOpenCalc,
   onOpenAi,
 }) => {
-  // Sort by highest gain percentage
   const sortedIpos = [...ipos].sort((a, b) => b.gainPercentage - a.gainPercentage);
-
   const topGainer = sortedIpos[0];
   const avgGmpGain = (
     sortedIpos.reduce((sum, item) => sum + item.gainPercentage, 0) / (sortedIpos.length || 1)
@@ -43,7 +40,7 @@ export const GmpRadarScreen: React.FC<GmpRadarScreenProps> = ({
         <View style={styles.dividerVertical} />
 
         <View style={styles.summaryItem}>
-          <Text style={styles.summaryLabel}>AVERAGE GMP GAIN</Text>
+          <Text style={styles.summaryLabel}>AVG GMP GAIN</Text>
           <Text style={styles.avgGain}>{avgGmpGain}%</Text>
           <Text style={styles.subtext}>Market Consensus</Text>
         </View>
@@ -51,9 +48,9 @@ export const GmpRadarScreen: React.FC<GmpRadarScreenProps> = ({
         <View style={styles.dividerVertical} />
 
         <View style={styles.summaryItem}>
-          <Text style={styles.summaryLabel}>ACTIVE TRACKERS</Text>
+          <Text style={styles.summaryLabel}>TRACKED ISSUES</Text>
           <Text style={styles.whiteBold}>{sortedIpos.length}</Text>
-          <Text style={styles.subtext}>NSE/BSE Feeds</Text>
+          <Text style={styles.subtext}>NSE / BSE</Text>
         </View>
       </View>
 
@@ -70,20 +67,8 @@ export const GmpRadarScreen: React.FC<GmpRadarScreenProps> = ({
               {/* Rank & Main Info */}
               <View style={styles.rowBetween}>
                 <View style={styles.rowFlex}>
-                  <View
-                    style={[
-                      styles.rankCircle,
-                      index === 0 ? styles.rankGold : styles.rankNormal,
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        styles.rankText,
-                        index === 0 ? styles.rankTextGold : styles.rankTextNormal,
-                      ]}
-                    >
-                      #{index + 1}
-                    </Text>
+                  <View style={styles.rankCircle}>
+                    <Text style={styles.rankText}>#{index + 1}</Text>
                   </View>
                   <View style={styles.infoCol}>
                     <Text style={styles.symbol}>{item.symbol}</Text>
@@ -104,7 +89,7 @@ export const GmpRadarScreen: React.FC<GmpRadarScreenProps> = ({
                     {item.gainPercentage}%
                   </Text>
                   <Text style={styles.gmpRupees}>
-                    GMP ₹{item.currentGmp} / share
+                    GMP INR {item.currentGmp}
                   </Text>
                 </View>
               </View>
@@ -113,42 +98,46 @@ export const GmpRadarScreen: React.FC<GmpRadarScreenProps> = ({
               <View style={styles.priceRow}>
                 <View style={styles.priceCol}>
                   <Text style={styles.tinyLabel}>ISSUE PRICE</Text>
-                  <Text style={styles.priceVal}>₹{item.priceBandHigh}</Text>
+                  <Text style={styles.priceVal}>INR {item.priceBandHigh}</Text>
                 </View>
                 <View style={styles.priceCol}>
                   <Text style={styles.tinyLabel}>EST. LISTING</Text>
                   <Text style={styles.priceValGreen}>
-                    ₹{item.estimatedListingPrice}
+                    INR {item.estimatedListingPrice}
                   </Text>
                 </View>
                 <View style={styles.priceCol}>
                   <Text style={styles.tinyLabel}>LOT GAIN</Text>
-                  <Text style={styles.priceValCyan}>
-                    +₹{(item.currentGmp * item.lotSize).toLocaleString('en-IN')}
+                  <Text style={styles.priceValWhite}>
+                    +INR {(item.currentGmp * item.lotSize).toLocaleString('en-IN')}
                   </Text>
                 </View>
               </View>
 
-              {/* Mini Trend Bar */}
-              <View style={styles.trendContainer}>
-                <Text style={styles.trendLabel}>7-DAY GMP MOMENTUM:</Text>
-                <View style={styles.trendBarsRow}>
-                  {item.gmpHistory.map((point, idx) => (
-                    <View key={idx} style={styles.barItem}>
-                      <View
-                        style={[
-                          styles.barFill,
-                          {
-                            height: Math.max(6, Math.min(28, (point.gainPercent / (topGainer?.gainPercentage || 100)) * 28)),
-                            backgroundColor: point.gainPercent >= 0 ? '#10b981' : '#f43f5e',
-                          },
-                        ]}
-                      />
-                      <Text style={styles.barDate}>{point.date.slice(0, 2)}</Text>
-                    </View>
-                  ))}
-                </View>
+              {/* Calendar Settlement Schedule */}
+              <View style={styles.scheduleRow}>
+                <Text style={styles.scheduleText}>
+                  Refunds: <Text style={styles.boldZinc}>{item.timeline.refundsInitiation}</Text>
+                </Text>
+                <Text style={styles.scheduleText}>
+                  Listing: <Text style={styles.boldZinc}>{item.timeline.listingOnExchange}</Text>
+                </Text>
               </View>
+
+              {/* Past Performance Box (if listed) */}
+              {item.pastResults && (
+                <View style={styles.pastResultsBox}>
+                  <Text style={styles.pastHeader}>Actual Exchange Listing Performance:</Text>
+                  <View style={styles.pastGrid}>
+                    <Text style={styles.pastItem}>
+                      Listing Day: <Text style={styles.greenText}>INR {item.pastResults.listingPrice} ({item.pastResults.listingGainPercent >= 0 ? '+' : ''}{item.pastResults.listingGainPercent}%)</Text>
+                    </Text>
+                    <Text style={styles.pastSub}>
+                      Day Close: INR {item.pastResults.listingDayClose}
+                    </Text>
+                  </View>
+                </View>
+              )}
 
               {/* Action buttons */}
               <View style={styles.cardActions}>
@@ -156,16 +145,14 @@ export const GmpRadarScreen: React.FC<GmpRadarScreenProps> = ({
                   onPress={() => onOpenCalc(item)}
                   style={styles.actionBtn}
                 >
-                  <Ionicons name="calculator-outline" size={13} color="#06b6d4" />
-                  <Text style={styles.actionBtnText}>Calculate Profit</Text>
+                  <Text style={styles.actionBtnText}>Bid Calculator</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   onPress={() => onOpenAi(item)}
-                  style={styles.actionBtnAi}
+                  style={styles.actionBtnSec}
                 >
-                  <Ionicons name="sparkles" size={13} color="#a5b4fc" />
-                  <Text style={styles.actionBtnAiText}>AI Verdict</Text>
+                  <Text style={styles.actionBtnSecText}>Analysis</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -179,19 +166,19 @@ export const GmpRadarScreen: React.FC<GmpRadarScreenProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#05070e',
+    backgroundColor: '#090a0f',
   },
   summaryCard: {
     flexDirection: 'row',
-    backgroundColor: '#0c121e',
-    marginHorizontal: 16,
-    marginTop: 12,
-    marginBottom: 8,
-    borderRadius: 16,
+    backgroundColor: '#11131a',
+    marginHorizontal: 14,
+    marginTop: 10,
+    marginBottom: 6,
+    borderRadius: 10,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)',
-    paddingVertical: 14,
-    paddingHorizontal: 10,
+    borderColor: '#1f2330',
+    paddingVertical: 12,
+    paddingHorizontal: 8,
     justifyContent: 'space-around',
     alignItems: 'center',
   },
@@ -199,58 +186,61 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   summaryLabel: {
-    color: '#64748b',
+    color: '#71717a',
     fontSize: 9,
     fontWeight: '800',
     letterSpacing: 0.5,
-    marginBottom: 3,
+    fontFamily: 'monospace',
+    marginBottom: 2,
   },
   topSymbol: {
     color: '#ffffff',
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '800',
     fontFamily: 'monospace',
   },
   topGain: {
     color: '#10b981',
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '800',
+    fontFamily: 'monospace',
     marginTop: 1,
   },
   avgGain: {
-    color: '#06b6d4',
-    fontSize: 16,
+    color: '#ffffff',
+    fontSize: 15,
     fontWeight: '900',
     fontFamily: 'monospace',
   },
   whiteBold: {
     color: '#ffffff',
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '900',
     fontFamily: 'monospace',
   },
   subtext: {
-    color: '#64748b',
-    fontSize: 10,
+    color: '#71717a',
+    fontSize: 9,
+    fontFamily: 'monospace',
     marginTop: 1,
   },
   dividerVertical: {
     width: 1,
-    height: 32,
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    height: 28,
+    backgroundColor: '#1f2330',
   },
   listContainer: {
-    paddingHorizontal: 16,
-    paddingTop: 8,
-    paddingBottom: 24,
+    paddingHorizontal: 14,
+    paddingTop: 6,
+    paddingBottom: 20,
   },
   radarCard: {
-    backgroundColor: '#0c121e',
-    borderRadius: 16,
+    backgroundColor: '#11131a',
+    borderRadius: 10,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)',
-    padding: 14,
-    marginBottom: 12,
+    borderColor: '#1f2330',
+    padding: 12,
+    marginBottom: 10,
   },
   rowBetween: {
     flexDirection: 'row',
@@ -263,57 +253,48 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   rankCircle: {
-    width: 32,
-    height: 32,
-    borderRadius: 10,
+    width: 28,
+    height: 28,
+    borderRadius: 6,
+    backgroundColor: '#1a1d28',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 10,
-  },
-  rankGold: {
-    backgroundColor: 'rgba(245, 158, 11, 0.15)',
+    marginRight: 8,
     borderWidth: 1,
-    borderColor: '#f59e0b',
-  },
-  rankNormal: {
-    backgroundColor: '#172033',
+    borderColor: '#282d3e',
   },
   rankText: {
     fontSize: 11,
     fontWeight: '800',
     fontFamily: 'monospace',
-  },
-  rankTextGold: {
-    color: '#f59e0b',
-  },
-  rankTextNormal: {
-    color: '#94a3b8',
+    color: '#d4d4d8',
   },
   infoCol: {
     flex: 1,
   },
   symbol: {
     color: '#ffffff',
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '800',
     fontFamily: 'monospace',
   },
   company: {
-    color: '#94a3b8',
-    fontSize: 11,
+    color: '#71717a',
+    fontSize: 10,
     marginTop: 1,
   },
   alignEnd: {
     alignItems: 'flex-end',
   },
   gmpPercent: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '900',
     fontFamily: 'monospace',
   },
   gmpRupees: {
-    color: '#94a3b8',
+    color: '#71717a',
     fontSize: 10,
+    fontFamily: 'monospace',
     marginTop: 1,
   },
   green: {
@@ -324,112 +305,131 @@ const styles = StyleSheet.create({
   },
   priceRow: {
     flexDirection: 'row',
-    backgroundColor: '#070a12',
-    borderRadius: 10,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    marginTop: 12,
+    backgroundColor: '#090a0f',
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#191c26',
+    paddingVertical: 7,
+    paddingHorizontal: 10,
+    marginTop: 10,
     justifyContent: 'space-between',
   },
   priceCol: {
     alignItems: 'center',
   },
   tinyLabel: {
-    color: '#64748b',
-    fontSize: 9,
+    color: '#52525b',
+    fontSize: 8,
     fontWeight: '700',
+    fontFamily: 'monospace',
   },
   priceVal: {
-    color: '#e2e8f0',
-    fontSize: 12,
+    color: '#e4e4e7',
+    fontSize: 11,
     fontWeight: '700',
-    marginTop: 2,
+    marginTop: 1,
     fontFamily: 'monospace',
   },
   priceValGreen: {
     color: '#10b981',
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '800',
-    marginTop: 2,
+    marginTop: 1,
     fontFamily: 'monospace',
   },
-  priceValCyan: {
-    color: '#06b6d4',
-    fontSize: 12,
+  priceValWhite: {
+    color: '#f4f4f5',
+    fontSize: 11,
     fontWeight: '800',
-    marginTop: 2,
+    marginTop: 1,
     fontFamily: 'monospace',
   },
-  trendContainer: {
-    marginTop: 12,
-    paddingTop: 10,
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.05)',
-  },
-  trendLabel: {
-    color: '#64748b',
-    fontSize: 9,
-    fontWeight: '800',
-    letterSpacing: 0.5,
-    marginBottom: 6,
-  },
-  trendBarsRow: {
+  scheduleRow: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
-    height: 34,
+    justifyContent: 'space-between',
+    marginTop: 8,
+    paddingHorizontal: 2,
   },
-  barItem: {
-    alignItems: 'center',
-    marginRight: 10,
-  },
-  barFill: {
-    width: 14,
-    borderRadius: 3,
-  },
-  barDate: {
-    color: '#64748b',
-    fontSize: 9,
-    marginTop: 3,
+  scheduleText: {
+    color: '#71717a',
+    fontSize: 10,
     fontFamily: 'monospace',
+  },
+  boldZinc: {
+    color: '#d4d4d8',
+    fontWeight: '700',
+  },
+  pastResultsBox: {
+    backgroundColor: '#090a0f',
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#191c26',
+    padding: 8,
+    marginTop: 8,
+  },
+  pastHeader: {
+    color: '#71717a',
+    fontSize: 9,
+    fontFamily: 'monospace',
+    fontWeight: '700',
+  },
+  pastGrid: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 3,
+  },
+  pastItem: {
+    color: '#a1a1aa',
+    fontSize: 10,
+    fontFamily: 'monospace',
+  },
+  pastSub: {
+    color: '#71717a',
+    fontSize: 10,
+    fontFamily: 'monospace',
+  },
+  greenText: {
+    color: '#10b981',
+    fontWeight: '800',
   },
   cardActions: {
     flexDirection: 'row',
-    marginTop: 12,
-    paddingTop: 10,
+    marginTop: 10,
+    paddingTop: 8,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.05)',
+    borderTopColor: '#1a1d28',
   },
   actionBtn: {
     flex: 1,
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#172033',
-    paddingVertical: 7,
-    borderRadius: 8,
-    marginRight: 8,
+    backgroundColor: '#1c202e',
+    paddingVertical: 6,
+    borderRadius: 6,
+    marginRight: 6,
+    borderWidth: 1,
+    borderColor: '#293044',
   },
   actionBtnText: {
-    color: '#38bdf8',
-    fontSize: 11,
+    color: '#e4e4e7',
+    fontSize: 10,
     fontWeight: '700',
-    marginLeft: 4,
+    fontFamily: 'monospace',
   },
-  actionBtnAi: {
+  actionBtnSec: {
     flex: 1,
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(99, 102, 241, 0.12)',
-    paddingVertical: 7,
-    borderRadius: 8,
+    backgroundColor: '#181b26',
+    paddingVertical: 6,
+    borderRadius: 6,
     borderWidth: 1,
-    borderColor: 'rgba(99, 102, 241, 0.25)',
+    borderColor: '#272c3d',
   },
-  actionBtnAiText: {
-    color: '#a5b4fc',
-    fontSize: 11,
+  actionBtnSecText: {
+    color: '#d4d4d8',
+    fontSize: 10,
     fontWeight: '700',
-    marginLeft: 4,
+    fontFamily: 'monospace',
   },
 });
