@@ -67,7 +67,36 @@ export const mockIpos: IPO[] = [
         growth: '+36% YoY Order Value',
         debtToEquity: '0.08x'
       }
-    }
+    },
+    documents: {
+      drhpUrl: 'https://www.sebi.gov.in/filings/public-issues/apr-2024/swiggy-limited-drhp.pdf',
+      rhpUrl: 'https://www.sebi.gov.in/filings/public-issues/oct-2024/swiggy-limited-rhp.pdf',
+      anchorBookUrl: 'https://www.bseindia.com/markets/marketinfo/DispNewNoticesDocs.aspx?fn=20241105-45.pdf',
+      allotmentNoticeUrl: 'https://linkintime.co.in/initial_offer/public-issues.html',
+    },
+    financialHistory: [
+      { fiscalYear: 'FY22', revenueCr: 5705, ebitdaCr: -3200, patCr: -3629, netWorthCr: 5670, eps: -18.2, ronwPercent: -64.0 },
+      { fiscalYear: 'FY23', revenueCr: 8265, ebitdaCr: -3010, patCr: -4179, netWorthCr: 4120, eps: -20.9, ronwPercent: -101.4 },
+      { fiscalYear: 'FY24', revenueCr: 11247, ebitdaCr: -1870, patCr: -2350, netWorthCr: 7980, eps: -11.7, ronwPercent: -29.4 },
+    ],
+    anchorInvestors: [
+      { name: 'Government of Singapore / GIC', sharesAllocated: 24500000, amountCr: 955.5, fundType: 'FII / Sovereign' },
+      { name: 'Abu Dhabi Investment Authority (ADIA)', sharesAllocated: 18200000, amountCr: 709.8, fundType: 'FII / Sovereign' },
+      { name: 'SBI Mutual Fund (Multi-Scheme)', sharesAllocated: 14100000, amountCr: 549.9, fundType: 'Domestic MF' },
+      { name: 'HDFC Life Insurance Co.', sharesAllocated: 10250000, amountCr: 399.7, fundType: 'Insurance / AIF' },
+      { name: 'Fidelity Securities Fund', sharesAllocated: 9500000, amountCr: 370.5, fundType: 'FII / Sovereign' },
+    ],
+    promoterHolding: {
+      preIssuePercent: 0.0, // Professionally managed
+      postIssuePercent: 0.0,
+      promoterNames: ['Professionally Managed Company (No Identified Promoter)'],
+      leadManagers: ['Kotak Mahindra Capital', 'Citigroup Global Markets', 'J.P. Morgan India', 'BofA Securities'],
+    },
+    subscriptionDayWise: [
+      { dayNumber: 1, date: '06 Nov', qibTimes: 0.08, sHniTimes: 0.12, bHniTimes: 0.15, retailTimes: 0.54, totalTimes: 0.12 },
+      { dayNumber: 2, date: '07 Nov', qibTimes: 0.42, sHniTimes: 0.55, bHniTimes: 0.70, retailTimes: 1.15, totalTimes: 0.78 },
+      { dayNumber: 3, date: '08 Nov', qibTimes: 6.02, sHniTimes: 3.80, bHniTimes: 4.45, retailTimes: 3.10, totalTimes: 3.59 },
+    ],
   },
   {
     id: '2',
@@ -141,7 +170,36 @@ export const mockIpos: IPO[] = [
         growth: '+69% YoY Topline',
         debtToEquity: '0.12x'
       }
-    }
+    },
+    documents: {
+      drhpUrl: 'https://www.sebi.gov.in/filings/public-issues/dec-2023/waaree-energies-limited-drhp.pdf',
+      rhpUrl: 'https://www.sebi.gov.in/filings/public-issues/oct-2024/waaree-energies-limited-rhp.pdf',
+      anchorBookUrl: 'https://www.bseindia.com/markets/marketinfo/DispNewNoticesDocs.aspx?fn=20241018-35.pdf',
+      allotmentNoticeUrl: 'https://linkintime.co.in/initial_offer/public-issues.html',
+    },
+    financialHistory: [
+      { fiscalYear: 'FY22', revenueCr: 2854, ebitdaCr: 210, patCr: 79, netWorthCr: 540, eps: 3.4, ronwPercent: 16.8 },
+      { fiscalYear: 'FY23', revenueCr: 6750, ebitdaCr: 835, patCr: 500, netWorthCr: 1820, eps: 21.6, ronwPercent: 34.2 },
+      { fiscalYear: 'FY24', revenueCr: 11397, ebitdaCr: 1775, patCr: 1274, netWorthCr: 3950, eps: 52.8, ronwPercent: 39.5 },
+    ],
+    anchorInvestors: [
+      { name: 'Nomura Funds Ireland Public Ltd', sharesAllocated: 2840000, amountCr: 426.8, fundType: 'FII / Sovereign' },
+      { name: 'Goldman Sachs (Singapore) Pte', sharesAllocated: 2650000, amountCr: 398.3, fundType: 'FII / Sovereign' },
+      { name: 'ICICI Prudential Mutual Fund', sharesAllocated: 2100000, amountCr: 315.6, fundType: 'Domestic MF' },
+      { name: 'Mirae Asset Large & Midcap Fund', sharesAllocated: 1850000, amountCr: 278.1, fundType: 'Domestic MF' },
+      { name: 'Tata Solar & Energy Opportunities Fund', sharesAllocated: 1420000, amountCr: 213.4, fundType: 'Domestic MF' },
+    ],
+    promoterHolding: {
+      preIssuePercent: 71.80,
+      postIssuePercent: 64.30,
+      promoterNames: ['Hitesh Chimanlal Doshi', 'Virenkumar Doshi', 'Pankaj Doshi'],
+      leadManagers: ['Axis Capital', 'IIFL Securities', 'Jefferies India', 'SBI Capital Markets'],
+    },
+    subscriptionDayWise: [
+      { dayNumber: 1, date: '21 Oct', qibTimes: 0.12, sHniTimes: 3.40, bHniTimes: 4.10, retailTimes: 3.25, totalTimes: 2.26 },
+      { dayNumber: 2, date: '22 Oct', qibTimes: 1.73, sHniTimes: 24.50, bHniTimes: 26.10, retailTimes: 6.40, totalTimes: 9.18 },
+      { dayNumber: 3, date: '23 Oct', qibTimes: 208.63, sHniTimes: 60.10, bHniTimes: 63.60, retailTimes: 10.79, totalTimes: 76.34 },
+    ],
   },
   {
     id: '3',
@@ -346,3 +404,11 @@ export const mockIpos: IPO[] = [
     }
   }
 ];
+
+export const initialFamilyAccounts: import('../types').FamilyAccount[] = [
+  { id: 'acc-1', name: 'Rajesh Sharma (Self)', pan: 'ABCDE1234F', relation: 'Self', dpClientId: '1208160012345678' },
+  { id: 'acc-2', name: 'Sunita Sharma (Spouse)', pan: 'FGHIJ5678A', relation: 'Spouse', dpClientId: '1208160087654321' },
+  { id: 'acc-3', name: 'Om Prakash Sharma (Father)', pan: 'KLMNO9012A', relation: 'Father', dpClientId: '1208160099887766' },
+  { id: 'acc-4', name: 'Kavita Sharma (Mother)', pan: 'PQRST3456B', relation: 'Mother', dpClientId: '1208160055443322' },
+];
+

@@ -9,6 +9,8 @@ import {
   Calculator,
   ChevronRight,
   TrendingUp,
+  FileText,
+  Users,
 } from 'lucide-react';
 
 interface IpoCardProps {
@@ -17,6 +19,8 @@ interface IpoCardProps {
   onOpenAiModal: (ipo: IPO) => void;
   onOpenBidCalc: (ipo: IPO) => void;
   onOpenAllotment: (ipo: IPO) => void;
+  onOpenDossier?: (ipo: IPO) => void;
+  onOpenFamilyAllotment?: (ipo: IPO) => void;
 }
 
 export const IpoCard: React.FC<IpoCardProps> = ({
@@ -25,6 +29,8 @@ export const IpoCard: React.FC<IpoCardProps> = ({
   onOpenAiModal,
   onOpenBidCalc,
   onOpenAllotment,
+  onOpenDossier,
+  onOpenFamilyAllotment,
 }) => {
   const isGainPositive = ipo.gainPercentage >= 0;
   const isMainboard = ipo.marketType === 'MAINBOARD';
@@ -156,30 +162,56 @@ export const IpoCard: React.FC<IpoCardProps> = ({
       </div>
 
       {/* Action Buttons */}
-      <div className="mt-4 pt-3.5 border-t border-[#f1f5f9] flex items-center space-x-2 text-xs">
-        <button
-          onClick={() => onOpenDetails(ipo)}
-          className="flex-1 flex items-center justify-center space-x-1.5 rounded-xl bg-[#00d09c] hover:bg-[#00b887] py-2 font-bold text-white transition-all shadow-xs"
-        >
-          <BarChart2 className="h-4 w-4" />
-          <span>Timeline & Chart</span>
-        </button>
+      <div className="mt-4 pt-3.5 border-t border-[#f1f5f9] space-y-2 text-xs">
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => onOpenDetails(ipo)}
+            className="flex-1 flex items-center justify-center space-x-1.5 rounded-xl bg-[#00d09c] hover:bg-[#00b887] py-2 font-bold text-white transition-all shadow-xs"
+          >
+            <BarChart2 className="h-4 w-4" />
+            <span>Timeline & Chart</span>
+          </button>
 
-        <button
-          onClick={() => onOpenBidCalc(ipo)}
-          className="flex-1 flex items-center justify-center space-x-1.5 rounded-xl border border-[#e2e8f0] bg-[#f8fafc] hover:bg-[#f1f5f9] py-2 font-semibold text-[#0f172a] transition-all"
-        >
-          <Calculator className="h-4 w-4 text-[#64748b]" />
-          <span>Bid Calculator</span>
-        </button>
+          {onOpenDossier && (
+            <button
+              onClick={() => onOpenDossier(ipo)}
+              className="flex-1 flex items-center justify-center space-x-1.5 rounded-xl border border-[#bae6fd] bg-[#f0f9ff] hover:bg-[#e0f2fe] py-2 font-bold text-[#0284c7] transition-all shadow-xs"
+              title="View SEBI DRHP/RHP Prospectus & Audited Balance Sheets"
+            >
+              <FileText className="h-4 w-4 text-[#0284c7]" />
+              <span>DRHP Dossier</span>
+            </button>
+          )}
+        </div>
 
-        <button
-          onClick={() => onOpenAiModal(ipo)}
-          className="p-2 rounded-xl border border-[#e2e8f0] bg-[#f8fafc] text-[#64748b] hover:text-[#0f172a] hover:bg-[#f1f5f9] transition-all"
-          title="Analysis"
-        >
-          <TrendingUp className="h-4 w-4" />
-        </button>
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => onOpenBidCalc(ipo)}
+            className="flex-1 flex items-center justify-center space-x-1.5 rounded-xl border border-[#e2e8f0] bg-[#f8fafc] hover:bg-[#f1f5f9] py-1.5 font-semibold text-[#0f172a] transition-all"
+          >
+            <Calculator className="h-3.5 w-3.5 text-[#64748b]" />
+            <span>Bid Calculator</span>
+          </button>
+
+          {onOpenFamilyAllotment && (
+            <button
+              onClick={() => onOpenFamilyAllotment(ipo)}
+              className="flex-1 flex items-center justify-center space-x-1.5 rounded-xl border border-[#b3f0df] bg-[#e6faf5] hover:bg-[#cbf5eb] py-1.5 font-bold text-[#008767] transition-all"
+              title="One-click family PAN allotment check"
+            >
+              <Users className="h-3.5 w-3.5 text-[#00d09c]" />
+              <span>Family Check</span>
+            </button>
+          )}
+
+          <button
+            onClick={() => onOpenAiModal(ipo)}
+            className="p-2 rounded-xl border border-[#e2e8f0] bg-[#f8fafc] text-[#64748b] hover:text-[#0f172a] hover:bg-[#f1f5f9] transition-all"
+            title="AI Financial Analysis"
+          >
+            <TrendingUp className="h-4 w-4" />
+          </button>
+        </div>
       </div>
     </div>
   );

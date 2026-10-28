@@ -63,6 +63,80 @@ export interface PastPerformanceResult {
   allotmentRatioRetail: string;
 }
 
+// Narada Feature: Multi-Account Allotment Models
+export interface FamilyAccount {
+  id: string;
+  name: string;
+  pan: string;
+  relation: 'Self' | 'Spouse' | 'Father' | 'Mother' | 'Sibling' | 'Child' | 'Friend';
+  dpClientId?: string;
+  applicationNo?: string;
+}
+
+export interface AccountAllotmentResult {
+  accountId: string;
+  accountName: string;
+  pan: string;
+  relation: string;
+  status: 'ALLOTTED' | 'NOT_ALLOTTED';
+  sharesAllotted: number;
+  amountInvested: number;
+  estimatedGain: number;
+  refundAmount: number;
+}
+
+export interface BulkAllotmentSummary {
+  ipoId: string;
+  ipoSymbol: string;
+  totalAccountsChecked: number;
+  totalAllottedAccounts: number;
+  totalShares: number;
+  totalEstProfit: number;
+  results: AccountAllotmentResult[];
+}
+
+// IPO Guru Feature: Prospectus Documents & SEBI Filings
+export interface ProspectusDocuments {
+  drhpUrl?: string;
+  rhpUrl?: string;
+  anchorBookUrl?: string;
+  allotmentNoticeUrl?: string;
+}
+
+export interface FiscalYearFinancial {
+  fiscalYear: string;
+  revenueCr: number;
+  ebitdaCr: number;
+  patCr: number;
+  netWorthCr: number;
+  eps: number;
+  ronwPercent: number;
+}
+
+export interface AnchorInvestor {
+  name: string;
+  sharesAllocated: number;
+  amountCr: number;
+  fundType: 'Domestic MF' | 'FII / Sovereign' | 'Insurance / AIF';
+}
+
+export interface PromoterHolding {
+  preIssuePercent: number;
+  postIssuePercent: number;
+  promoterNames: string[];
+  leadManagers: string[];
+}
+
+export interface DayWiseSubscription {
+  dayNumber: number;
+  date: string;
+  qibTimes: number;
+  sHniTimes: number;
+  bHniTimes: number;
+  retailTimes: number;
+  totalTimes: number;
+}
+
 export interface IPO {
   id: string;
   slug: string;
@@ -86,6 +160,12 @@ export interface IPO {
   aiAnalysis: AiAnalysis;
   timeline: TimelineDates;
   pastResults?: PastPerformanceResult;
+  // IPO Guru Dossier Extensions
+  documents?: ProspectusDocuments;
+  financialHistory?: FiscalYearFinancial[];
+  anchorInvestors?: AnchorInvestor[];
+  promoterHolding?: PromoterHolding;
+  subscriptionDayWise?: DayWiseSubscription[];
 }
 
 export interface UserBid {

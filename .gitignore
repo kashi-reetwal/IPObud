@@ -21,3 +21,4 @@ env/
 Thumbs.db
 .vscode/
 .idea/
+*.tsbuildinfo

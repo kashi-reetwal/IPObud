@@ -12,6 +12,8 @@ import { GmpHistoryChart } from '../components/GmpHistoryChart';
 import { AiAnalysisModal } from '../components/AiAnalysisModal';
 import { AllotmentModal } from '../components/AllotmentModal';
 import { BidCalculatorModal } from '../components/BidCalculatorModal';
+import { MultiAccountManagerModal } from '../components/MultiAccountManagerModal';
+import { DossierProspectusModal } from '../components/DossierProspectusModal';
 import { TrendingUp, Layers, CheckCircle2 } from 'lucide-react';
 
 export default function Home() {
@@ -28,6 +30,8 @@ export default function Home() {
   const [selectedBidIpo, setSelectedBidIpo] = useState<IPO | null>(null);
   const [allotmentModalOpen, setAllotmentModalOpen] = useState(false);
   const [selectedAllotmentIpo, setSelectedAllotmentIpo] = useState<IPO | null>(null);
+  const [multiAccountModalOpen, setMultiAccountModalOpen] = useState(false);
+  const [selectedDossierIpo, setSelectedDossierIpo] = useState<IPO | null>(null);
 
   // Filtered IPO list
   const filteredIpos = useMemo(() => {
@@ -68,6 +72,9 @@ export default function Home() {
         onOpenAllotment={() => {
           setSelectedAllotmentIpo(null);
           setAllotmentModalOpen(true);
+        }}
+        onOpenMultiAccount={() => {
+          setMultiAccountModalOpen(true);
         }}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
@@ -196,6 +203,11 @@ export default function Home() {
                     setSelectedAllotmentIpo(target);
                     setAllotmentModalOpen(true);
                   }}
+                  onOpenDossier={(target) => setSelectedDossierIpo(target)}
+                  onOpenFamilyAllotment={(target) => {
+                    setSelectedAllotmentIpo(target);
+                    setMultiAccountModalOpen(true);
+                  }}
                 />
               ))}
             </div>
@@ -235,6 +247,17 @@ export default function Home() {
           }}
         />
       )}
+      {multiAccountModalOpen && (
+        <MultiAccountManagerModal
+          ipos={mockIpos}
+          selectedIpo={selectedAllotmentIpo || featuredIpo}
+          onClose={() => setMultiAccountModalOpen(false)}
+        />
+      )}
+      <DossierProspectusModal
+        ipo={selectedDossierIpo}
+        onClose={() => setSelectedDossierIpo(null)}
+      />
     </div>
   );
 }

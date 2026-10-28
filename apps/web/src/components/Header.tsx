@@ -1,10 +1,11 @@
 'use client';
 
 import React from 'react';
-import { Search, ShieldCheck, Bell, TrendingUp } from 'lucide-react';
+import { Search, ShieldCheck, Bell, TrendingUp, Users } from 'lucide-react';
 
 interface HeaderProps {
   onOpenAllotment: () => void;
+  onOpenMultiAccount?: () => void;
   searchTerm: string;
   setSearchTerm: (val: string) => void;
   activeFilter: string;
@@ -15,6 +16,7 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({
   onOpenAllotment,
+  onOpenMultiAccount,
   searchTerm,
   setSearchTerm,
   activeFilter,
@@ -97,6 +99,21 @@ export const Header: React.FC<HeaderProps> = ({
                 Angel One
               </button>
             </div>
+          )}
+
+          {/* Narada Multi-Account Family Manager */}
+          {onOpenMultiAccount && (
+            <button
+              onClick={onOpenMultiAccount}
+              className="flex items-center space-x-1.5 rounded-xl border border-[#b3f0df] bg-[#e6faf5] hover:bg-[#cbf5eb] px-3.5 py-2 text-xs font-bold text-[#008767] transition-all shadow-xs"
+              title="Narada Multi-Account Family Allotment Engine"
+            >
+              <Users className="h-4 w-4 text-[#00d09c]" />
+              <span className="hidden sm:inline">Family Accounts</span>
+              <span className="rounded-full bg-white px-1.5 py-0.2 text-[10px] font-extrabold text-[#008767] border border-[#b3f0df]">
+                Narada
+              </span>
+            </button>
           )}
 
           {/* Allotment Query Button */}
