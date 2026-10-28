@@ -90,7 +90,7 @@ export const MultiAccountManagerModal: React.FC<MultiAccountManagerModalProps> =
     setBulkSummary(null);
   };
 
-  // Run One-Click Multi-Account Check (Narada Signature Feature)
+  // Run One-Click Multi-Account Check across family PANs
   const handleBulkCheck = () => {
     if (accounts.length === 0) return;
 

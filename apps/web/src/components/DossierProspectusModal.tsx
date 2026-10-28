@@ -64,7 +64,7 @@ export const DossierProspectusModal: React.FC<DossierProspectusModalProps> = ({
           </button>
         </div>
 
-        {/* Tab Switcher (Groww / Angel One style) */}
+        {/* Navigation Tab Switcher */}
         <div className="mt-4 flex items-center space-x-1 border-b border-[#f1f5f9] pb-2 text-xs overflow-x-auto">
           {[
             { id: 'DOCUMENTS', label: 'SEBI Prospectus Files', icon: FileText },
@@ -417,10 +417,12 @@ export const DossierProspectusModal: React.FC<DossierProspectusModalProps> = ({
                     <tr>
                       <th className="py-2.5 px-3">Day / Date</th>
                       <th className="py-2.5 px-3 text-right">QIB</th>
-                      <th className="py-2.5 px-3 text-right">sHNI (₹2L-10L)</th>
-                      <th className="py-2.5 px-3 text-right">bHNI (&gt;₹10L)</th>
-                      <th className="py-2.5 px-3 text-right">Retail (RII)</th>
+                      <th className="py-2.5 px-3 text-right">sHNI</th>
+                      <th className="py-2.5 px-3 text-right">bHNI</th>
+                      <th className="py-2.5 px-3 text-right font-bold text-[#008767]">Retail</th>
                       <th className="py-2.5 px-3 text-right font-bold text-[#0f172a]">Total Times</th>
+                      <th className="py-2.5 px-3 text-right font-bold text-[#0284c7]">Applications</th>
+                      <th className="py-2.5 px-3 text-right font-bold text-[#1849a9]">Amount Bid</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#f1f5f9]">
@@ -436,6 +438,16 @@ export const DossierProspectusModal: React.FC<DossierProspectusModalProps> = ({
                         <td className="py-2.5 px-3 text-right font-extrabold text-[#0f172a] bg-[#f8fafc]">
                           {d.totalTimes}x
                         </td>
+                        <td className="py-2.5 px-3 text-right font-bold text-[#0284c7]">
+                          {d.applicationsCount
+                            ? d.applicationsCount >= 100000
+                              ? `${(d.applicationsCount / 100000).toFixed(2)}L`
+                              : d.applicationsCount.toLocaleString('en-IN')
+                            : '-'}
+                        </td>
+                        <td className="py-2.5 px-3 text-right font-bold text-[#1849a9]">
+                          {d.amountBidCr ? `₹${d.amountBidCr.toLocaleString('en-IN')} Cr` : '-'}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -445,17 +457,36 @@ export const DossierProspectusModal: React.FC<DossierProspectusModalProps> = ({
               <p className="text-xs text-[#64748b]">Day-wise subscription progression data is being calculated.</p>
             )}
 
-            {/* Current Total Subscription Demand Box */}
-            <div className="rounded-xl border border-[#b3f0df] bg-[#e6faf5] p-4 flex items-center justify-between">
-              <div>
-                <span className="text-[11px] font-bold text-[#008767] uppercase">Final Overall Oversubscription</span>
-                <p className="text-xl font-extrabold text-[#008767] mt-0.5">
-                  {ipo.subscription.total}x Times Total Issue
+            {/* Current Total Subscription Demand Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="rounded-xl border border-[#b3f0df] bg-[#e6faf5] p-3 text-left shadow-xs">
+                <span className="text-[11px] font-bold text-[#008767] uppercase block">Overall Demand</span>
+                <p className="text-lg font-extrabold text-[#008767] mt-0.5">
+                  {ipo.subscription.total}x Times
                 </p>
+                <span className="text-[10px] text-[#64748b]">Total Offer: ₹{ipo.issueSizeCr.toLocaleString('en-IN')} Cr</span>
               </div>
-              <div className="text-right">
-                <span className="text-[11px] text-[#64748b]">Retail Portion Demand</span>
-                <p className="text-base font-bold text-[#0f172a]">{ipo.subscription.retail}x Over-demanded</p>
+              <div className="rounded-xl border border-[#e2e8f0] bg-white p-3 text-left shadow-xs">
+                <span className="text-[11px] font-bold text-[#0f172a] uppercase block">Total Bid Value</span>
+                <p className="text-lg font-extrabold text-[#0f172a] mt-0.5">
+                  {ipo.subscription.totalAmountBidCr > 0 ? `₹${ipo.subscription.totalAmountBidCr.toLocaleString('en-IN')} Cr` : 'Pending'}
+                </p>
+                <span className="text-[10px] text-[#64748b]">Market capital committed</span>
+              </div>
+              <div className="rounded-xl border border-[#bae6fd] bg-[#f0f9ff] p-3 text-left shadow-xs">
+                <span className="text-[11px] font-bold text-[#0284c7] uppercase block">Total Applications</span>
+                <p className="text-lg font-extrabold text-[#0284c7] mt-0.5">
+                  {ipo.subscription.totalApplications > 0
+                    ? ipo.subscription.totalApplications >= 100000
+                      ? `${(ipo.subscription.totalApplications / 100000).toFixed(2)} Lakh Bids`
+                      : `${ipo.subscription.totalApplications.toLocaleString('en-IN')} Bids`
+                    : '0 Bids'}
+                </p>
+                <span className="text-[10px] text-[#64748b]">
+                  {ipo.subscription.retailApplications
+                    ? `${(ipo.subscription.retailApplications / 100000).toFixed(2)}L Retail Applications`
+                    : 'Unique PAN submissions'}
+                </span>
               </div>
             </div>
           </div>

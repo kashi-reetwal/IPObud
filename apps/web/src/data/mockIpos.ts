@@ -41,8 +41,18 @@ export const mockIpos: IPO[] = [
       day: 2,
       qib: 0.42,
       nii: 0.65,
+      sHni: 0.55,
+      bHni: 0.70,
       retail: 1.15,
       total: 0.78,
+      totalApplications: 924510,
+      totalAmountBidCr: 8835.40,
+      retailApplications: 841200,
+      retailAmountBidCr: 1955.00,
+      qibAmountBidCr: 4757.50,
+      niiAmountBidCr: 2122.90,
+      sharesOfferedCr: 29.04,
+      sharesBidCr: 22.65,
       updatedAt: '07 Nov 15:30 IST',
     },
     aiAnalysis: {
@@ -87,15 +97,15 @@ export const mockIpos: IPO[] = [
       { name: 'Fidelity Securities Fund', sharesAllocated: 9500000, amountCr: 370.5, fundType: 'FII / Sovereign' },
     ],
     promoterHolding: {
-      preIssuePercent: 0.0, // Professionally managed
+      preIssuePercent: 0.0,
       postIssuePercent: 0.0,
       promoterNames: ['Professionally Managed Company (No Identified Promoter)'],
       leadManagers: ['Kotak Mahindra Capital', 'Citigroup Global Markets', 'J.P. Morgan India', 'BofA Securities'],
     },
     subscriptionDayWise: [
-      { dayNumber: 1, date: '06 Nov', qibTimes: 0.08, sHniTimes: 0.12, bHniTimes: 0.15, retailTimes: 0.54, totalTimes: 0.12 },
-      { dayNumber: 2, date: '07 Nov', qibTimes: 0.42, sHniTimes: 0.55, bHniTimes: 0.70, retailTimes: 1.15, totalTimes: 0.78 },
-      { dayNumber: 3, date: '08 Nov', qibTimes: 6.02, sHniTimes: 3.80, bHniTimes: 4.45, retailTimes: 3.10, totalTimes: 3.59 },
+      { dayNumber: 1, date: '06 Nov', qibTimes: 0.08, sHniTimes: 0.12, bHniTimes: 0.15, retailTimes: 0.54, totalTimes: 0.12, applicationsCount: 382400, amountBidCr: 1350.20 },
+      { dayNumber: 2, date: '07 Nov', qibTimes: 0.42, sHniTimes: 0.55, bHniTimes: 0.70, retailTimes: 1.15, totalTimes: 0.78, applicationsCount: 924510, amountBidCr: 8835.40 },
+      { dayNumber: 3, date: '08 Nov', qibTimes: 6.02, sHniTimes: 3.80, bHniTimes: 4.45, retailTimes: 3.10, totalTimes: 3.59, applicationsCount: 2240500, amountBidCr: 40650.00 },
     ],
   },
   {
@@ -145,8 +155,18 @@ export const mockIpos: IPO[] = [
       day: 3,
       qib: 208.63,
       nii: 62.48,
+      sHni: 60.10,
+      bHni: 63.60,
       retail: 10.79,
       total: 76.34,
+      totalApplications: 9734180,
+      totalAmountBidCr: 241500.00,
+      retailApplications: 8850000,
+      retailAmountBidCr: 13300.00,
+      qibAmountBidCr: 172000.00,
+      niiAmountBidCr: 56200.00,
+      sharesOfferedCr: 2.87,
+      sharesBidCr: 219.09,
       updatedAt: '23 Oct 17:00 IST',
     },
     aiAnalysis: {
@@ -196,9 +216,9 @@ export const mockIpos: IPO[] = [
       leadManagers: ['Axis Capital', 'IIFL Securities', 'Jefferies India', 'SBI Capital Markets'],
     },
     subscriptionDayWise: [
-      { dayNumber: 1, date: '21 Oct', qibTimes: 0.12, sHniTimes: 3.40, bHniTimes: 4.10, retailTimes: 3.25, totalTimes: 2.26 },
-      { dayNumber: 2, date: '22 Oct', qibTimes: 1.73, sHniTimes: 24.50, bHniTimes: 26.10, retailTimes: 6.40, totalTimes: 9.18 },
-      { dayNumber: 3, date: '23 Oct', qibTimes: 208.63, sHniTimes: 60.10, bHniTimes: 63.60, retailTimes: 10.79, totalTimes: 76.34 },
+      { dayNumber: 1, date: '21 Oct', qibTimes: 0.12, sHniTimes: 3.40, bHniTimes: 4.10, retailTimes: 3.25, totalTimes: 2.26, applicationsCount: 2840000, amountBidCr: 9760.00 },
+      { dayNumber: 2, date: '22 Oct', qibTimes: 1.73, sHniTimes: 24.50, bHniTimes: 26.10, retailTimes: 6.40, totalTimes: 9.18, applicationsCount: 5610000, amountBidCr: 39650.00 },
+      { dayNumber: 3, date: '23 Oct', qibTimes: 208.63, sHniTimes: 60.10, bHniTimes: 63.60, retailTimes: 10.79, totalTimes: 76.34, applicationsCount: 9734180, amountBidCr: 241500.00 },
     ],
   },
   {
@@ -238,8 +258,18 @@ export const mockIpos: IPO[] = [
       day: 0,
       qib: 0.00,
       nii: 0.00,
+      sHni: 0.00,
+      bHni: 0.00,
       retail: 0.00,
       total: 0.00,
+      totalApplications: 0,
+      totalAmountBidCr: 0.00,
+      retailApplications: 0,
+      retailAmountBidCr: 0.00,
+      qibAmountBidCr: 0.00,
+      niiAmountBidCr: 0.00,
+      sharesOfferedCr: 92.59,
+      sharesBidCr: 0.00,
       updatedAt: 'Bidding opens 19 Nov',
     },
     aiAnalysis: {
@@ -263,7 +293,29 @@ export const mockIpos: IPO[] = [
         growth: '+109% Renewable Output',
         debtToEquity: '0.45x'
       }
-    }
+    },
+    documents: {
+      drhpUrl: 'https://www.sebi.gov.in/filings/public-issues/sep-2024/ntpc-green-energy-limited-drhp.pdf',
+      rhpUrl: 'https://www.sebi.gov.in/filings/public-issues/nov-2024/ntpc-green-energy-limited-rhp.pdf',
+      anchorBookUrl: 'https://www.bseindia.com/markets/marketinfo/DispNewNoticesDocs.aspx?fn=20241118-12.pdf',
+      allotmentNoticeUrl: 'https://kosmic.kfintech.com/ipostatus/',
+    },
+    financialHistory: [
+      { fiscalYear: 'FY22', revenueCr: 910, ebitdaCr: 720, patCr: 94, netWorthCr: 5210, eps: 1.1, ronwPercent: 1.8 },
+      { fiscalYear: 'FY23', revenueCr: 1205, ebitdaCr: 980, patCr: 171, netWorthCr: 6840, eps: 2.0, ronwPercent: 2.5 },
+      { fiscalYear: 'FY24', revenueCr: 1962, ebitdaCr: 1610, patCr: 344, netWorthCr: 8920, eps: 4.1, ronwPercent: 3.9 },
+    ],
+    anchorInvestors: [
+      { name: 'Life Insurance Corporation of India (LIC)', sharesAllocated: 38400000, amountCr: 414.7, fundType: 'Insurance / AIF' },
+      { name: 'Nippon India Power & Infra Fund', sharesAllocated: 24500000, amountCr: 264.6, fundType: 'Domestic MF' },
+      { name: 'Goldman Sachs Asset Management', sharesAllocated: 21000000, amountCr: 226.8, fundType: 'FII / Sovereign' },
+    ],
+    promoterHolding: {
+      preIssuePercent: 100.0,
+      postIssuePercent: 89.01,
+      promoterNames: ['NTPC Limited (Govt of India Public Sector Undertaking)'],
+      leadManagers: ['IDBI Capital', 'HDFC Bank', 'IIFL Securities', 'Nuvama Wealth Management'],
+    },
   },
   {
     id: '4',
@@ -311,8 +363,18 @@ export const mockIpos: IPO[] = [
       day: 3,
       qib: 6.97,
       nii: 0.60,
+      sHni: 0.48,
+      bHni: 0.66,
       retail: 0.50,
       total: 2.37,
+      totalApplications: 724800,
+      totalAmountBidCr: 46300.00,
+      retailApplications: 685000,
+      retailAmountBidCr: 4180.00,
+      qibAmountBidCr: 38850.00,
+      niiAmountBidCr: 3270.00,
+      sharesOfferedCr: 14.22,
+      sharesBidCr: 33.70,
       updatedAt: 'Listing Complete',
     },
     aiAnalysis: {
@@ -336,7 +398,34 @@ export const mockIpos: IPO[] = [
         growth: '+15.8% YoY Net Profit',
         debtToEquity: '0.04x'
       }
-    }
+    },
+    documents: {
+      drhpUrl: 'https://www.sebi.gov.in/filings/public-issues/jun-2024/hyundai-motor-india-limited-drhp.pdf',
+      rhpUrl: 'https://www.sebi.gov.in/filings/public-issues/oct-2024/hyundai-motor-india-limited-rhp.pdf',
+      anchorBookUrl: 'https://www.bseindia.com/markets/marketinfo/DispNewNoticesDocs.aspx?fn=20241014-08.pdf',
+      allotmentNoticeUrl: 'https://kosmic.kfintech.com/ipostatus/',
+    },
+    financialHistory: [
+      { fiscalYear: 'FY22', revenueCr: 47250, ebitdaCr: 5410, patCr: 2865, netWorthCr: 14200, eps: 35.2, ronwPercent: 20.2 },
+      { fiscalYear: 'FY23', revenueCr: 60300, ebitdaCr: 7540, patCr: 4709, netWorthCr: 18500, eps: 57.9, ronwPercent: 25.5 },
+      { fiscalYear: 'FY24', revenueCr: 69829, ebitdaCr: 9120, patCr: 6060, netWorthCr: 22400, eps: 74.5, ronwPercent: 27.1 },
+    ],
+    anchorInvestors: [
+      { name: 'BlackRock Global Allocation Fund', sharesAllocated: 5400000, amountCr: 1058.4, fundType: 'FII / Sovereign' },
+      { name: 'GIC Private Limited (Singapore)', sharesAllocated: 4800000, amountCr: 940.8, fundType: 'FII / Sovereign' },
+      { name: 'SBI Bluechip Fund', sharesAllocated: 3200000, amountCr: 627.2, fundType: 'Domestic MF' },
+    ],
+    promoterHolding: {
+      preIssuePercent: 100.0,
+      postIssuePercent: 82.5,
+      promoterNames: ['Hyundai Motor Company (South Korea)'],
+      leadManagers: ['Kotak Mahindra Capital', 'Citigroup', 'HSBC Securities', 'J.P. Morgan India', 'Morgan Stanley'],
+    },
+    subscriptionDayWise: [
+      { dayNumber: 1, date: '15 Oct', qibTimes: 0.05, sHniTimes: 0.11, bHniTimes: 0.14, retailTimes: 0.26, totalTimes: 0.18, applicationsCount: 295000, amountBidCr: 5010.00 },
+      { dayNumber: 2, date: '16 Oct', qibTimes: 0.58, sHniTimes: 0.22, bHniTimes: 0.31, retailTimes: 0.38, totalTimes: 0.42, applicationsCount: 480000, amountBidCr: 11700.00 },
+      { dayNumber: 3, date: '17 Oct', qibTimes: 6.97, sHniTimes: 0.48, bHniTimes: 0.66, retailTimes: 0.50, totalTimes: 2.37, applicationsCount: 724800, amountBidCr: 46300.00 },
+    ],
   },
   {
     id: '5',
@@ -376,8 +465,18 @@ export const mockIpos: IPO[] = [
       day: 2,
       qib: 4.20,
       nii: 12.50,
+      sHni: 11.20,
+      bHni: 13.80,
       retail: 18.40,
       total: 13.25,
+      totalApplications: 28450,
+      totalAmountBidCr: 338.40,
+      retailApplications: 24100,
+      retailAmountBidCr: 188.00,
+      qibAmountBidCr: 42.80,
+      niiAmountBidCr: 107.60,
+      sharesOfferedCr: 0.35,
+      sharesBidCr: 4.64,
       updatedAt: '28 Nov 14:00 IST',
     },
     aiAnalysis: {
@@ -401,7 +500,28 @@ export const mockIpos: IPO[] = [
         growth: '+44% YoY Net Profit',
         debtToEquity: '0.22x'
       }
-    }
+    },
+    documents: {
+      drhpUrl: 'https://www.sebi.gov.in/filings/public-issues/nov-2024/apex-ecotech-limited-drhp.pdf',
+      rhpUrl: 'https://www.sebi.gov.in/filings/public-issues/nov-2024/apex-ecotech-limited-rhp.pdf',
+      anchorBookUrl: 'https://www.bseindia.com/markets/marketinfo/DispNewNoticesDocs.aspx?fn=20241126-22.pdf',
+      allotmentNoticeUrl: 'https://www.bigshareonline.com/ipo_Allotment.html',
+    },
+    financialHistory: [
+      { fiscalYear: 'FY22', revenueCr: 28.4, ebitdaCr: 3.1, patCr: 1.8, netWorthCr: 8.5, eps: 3.2, ronwPercent: 21.2 },
+      { fiscalYear: 'FY23', revenueCr: 39.5, ebitdaCr: 5.2, patCr: 3.4, netWorthCr: 12.1, eps: 4.8, ronwPercent: 28.1 },
+      { fiscalYear: 'FY24', revenueCr: 56.8, ebitdaCr: 8.9, patCr: 6.2, netWorthCr: 19.4, eps: 7.9, ronwPercent: 32.0 },
+    ],
+    promoterHolding: {
+      preIssuePercent: 88.5,
+      postIssuePercent: 64.2,
+      promoterNames: ['Lalit Ramchandra Agarwal', 'Ankit Agarwal'],
+      leadManagers: ['Share India Capital Services'],
+    },
+    subscriptionDayWise: [
+      { dayNumber: 1, date: '27 Nov', qibTimes: 1.10, sHniTimes: 3.20, bHniTimes: 3.80, retailTimes: 6.50, totalTimes: 4.15, applicationsCount: 10200, amountBidCr: 106.00 },
+      { dayNumber: 2, date: '28 Nov', qibTimes: 4.20, sHniTimes: 11.20, bHniTimes: 13.80, retailTimes: 18.40, totalTimes: 13.25, applicationsCount: 28450, amountBidCr: 338.40 },
+    ],
   }
 ];
 
@@ -411,4 +531,3 @@ export const initialFamilyAccounts: import('../types').FamilyAccount[] = [
   { id: 'acc-3', name: 'Om Prakash Sharma (Father)', pan: 'KLMNO9012A', relation: 'Father', dpClientId: '1208160099887766' },
   { id: 'acc-4', name: 'Kavita Sharma (Mother)', pan: 'PQRST3456B', relation: 'Mother', dpClientId: '1208160055443322' },
 ];
-

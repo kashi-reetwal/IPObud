@@ -24,8 +24,18 @@ export interface SubscriptionStatus {
   day: number;
   qib: number;
   nii: number;
+  sHni?: number;
+  bHni?: number;
   retail: number;
   total: number;
+  totalApplications: number; // Count of unique PAN applications
+  totalAmountBidCr: number;  // Total value bid in INR Crores
+  retailApplications?: number; // Retail individual investor applications count
+  retailAmountBidCr?: number;  // Total retail bid value in INR Crores
+  qibAmountBidCr?: number;     // Institutional bid value in INR Crores
+  niiAmountBidCr?: number;     // Non-institutional bid value in INR Crores
+  sharesOfferedCr?: number;    // Total shares offered in Crores
+  sharesBidCr?: number;        // Total shares bid in Crores
   updatedAt: string;
 }
 
@@ -63,7 +73,7 @@ export interface PastPerformanceResult {
   allotmentRatioRetail: string;
 }
 
-// Narada Feature: Multi-Account Allotment Models
+// Multi-Account Family Allotment Models
 export interface FamilyAccount {
   id: string;
   name: string;
@@ -95,7 +105,7 @@ export interface BulkAllotmentSummary {
   results: AccountAllotmentResult[];
 }
 
-// IPO Guru Feature: Prospectus Documents & SEBI Filings
+// Statutory Prospectus Documents & SEBI Filings
 export interface ProspectusDocuments {
   drhpUrl?: string;
   rhpUrl?: string;
@@ -135,6 +145,8 @@ export interface DayWiseSubscription {
   bHniTimes: number;
   retailTimes: number;
   totalTimes: number;
+  applicationsCount?: number;
+  amountBidCr?: number;
 }
 
 export interface IPO {
@@ -160,7 +172,7 @@ export interface IPO {
   aiAnalysis: AiAnalysis;
   timeline: TimelineDates;
   pastResults?: PastPerformanceResult;
-  // IPO Guru Dossier Extensions
+  // Institutional Dossier Extensions
   documents?: ProspectusDocuments;
   financialHistory?: FiscalYearFinancial[];
   anchorInvestors?: AnchorInvestor[];

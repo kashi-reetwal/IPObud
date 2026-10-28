@@ -7,23 +7,17 @@ import { Header } from '../components/Header';
 import { TickerBar } from '../components/TickerBar';
 import { IpoCard } from '../components/IpoCard';
 import { TimelineModal } from '../components/TimelineModal';
-import { CalendarTimeline } from '../components/CalendarTimeline';
-import { GmpHistoryChart } from '../components/GmpHistoryChart';
 import { AiAnalysisModal } from '../components/AiAnalysisModal';
 import { AllotmentModal } from '../components/AllotmentModal';
 import { BidCalculatorModal } from '../components/BidCalculatorModal';
 import { MultiAccountManagerModal } from '../components/MultiAccountManagerModal';
 import { DossierProspectusModal } from '../components/DossierProspectusModal';
-import { TrendingUp, Layers, CheckCircle2, ChevronDown } from 'lucide-react';
+import { Layers, CheckCircle2, ChevronDown } from 'lucide-react';
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeFilter, setActiveFilter] = useState('ALL');
   const [marketTypeFilter, setMarketTypeFilter] = useState<'ALL' | 'MAINBOARD' | 'SME'>('ALL');
-  const [activeTheme, setActiveTheme] = useState<'GROWW' | 'ANGEL_ONE'>('GROWW');
-
-  // Active highlighted IPO for timeline and graph on page
-  const [featuredIpo, setFeaturedIpo] = useState<IPO>(mockIpos[1]); // Waaree Energies default
 
   // Modals state
   const [selectedTimelineIpo, setSelectedTimelineIpo] = useState<IPO | null>(null);
@@ -76,16 +70,12 @@ export default function Home() {
   );
 
   const handleCardTimelineClick = (target: IPO) => {
-    setFeaturedIpo(target);
-    const el = document.getElementById('issue-deep-dive');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
+    setSelectedTimelineIpo(target);
   };
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-[#0f172a] flex flex-col font-sans">
-      {/* 1. Header */}
+      {/* 1. Institutional Header */}
       <Header
         onOpenAllotment={() => {
           setSelectedAllotmentIpo(null);
@@ -102,10 +92,10 @@ export default function Home() {
         setMarketTypeFilter={setMarketTypeFilter}
       />
 
-      {/* 2. Market Trend Ticker */}
+      {/* 2. Real-Time Market Trend Ticker */}
       <TickerBar ipos={mockIpos} />
 
-      {/* 3. Main Dashboard */}
+      {/* 3. Main Card-Centric Dashboard */}
       <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 space-y-8">
         {/* Top Market Overview Summary */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-[#e2e8f0] pb-5">
@@ -175,7 +165,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* CARDS FIRST: Categorized Sections */}
+        {/* CARDS DISPLAY: Categorized Sections */}
         {filteredIpos.length === 0 ? (
           <div className="rounded-2xl border border-[#e2e8f0] bg-white p-12 text-center text-sm text-[#64748b] shadow-xs">
             <p className="font-semibold text-[#0f172a] text-base">No IPOs matched your search or segment filter.</p>
@@ -335,52 +325,9 @@ export default function Home() {
             ))}
           </div>
         )}
-
-        {/* 4. Issue Deep Dive & Settlement Schedule (Placed BELOW Cards) */}
-        <section id="issue-deep-dive" className="rounded-2xl border border-[#e2e8f0] bg-white p-5 space-y-4 shadow-xs scroll-mt-24">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-[#f1f5f9] pb-3.5">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-[#008767]">
-                Issue Deep Dive & Settlement Schedule
-              </span>
-              <h2 className="text-lg font-bold text-[#0f172a] mt-0.5">
-                {featuredIpo.companyName} ({featuredIpo.symbol})
-              </h2>
-            </div>
-
-            {/* Quick IPO Selector Tabs */}
-            <div className="flex items-center space-x-1.5 overflow-x-auto">
-              <span className="text-xs text-[#64748b] mr-1 hidden sm:inline font-medium">Select Issue:</span>
-              {mockIpos.map((ipo) => (
-                <button
-                  key={ipo.id}
-                  onClick={() => setFeaturedIpo(ipo)}
-                  className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition-all ${
-                    featuredIpo.id === ipo.id
-                      ? 'bg-[#00d09c] text-white shadow-xs font-bold'
-                      : 'text-[#64748b] hover:text-[#0f172a] bg-[#f8fafc] border border-[#e2e8f0]'
-                  }`}
-                >
-                  {ipo.symbol}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Complete 6-Step Settlement Calendar */}
-          <CalendarTimeline timeline={featuredIpo.timeline} />
-
-          {/* High Precision Historical Trend & Past Performance Chart */}
-          <GmpHistoryChart
-            data={featuredIpo.gmpHistory}
-            symbol={featuredIpo.symbol}
-            issuePrice={featuredIpo.priceBandHigh}
-            pastResults={featuredIpo.pastResults}
-          />
-        </section>
       </main>
 
-      {/* 5. Clean Institutional Footer */}
+      {/* 4. Clean Institutional Footer */}
       <footer className="border-t border-[#e2e8f0] bg-white py-6 text-center text-xs text-[#64748b]">
         <p className="font-semibold text-[#0f172a]">
           IPObud • Built for Indian Stock Market Investors & Traders
@@ -390,7 +337,7 @@ export default function Home() {
         </p>
       </footer>
 
-      {/* 6. Modals */}
+      {/* 5. Modals */}
       <TimelineModal
         ipo={selectedTimelineIpo}
         onClose={() => setSelectedTimelineIpo(null)}
@@ -415,7 +362,7 @@ export default function Home() {
       {multiAccountModalOpen && (
         <MultiAccountManagerModal
           ipos={mockIpos}
-          selectedIpo={selectedAllotmentIpo || featuredIpo}
+          selectedIpo={selectedAllotmentIpo || mockIpos[0]}
           onClose={() => setMultiAccountModalOpen(false)}
         />
       )}

@@ -12,8 +12,6 @@ interface HeaderProps {
   setActiveFilter: (val: string) => void;
   marketTypeFilter?: 'ALL' | 'MAINBOARD' | 'SME';
   setMarketTypeFilter?: (val: 'ALL' | 'MAINBOARD' | 'SME') => void;
-  activeTheme?: 'GROWW' | 'ANGEL_ONE';
-  setActiveTheme?: (theme: 'GROWW' | 'ANGEL_ONE') => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -25,10 +23,7 @@ export const Header: React.FC<HeaderProps> = ({
   setActiveFilter,
   marketTypeFilter = 'ALL',
   setMarketTypeFilter,
-  activeTheme = 'GROWW',
-  setActiveTheme,
 }) => {
-  const isAngel = activeTheme === 'ANGEL_ONE';
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -45,15 +40,9 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header className="sticky top-0 z-40 w-full border-b border-[#e2e8f0] bg-white/95 backdrop-blur-md shadow-xs">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6">
-        {/* Brand (Groww / Angel One style) */}
+        {/* Brand */}
         <div className="flex items-center space-x-3">
-          <div
-            className={`flex h-10 w-10 items-center justify-center rounded-xl text-white shadow-sm transition-all ${
-              isAngel
-                ? 'bg-gradient-to-br from-[#1849a9] to-[#0e3bb4]'
-                : 'bg-gradient-to-br from-[#00d09c] to-[#00a87e]'
-            }`}
-          >
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl text-white shadow-sm transition-all bg-gradient-to-br from-[#00d09c] to-[#00a87e]">
             <TrendingUp className="h-5 w-5" />
           </div>
           <div>
@@ -100,11 +89,7 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Allotment Query Button */}
           <button
             onClick={onOpenAllotment}
-            className={`flex items-center space-x-1.5 rounded-xl px-3.5 py-2 text-xs font-semibold transition-all shadow-xs ${
-              isAngel
-                ? 'bg-[#1849a9] hover:bg-[#123887] text-white'
-                : 'bg-[#eff6ff] hover:bg-[#dbeafe] text-[#1849a9] border border-[#bfdbfe]'
-            }`}
+            className="flex items-center space-x-1.5 rounded-xl px-3.5 py-2 text-xs font-semibold transition-all shadow-xs bg-[#eff6ff] hover:bg-[#dbeafe] text-[#1849a9] border border-[#bfdbfe]"
           >
             <ShieldCheck className="h-4 w-4" />
             <span>Check Allotment</span>
@@ -223,9 +208,7 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={() => setActiveFilter(tab.id)}
               className={`whitespace-nowrap rounded-lg px-3 py-1.5 font-medium transition-all ${
                 isActive
-                  ? isAngel
-                    ? 'bg-[#1849a9] text-white font-bold shadow-xs'
-                    : 'bg-[#00d09c] text-white font-bold shadow-xs'
+                  ? 'bg-[#00d09c] text-white font-bold shadow-xs'
                   : 'text-[#64748b] hover:text-[#0f172a] hover:bg-[#f1f5f9]'
               }`}
             >

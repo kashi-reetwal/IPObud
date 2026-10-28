@@ -103,7 +103,7 @@ export const CalendarTimeline: React.FC<CalendarTimelineProps> = ({ timeline }) 
             >
               <div className="flex items-center justify-between">
                 <span className={`text-[11px] font-bold ${isCurrent ? 'text-[#008767]' : isDone ? 'text-[#008767]' : 'text-[#64748b]'}`}>
-                  Milestone {idx + 1}
+                  Stage {idx + 1}
                 </span>
                 <span
                   className={`flex h-5 w-5 items-center justify-center rounded-full text-[10px] ${
