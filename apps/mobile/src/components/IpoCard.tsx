@@ -8,7 +8,6 @@ interface IpoCardProps {
   onOpenAi: (ipo: IPO) => void;
   onOpenCalc: (ipo: IPO) => void;
   onOpenAllotment: (ipo: IPO) => void;
-  onOpenTimeline?: (ipo: IPO) => void;
 }
 
 export const IpoCard: React.FC<IpoCardProps> = ({
@@ -16,28 +15,27 @@ export const IpoCard: React.FC<IpoCardProps> = ({
   onOpenAi,
   onOpenCalc,
   onOpenAllotment,
-  onOpenTimeline,
 }) => {
   const isPositive = ipo.gainPercentage >= 0;
   const isMainboard = ipo.marketType === 'MAINBOARD';
   const minInvestment = ipo.priceBandHigh * ipo.lotSize;
 
-  const getVerdictColor = (verdict: string) => {
+  const getVerdictStyle = (verdict: string) => {
     switch (verdict) {
       case 'STRONG_APPLY':
-        return '#10b981';
+        return { bg: '#e6faf5', text: '#008767', border: '#b3f0df' };
       case 'APPLY':
-        return '#d4d4d8';
+        return { bg: '#eff6ff', text: '#1849a9', border: '#bfdbfe' };
       case 'LISTING_GAINS_ONLY':
-        return '#f59e0b';
+        return { bg: '#fff4ed', text: '#c2410c', border: '#fed7aa' };
       case 'AVOID':
-        return '#f43f5e';
+        return { bg: '#fef2f2', text: '#b91c1c', border: '#fecaca' };
       default:
-        return '#71717a';
+        return { bg: '#f1f5f9', text: '#475569', border: '#e2e8f0' };
     }
   };
 
-  const verdictColor = getVerdictColor(ipo.aiAnalysis.verdict);
+  const vStyle = getVerdictStyle(ipo.aiAnalysis.verdict);
 
   return (
     <View style={styles.card}>
@@ -45,60 +43,67 @@ export const IpoCard: React.FC<IpoCardProps> = ({
       <View style={styles.header}>
         <View style={styles.titleArea}>
           <View style={styles.badgeRow}>
-            <Text style={styles.symbol}>{ipo.symbol}</Text>
-            <View style={styles.typePill}>
-              <Text style={styles.typeText}>{ipo.marketType}</Text>
+            <View style={styles.avatarBox}>
+              <Text style={styles.avatarText}>{ipo.symbol.slice(0, 2)}</Text>
             </View>
-            <View style={styles.statusPill}>
-              <Text style={styles.statusText}>{ipo.status}</Text>
+            <View>
+              <Text style={styles.companyName} numberOfLines={1}>
+                {ipo.companyName}
+              </Text>
+              <View style={styles.subRow}>
+                <Text style={styles.symbol}>{ipo.symbol}</Text>
+                <Text style={styles.bullet}>•</Text>
+                <Text style={styles.typeText}>{ipo.marketType}</Text>
+                <Text style={styles.bullet}>•</Text>
+                <View style={styles.statusPill}>
+                  <Text style={styles.statusText}>{ipo.status}</Text>
+                </View>
+              </View>
             </View>
           </View>
-          <Text style={styles.companyName} numberOfLines={1}>
-            {ipo.companyName}
-          </Text>
         </View>
 
         {/* AI Verdict Badge */}
         <TouchableOpacity
           onPress={() => onOpenAi(ipo)}
-          style={[styles.verdictBadge, { borderColor: verdictColor + '60' }]}
+          style={[styles.verdictBadge, { backgroundColor: vStyle.bg, borderColor: vStyle.border }]}
         >
-          <Text style={[styles.verdictText, { color: verdictColor }]}>
+          <Text style={[styles.verdictText, { color: vStyle.text }]}>
             {ipo.aiAnalysis.verdict.replace(/_/g, ' ')}
           </Text>
         </TouchableOpacity>
       </View>
 
-      {/* Price & GMP Metrics Row */}
+      {/* Pricing & GMP Details */}
       <View style={styles.metricsBox}>
         <View style={styles.metricColumn}>
-          <Text style={styles.metricLabel}>PRICE BAND</Text>
+          <Text style={styles.metricLabel}>Price Band</Text>
           <Text style={styles.metricValue}>
-            INR {ipo.priceBandLow} - {ipo.priceBandHigh}
+            ₹{ipo.priceBandLow} - ₹{ipo.priceBandHigh}
           </Text>
           <Text style={styles.subMetric}>
-            Lot: {ipo.lotSize} sh (INR {minInvestment.toLocaleString('en-IN')})
+            Lot: {ipo.lotSize} shares (₹{minInvestment.toLocaleString('en-IN')})
           </Text>
         </View>
 
         <View style={[styles.metricColumn, styles.alignRight]}>
-          <Text style={styles.metricLabel}>CURRENT GMP</Text>
+          <Text style={styles.metricLabel}>Est. Listing Gain</Text>
           <Text
             style={[
               styles.metricValue,
               isPositive ? styles.greenText : styles.redText,
             ]}
           >
-            INR {ipo.currentGmp} ({ipo.gainPercentage > 0 ? '+' : ''}
+            +₹{ipo.currentGmp} ({ipo.gainPercentage > 0 ? '+' : ''}
             {ipo.gainPercentage}%)
           </Text>
           <Text style={styles.subMetric}>
-            Est: <Text style={styles.boldWhite}>INR {ipo.estimatedListingPrice}</Text>
+            Est. Price: <Text style={styles.boldWhite}>₹{ipo.estimatedListingPrice}</Text>
           </Text>
         </View>
       </View>
 
-      {/* Calendar Dates Timeline Box */}
+      {/* Key Dates Stepper / Grid */}
       <View style={styles.datesBox}>
         <Text style={styles.datesHeader}>KEY SETTLEMENT DATES</Text>
         <View style={styles.datesGrid}>
@@ -107,23 +112,23 @@ export const IpoCard: React.FC<IpoCardProps> = ({
             <Text style={styles.dateVal}>{ipo.timeline.biddingClose}</Text>
           </View>
           <View style={styles.dateCol}>
-            <Text style={styles.dateLabel}>Allotment Final</Text>
+            <Text style={styles.dateLabel}>Allotment</Text>
             <Text style={styles.dateVal}>{ipo.timeline.allotmentFinalization}</Text>
           </View>
           <View style={styles.dateCol}>
-            <Text style={styles.dateLabel}>Refunds Initiate</Text>
+            <Text style={styles.dateLabel}>Refunds</Text>
             <Text style={styles.dateVal}>{ipo.timeline.refundsInitiation}</Text>
           </View>
           <View style={styles.dateCol}>
-            <Text style={styles.dateLabel}>Listing Day</Text>
+            <Text style={styles.dateLabel}>Listing</Text>
             <Text style={styles.dateValGreen}>{ipo.timeline.listingOnExchange}</Text>
           </View>
         </View>
       </View>
 
-      {/* Subscription Multiples */}
+      {/* Subscription demand */}
       <View style={styles.subscriptionRow}>
-        <Text style={styles.subDemandLabel}>Subscription Multiples:</Text>
+        <Text style={styles.subDemandLabel}>Subscription Demand:</Text>
         <View style={styles.flexRow}>
           <Text style={styles.subQuota}>QIB <Text style={styles.boldWhite}>{ipo.subscription.qib}x</Text></Text>
           <Text style={styles.subQuota}>NII <Text style={styles.boldWhite}>{ipo.subscription.nii}x</Text></Text>
@@ -131,7 +136,7 @@ export const IpoCard: React.FC<IpoCardProps> = ({
         </View>
       </View>
 
-      {/* Bottom Action Buttons */}
+      {/* Action Buttons */}
       <View style={styles.actionsRow}>
         <TouchableOpacity
           onPress={() => onOpenCalc(ipo)}
@@ -162,12 +167,17 @@ export const IpoCard: React.FC<IpoCardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#0f1118',
-    borderRadius: 12,
+    backgroundColor: '#ffffff',
+    borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#1f2433',
-    padding: 14,
-    marginBottom: 12,
+    borderColor: '#e2e8f0',
+    padding: 16,
+    marginBottom: 14,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
   },
   header: {
     flexDirection: 'row',
@@ -181,70 +191,79 @@ const styles = StyleSheet.create({
   badgeRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 4,
+  },
+  avatarBox: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: '#eff6ff',
+    borderWidth: 1,
+    borderColor: '#bfdbfe',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
+  },
+  avatarText: {
+    color: '#1849a9',
+    fontSize: 12,
+    fontWeight: '800',
+  },
+  companyName: {
+    color: '#0f172a',
+    fontSize: 15,
+    fontWeight: '700',
+  },
+  subRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 2,
   },
   symbol: {
-    color: '#f4f4f5',
-    fontSize: 13,
-    fontWeight: '800',
-    fontFamily: 'monospace',
-    marginRight: 6,
+    color: '#0f172a',
+    fontSize: 11,
+    fontWeight: '700',
   },
-  typePill: {
-    backgroundColor: '#181b26',
-    borderWidth: 1,
-    borderColor: '#272c3d',
-    paddingHorizontal: 5,
-    paddingVertical: 1,
-    borderRadius: 4,
-    marginRight: 6,
+  bullet: {
+    color: '#cbd5e1',
+    marginHorizontal: 4,
+    fontSize: 10,
   },
   typeText: {
-    fontSize: 9,
-    fontWeight: '700',
-    color: '#a1a1aa',
-    fontFamily: 'monospace',
+    color: '#64748b',
+    fontSize: 11,
   },
   statusPill: {
-    backgroundColor: '#181b26',
+    backgroundColor: '#f1f5f9',
     borderWidth: 1,
-    borderColor: '#272c3d',
+    borderColor: '#e2e8f0',
     paddingHorizontal: 5,
     paddingVertical: 1,
     borderRadius: 4,
   },
   statusText: {
+    color: '#475569',
     fontSize: 9,
-    fontWeight: '700',
-    color: '#a1a1aa',
-    fontFamily: 'monospace',
-  },
-  companyName: {
-    color: '#ffffff',
-    fontSize: 14,
     fontWeight: '700',
   },
   verdictBadge: {
     borderWidth: 1,
-    backgroundColor: '#181b26',
-    paddingHorizontal: 7,
+    paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: 6,
+    borderRadius: 12,
   },
   verdictText: {
     fontSize: 10,
-    fontWeight: '800',
-    fontFamily: 'monospace',
+    fontWeight: '700',
   },
   metricsBox: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#08090d',
-    borderRadius: 8,
+    backgroundColor: '#f8fafc',
+    borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#1c202d',
-    padding: 10,
-    marginTop: 10,
+    borderColor: '#e2e8f0',
+    padding: 12,
+    marginTop: 12,
   },
   metricColumn: {
     flex: 1,
@@ -253,51 +272,46 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   metricLabel: {
-    color: '#71717a',
-    fontSize: 9,
-    fontWeight: '700',
-    fontFamily: 'monospace',
-    letterSpacing: 0.5,
+    color: '#64748b',
+    fontSize: 11,
+    fontWeight: '500',
   },
   metricValue: {
-    color: '#ffffff',
-    fontSize: 13,
-    fontWeight: '800',
+    color: '#0f172a',
+    fontSize: 14,
+    fontWeight: '700',
     marginTop: 2,
-    fontFamily: 'monospace',
   },
   subMetric: {
-    color: '#71717a',
+    color: '#64748b',
     fontSize: 10,
     marginTop: 2,
-    fontFamily: 'monospace',
   },
   boldWhite: {
-    color: '#f4f4f5',
+    color: '#0f172a',
     fontWeight: '700',
   },
   greenText: {
-    color: '#10b981',
-    fontWeight: '800',
+    color: '#008767',
+    fontWeight: '700',
   },
   redText: {
-    color: '#f43f5e',
-    fontWeight: '800',
+    color: '#b91c1c',
+    fontWeight: '700',
   },
   datesBox: {
-    backgroundColor: '#08090d',
-    borderRadius: 8,
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#1c202d',
-    padding: 9,
-    marginTop: 8,
+    borderColor: '#e2e8f0',
+    padding: 10,
+    marginTop: 10,
   },
   datesHeader: {
-    color: '#71717a',
+    color: '#008767',
     fontSize: 9,
-    fontWeight: '800',
+    fontWeight: '700',
     letterSpacing: 0.5,
-    fontFamily: 'monospace',
     marginBottom: 6,
   },
   datesGrid: {
@@ -308,103 +322,95 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   dateLabel: {
-    color: '#52525b',
-    fontSize: 8,
-    fontFamily: 'monospace',
+    color: '#64748b',
+    fontSize: 9,
   },
   dateVal: {
-    color: '#d4d4d8',
+    color: '#0f172a',
     fontSize: 10,
-    fontWeight: '700',
-    fontFamily: 'monospace',
+    fontWeight: '600',
     marginTop: 1,
   },
   dateValGreen: {
-    color: '#10b981',
+    color: '#008767',
     fontSize: 10,
-    fontWeight: '800',
-    fontFamily: 'monospace',
+    fontWeight: '700',
     marginTop: 1,
   },
   subscriptionRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#12151e',
-    borderRadius: 6,
-    paddingHorizontal: 8,
-    paddingVertical: 6,
-    marginTop: 8,
+    backgroundColor: '#f8fafc',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
+    paddingHorizontal: 10,
+    paddingVertical: 7,
+    marginTop: 10,
   },
   flexRow: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   subDemandLabel: {
-    color: '#71717a',
-    fontSize: 10,
-    fontFamily: 'monospace',
+    color: '#64748b',
+    fontSize: 11,
   },
   subQuota: {
-    color: '#71717a',
-    fontSize: 10,
-    marginLeft: 6,
-    fontFamily: 'monospace',
+    color: '#64748b',
+    fontSize: 11,
+    marginLeft: 8,
   },
   actionsRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 12,
-    paddingTop: 10,
+    marginTop: 14,
+    paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#1a1f2c',
+    borderTopColor: '#f1f5f9',
   },
   calcBtn: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#1c202e',
-    borderRadius: 6,
-    paddingVertical: 7,
-    marginRight: 6,
+    backgroundColor: '#f8fafc',
     borderWidth: 1,
-    borderColor: '#293044',
+    borderColor: '#e2e8f0',
+    borderRadius: 10,
+    paddingVertical: 9,
+    marginRight: 8,
   },
   calcBtnText: {
-    color: '#e4e4e7',
-    fontSize: 11,
+    color: '#0f172a',
+    fontSize: 12,
     fontWeight: '700',
-    fontFamily: 'monospace',
   },
   aiBtn: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#181b26',
-    borderRadius: 6,
-    paddingVertical: 7,
-    borderWidth: 1,
-    borderColor: '#272c3d',
+    backgroundColor: '#00d09c',
+    borderRadius: 10,
+    paddingVertical: 9,
   },
   aiBtnText: {
-    color: '#d4d4d8',
-    fontSize: 11,
+    color: '#ffffff',
+    fontSize: 12,
     fontWeight: '700',
-    fontFamily: 'monospace',
   },
   allotmentBtn: {
-    backgroundColor: '#06261c',
-    borderRadius: 6,
-    paddingVertical: 7,
-    paddingHorizontal: 10,
-    marginLeft: 6,
+    backgroundColor: '#eff6ff',
+    borderRadius: 10,
+    paddingVertical: 9,
+    paddingHorizontal: 12,
+    marginLeft: 8,
     borderWidth: 1,
-    borderColor: '#0d543e',
+    borderColor: '#bfdbfe',
   },
   allotmentBtnText: {
-    color: '#34d399',
-    fontSize: 11,
+    color: '#1849a9',
+    fontSize: 12,
     fontWeight: '700',
-    fontFamily: 'monospace',
   },
 });

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { GmpPoint, PastPerformanceResult } from '../types';
-import { TrendingUp, BarChart2, Info } from 'lucide-react';
+import { TrendingUp, BarChart2 } from 'lucide-react';
 
 interface GmpHistoryChartProps {
   data: GmpPoint[];
@@ -22,13 +22,12 @@ export const GmpHistoryChart: React.FC<GmpHistoryChartProps> = ({
 
   if (!data || data.length === 0) {
     return (
-      <div className="rounded-lg border border-zinc-800 bg-zinc-950 p-6 text-center text-xs text-zinc-500">
-        No past trend records logged for this issue.
+      <div className="rounded-2xl border border-[#20273a] bg-[#161b2a] p-6 text-center text-xs text-[#8f98a8]">
+        No trend data available for this issue.
       </div>
     );
   }
 
-  // Values based on selected metric
   const values = data.map((d) => {
     if (metric === 'PERCENT') return d.gainPercent;
     if (metric === 'PRICE') return d.estListingPrice;
@@ -39,7 +38,6 @@ export const GmpHistoryChart: React.FC<GmpHistoryChartProps> = ({
   const maxVal = Math.max(...values, 10);
   const range = maxVal - minVal || 1;
 
-  // Chart dimensions
   const svgWidth = 600;
   const svgHeight = 220;
   const paddingX = 45;
@@ -71,29 +69,29 @@ export const GmpHistoryChart: React.FC<GmpHistoryChartProps> = ({
   const activePoint = hoveredIdx !== null ? points[hoveredIdx] : points[points.length - 1];
 
   return (
-    <div className="rounded-xl border border-zinc-800 bg-zinc-950/80 p-4 font-sans">
-      {/* Top Controls Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-zinc-800 pb-3">
+    <div className="rounded-2xl border border-[#e2e8f0] bg-white p-5 shadow-xs">
+      {/* Top Header & Metric Tabs */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-[#f1f5f9] pb-3.5">
         <div>
           <div className="flex items-center space-x-2">
-            <span className="font-mono text-xs font-bold tracking-wider text-zinc-200 uppercase">
-              {symbol} Premium Trend & Past Performance
+            <span className="text-sm font-bold text-[#0f172a]">
+              {symbol} GMP Historical Trend & Listing Gains
             </span>
-            <span className="rounded border border-zinc-700 bg-zinc-900 px-1.5 py-0.2 text-[10px] font-mono text-zinc-400">
-              Cutoff INR {issuePrice}
+            <span className="rounded-md bg-[#f1f5f9] border border-[#e2e8f0] px-2 py-0.5 text-[11px] font-semibold text-[#475569]">
+              Issue Price: ₹{issuePrice}
             </span>
           </div>
-          <p className="text-[11px] text-zinc-400 mt-0.5">
-            Historical grey market premium consensus leading to listing day
+          <p className="text-xs text-[#64748b] mt-0.5">
+            Daily grey market premium momentum leading to listing
           </p>
         </div>
 
         {/* Metric Selector Tabs */}
-        <div className="flex items-center space-x-1 rounded-lg border border-zinc-800 bg-zinc-900/60 p-1">
+        <div className="flex items-center space-x-1 rounded-xl bg-[#f8fafc] p-1 border border-[#e2e8f0]">
           {[
-            { id: 'GMP', label: 'GMP (INR)' },
+            { id: 'GMP', label: 'GMP (₹)' },
             { id: 'PERCENT', label: 'Gain (%)' },
-            { id: 'PRICE', label: 'Est. Listing' },
+            { id: 'PRICE', label: 'Est. Price' },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -101,10 +99,10 @@ export const GmpHistoryChart: React.FC<GmpHistoryChartProps> = ({
                 setMetric(tab.id as any);
                 setHoveredIdx(null);
               }}
-              className={`rounded px-2.5 py-1 text-[11px] font-mono font-medium transition-colors ${
+              className={`rounded-lg px-3 py-1 text-xs font-semibold transition-all ${
                 metric === tab.id
-                  ? 'bg-zinc-800 text-white font-semibold'
-                  : 'text-zinc-400 hover:text-zinc-200'
+                  ? 'bg-[#00d09c] text-white shadow-xs font-bold'
+                  : 'text-[#64748b] hover:text-[#0f172a]'
               }`}
             >
               {tab.label}
@@ -113,34 +111,34 @@ export const GmpHistoryChart: React.FC<GmpHistoryChartProps> = ({
         </div>
       </div>
 
-      {/* Active Metric Callout */}
+      {/* Active Reading Callout */}
       <div className="my-3 flex items-baseline justify-between">
         <div>
-          <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
-            {hoveredIdx !== null ? `Recorded on ${activePoint.point.date}` : 'Latest Value'}
+          <span className="text-xs font-medium text-[#64748b]">
+            {hoveredIdx !== null ? `Date: ${activePoint.point.date}` : 'Latest Recorded Premium'}
           </span>
           <div className="flex items-baseline space-x-2 mt-0.5">
-            <span className="font-mono text-xl font-bold text-white">
+            <span className="text-2xl font-bold text-[#0f172a]">
               {metric === 'PERCENT'
                 ? `${activePoint.val > 0 ? '+' : ''}${activePoint.val.toFixed(2)}%`
-                : `INR ${activePoint.val.toLocaleString('en-IN')}`}
+                : `₹${activePoint.val.toLocaleString('en-IN')}`}
             </span>
-            <span className="font-mono text-xs text-emerald-400">
-              ({activePoint.point.gainPercent > 0 ? '+' : ''}
-              {activePoint.point.gainPercent}% gain)
+            <span className="rounded-full bg-[#e6faf5] border border-[#b3f0df] px-2 py-0.5 text-xs font-bold text-[#008767]">
+              {activePoint.point.gainPercent > 0 ? '+' : ''}
+              {activePoint.point.gainPercent}% return
             </span>
           </div>
         </div>
 
-        <div className="text-right text-[11px] font-mono text-zinc-400">
+        <div className="text-right text-xs text-[#64748b]">
           <span>Est. Listing: </span>
-          <strong className="text-zinc-200 font-bold">
-            INR {activePoint.point.estListingPrice}
+          <strong className="text-[#0f172a] font-bold text-sm">
+            ₹{activePoint.point.estListingPrice}
           </strong>
         </div>
       </div>
 
-      {/* SVG Chart */}
+      {/* Smooth SVG Chart */}
       <div className="relative w-full overflow-hidden">
         <svg
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
@@ -148,9 +146,9 @@ export const GmpHistoryChart: React.FC<GmpHistoryChartProps> = ({
           preserveAspectRatio="none"
         >
           <defs>
-            <linearGradient id={`grad-${symbol}`} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#10b981" stopOpacity="0.25" />
-              <stop offset="100%" stopColor="#10b981" stopOpacity="0.0" />
+            <linearGradient id={`groww-grad-${symbol}`} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#00d09c" stopOpacity="0.22" />
+              <stop offset="100%" stopColor="#00d09c" stopOpacity="0.0" />
             </linearGradient>
           </defs>
 
@@ -165,17 +163,17 @@ export const GmpHistoryChart: React.FC<GmpHistoryChartProps> = ({
                   y1={y}
                   x2={svgWidth - paddingX}
                   y2={y}
-                  stroke="#27272a"
+                  stroke="#f1f5f9"
                   strokeDasharray="3 3"
-                  strokeWidth="1"
+                  strokeWidth="1.5"
                 />
                 <text
                   x={paddingX - 8}
                   y={y + 3}
                   textAnchor="end"
-                  fill="#71717a"
-                  fontSize="9"
-                  fontFamily="monospace"
+                  fill="#94a3b8"
+                  fontSize="10"
+                  fontWeight="500"
                 >
                   {metric === 'PERCENT' ? `${refVal.toFixed(0)}%` : refVal.toFixed(0)}
                 </text>
@@ -184,14 +182,14 @@ export const GmpHistoryChart: React.FC<GmpHistoryChartProps> = ({
           })}
 
           {/* Area Fill */}
-          <path d={areaD} fill={`url(#grad-${symbol})`} />
+          <path d={areaD} fill={`url(#groww-grad-${symbol})`} />
 
           {/* Line Stroke */}
           <path
             d={pathD}
             fill="none"
-            stroke="#10b981"
-            strokeWidth="2"
+            stroke="#00d09c"
+            strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
@@ -206,19 +204,18 @@ export const GmpHistoryChart: React.FC<GmpHistoryChartProps> = ({
               <circle
                 cx={pt.x}
                 cy={pt.y}
-                r={hoveredIdx === i ? 5 : 3}
-                fill={hoveredIdx === i ? '#ffffff' : '#10b981'}
-                stroke="#090a0f"
-                strokeWidth="2"
+                r={hoveredIdx === i ? 6 : 4}
+                fill={hoveredIdx === i ? '#00d09c' : '#ffffff'}
+                stroke="#00d09c"
+                strokeWidth="2.5"
               />
-              {/* X Axis Date labels */}
               <text
                 x={pt.x}
                 y={svgHeight - 10}
                 textAnchor="middle"
-                fill={hoveredIdx === i ? '#ffffff' : '#71717a'}
-                fontSize="9"
-                fontFamily="monospace"
+                fill={hoveredIdx === i ? '#0f172a' : '#94a3b8'}
+                fontSize="10"
+                fontWeight="600"
               >
                 {pt.point.date}
               </text>
@@ -227,35 +224,35 @@ export const GmpHistoryChart: React.FC<GmpHistoryChartProps> = ({
         </svg>
       </div>
 
-      {/* Past Results Section (if already listed) */}
+      {/* Past Results Section (if listed) */}
       {pastResults && (
-        <div className="mt-4 rounded-lg border border-zinc-800 bg-zinc-900/40 p-3 text-xs font-mono">
-          <div className="flex items-center justify-between border-b border-zinc-800/80 pb-2">
-            <span className="text-[10px] font-bold text-zinc-300 uppercase">
+        <div className="mt-4 rounded-xl border border-[#e2e8f0] bg-[#f8fafc] p-4 text-xs">
+          <div className="flex items-center justify-between border-b border-[#e2e8f0] pb-2.5">
+            <span className="text-xs font-bold text-[#0f172a]">
               Actual Listing Day Performance
             </span>
-            <span className="text-[10px] text-zinc-400">Exchange Result: NSE/BSE</span>
+            <span className="text-[11px] font-semibold text-[#64748b]">Exchange: NSE & BSE</span>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2.5">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3">
             <div>
-              <span className="text-[10px] text-zinc-500">Issue Price</span>
-              <p className="font-bold text-zinc-200">INR {pastResults.issuePrice}</p>
+              <span className="text-[11px] text-[#64748b]">Issue Price</span>
+              <p className="font-bold text-[#0f172a] text-sm mt-0.5">₹{pastResults.issuePrice}</p>
             </div>
             <div>
-              <span className="text-[10px] text-zinc-500">Listing Price</span>
-              <p className="font-bold text-emerald-400">INR {pastResults.listingPrice}</p>
+              <span className="text-[11px] text-[#64748b]">Listing Debut Price</span>
+              <p className="font-bold text-[#008767] text-sm mt-0.5">₹{pastResults.listingPrice}</p>
             </div>
             <div>
-              <span className="text-[10px] text-zinc-500">Listing Gain</span>
-              <p className={`font-bold ${pastResults.listingGainPercent >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+              <span className="text-[11px] text-[#64748b]">Listing Day Gain</span>
+              <p className={`font-bold text-sm mt-0.5 ${pastResults.listingGainPercent >= 0 ? 'text-[#008767]' : 'text-[#b91c1c]'}`}>
                 {pastResults.listingGainPercent >= 0 ? '+' : ''}
                 {pastResults.listingGainPercent}%
               </p>
             </div>
             <div>
-              <span className="text-[10px] text-zinc-500">Retail Allocation Ratio</span>
-              <p className="font-bold text-zinc-300">{pastResults.allotmentRatioRetail}</p>
+              <span className="text-[11px] text-[#64748b]">Retail Allocation</span>
+              <p className="font-semibold text-[#0f172a] mt-0.5">{pastResults.allotmentRatioRetail}</p>
             </div>
           </div>
         </div>

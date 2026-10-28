@@ -12,14 +12,15 @@ import { GmpHistoryChart } from '../components/GmpHistoryChart';
 import { AiAnalysisModal } from '../components/AiAnalysisModal';
 import { AllotmentModal } from '../components/AllotmentModal';
 import { BidCalculatorModal } from '../components/BidCalculatorModal';
-import { Calendar, BarChart2, Layers, TrendingUp, CheckCircle2 } from 'lucide-react';
+import { TrendingUp, Layers, CheckCircle2 } from 'lucide-react';
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeFilter, setActiveFilter] = useState('ALL');
+  const [activeTheme, setActiveTheme] = useState<'GROWW' | 'ANGEL_ONE'>('GROWW');
 
   // Active highlighted IPO for timeline and graph on page
-  const [featuredIpo, setFeaturedIpo] = useState<IPO>(mockIpos[1]); // Default to Waaree Energies
+  const [featuredIpo, setFeaturedIpo] = useState<IPO>(mockIpos[1]); // Waaree Energies default
 
   // Modals state
   const [selectedTimelineIpo, setSelectedTimelineIpo] = useState<IPO | null>(null);
@@ -54,13 +55,15 @@ export default function Home() {
     return {
       activeCount,
       topGmpGain: highestGmpIpo ? `+${highestGmpIpo.gainPercentage}% (${highestGmpIpo.symbol})` : 'N/A',
-      totalCapitalRaised: `INR ${(totalCapitalRaised / 1000).toFixed(1)}k Cr`,
+      totalCapitalRaised: `₹${(totalCapitalRaised / 1000).toFixed(1)}k Cr`,
     };
   }, []);
 
+  const isAngel = activeTheme === 'ANGEL_ONE';
+
   return (
-    <div className="min-h-screen bg-[#090a0f] text-zinc-100 flex flex-col font-sans">
-      {/* 1. Institutional Header */}
+    <div className="min-h-screen bg-[#f8fafc] text-[#0f172a] flex flex-col font-sans">
+      {/* 1. Groww & Angel One Header */}
       <Header
         onOpenAllotment={() => {
           setSelectedAllotmentIpo(null);
@@ -70,64 +73,68 @@ export default function Home() {
         setSearchTerm={setSearchTerm}
         activeFilter={activeFilter}
         setActiveFilter={setActiveFilter}
+        activeTheme={activeTheme}
+        setActiveTheme={setActiveTheme}
       />
 
-      {/* 2. Ticker Marquee Tape */}
+      {/* 2. Market Trend Ticker */}
       <TickerBar ipos={mockIpos} />
 
-      {/* 3. Main Terminal Body */}
+      {/* 3. Main Dashboard */}
       <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 space-y-6">
-        {/* Top Market Overview Stats */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-zinc-800/80 pb-5">
+        {/* Top Market Overview Summary */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-[#e2e8f0] pb-5">
           <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight font-mono">
-              Indian Public Offerings & Grey Market Analytics
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0f172a] tracking-tight">
+              Indian IPO Market & Grey Market Tracker
             </h1>
-            <p className="mt-1 text-xs text-zinc-400 font-mono">
-              NSE / BSE Mainboard and SME schedules, settlement calendar dates, subscription multiples, and past performance.
+            <p className="mt-1 text-xs sm:text-sm text-[#64748b]">
+              Track live NSE & BSE IPO dates, GMP gains, settlement schedules, and allotment status.
             </p>
           </div>
 
-          {/* Quick Metrics */}
-          <div className="grid grid-cols-3 gap-2.5 shrink-0 font-mono">
-            <div className="rounded-lg border border-zinc-800 bg-zinc-950 p-2.5">
-              <span className="text-[10px] text-zinc-500 uppercase font-semibold">Live Issues</span>
-              <p className="text-base font-bold text-white mt-0.5">{stats.activeCount} Bidding</p>
+          {/* KPI Stat Cards (Groww Style) */}
+          <div className="grid grid-cols-3 gap-3 shrink-0">
+            <div className="rounded-xl border border-[#e2e8f0] bg-white p-3 shadow-xs">
+              <span className="text-[11px] font-semibold text-[#64748b] block">Live Bidding</span>
+              <p className="text-base font-bold text-[#0f172a] mt-0.5">{stats.activeCount} Issues Open</p>
             </div>
-            <div className="rounded-lg border border-zinc-800 bg-zinc-950 p-2.5">
-              <span className="text-[10px] text-zinc-500 uppercase font-semibold">Highest GMP</span>
-              <p className="text-base font-bold text-emerald-400 mt-0.5 truncate">{stats.topGmpGain}</p>
+            <div className="rounded-xl border border-[#e2e8f0] bg-white p-3 shadow-xs">
+              <span className="text-[11px] font-semibold text-[#64748b] block">Top Listing Gain</span>
+              <p className="text-base font-bold text-[#008767] mt-0.5 truncate">{stats.topGmpGain}</p>
             </div>
-            <div className="rounded-lg border border-zinc-800 bg-zinc-950 p-2.5">
-              <span className="text-[10px] text-zinc-500 uppercase font-semibold">Capital Tracked</span>
-              <p className="text-base font-bold text-zinc-300 mt-0.5">{stats.totalCapitalRaised}</p>
+            <div className="rounded-xl border border-[#e2e8f0] bg-white p-3 shadow-xs">
+              <span className="text-[11px] font-semibold text-[#64748b] block">Capital Raised</span>
+              <p className="text-base font-bold text-[#0f172a] mt-0.5">{stats.totalCapitalRaised}</p>
             </div>
           </div>
         </div>
 
-        {/* 4. Featured Issue Calendar & Trend Chart Viewer */}
-        <section className="rounded-xl border border-zinc-800 bg-[#0e1017] p-4 space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-zinc-800/80 pb-3">
+        {/* 4. Featured Issue Calendar & Trend Chart (Interactive Viewer) */}
+        <section className="rounded-2xl border border-[#e2e8f0] bg-white p-5 space-y-4 shadow-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-[#f1f5f9] pb-3.5">
             <div>
-              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-zinc-400">
-                Detailed Analysis & Calendar Sequence
+              <span className="text-xs font-bold uppercase tracking-wider text-[#008767]">
+                Issue Deep Dive & Settlement Schedule
               </span>
-              <h2 className="text-base font-bold text-white font-mono mt-0.5">
+              <h2 className="text-lg font-bold text-[#0f172a] mt-0.5">
                 {featuredIpo.companyName} ({featuredIpo.symbol})
               </h2>
             </div>
 
-            {/* Quick IPO Selector */}
+            {/* Quick IPO Selector Tabs */}
             <div className="flex items-center space-x-1.5 overflow-x-auto">
-              <span className="text-[11px] font-mono text-zinc-500 mr-1 hidden sm:inline">Select Issue:</span>
+              <span className="text-xs text-[#64748b] mr-1 hidden sm:inline font-medium">Select Issue:</span>
               {mockIpos.map((ipo) => (
                 <button
                   key={ipo.id}
                   onClick={() => setFeaturedIpo(ipo)}
-                  className={`rounded px-2 py-1 font-mono text-[11px] transition-colors ${
+                  className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition-all ${
                     featuredIpo.id === ipo.id
-                      ? 'bg-zinc-800 text-white font-bold border border-zinc-700'
-                      : 'text-zinc-400 hover:text-white bg-zinc-950'
+                      ? isAngel
+                        ? 'bg-[#1849a9] text-white shadow-xs font-bold'
+                        : 'bg-[#00d09c] text-white shadow-xs font-bold'
+                      : 'text-[#64748b] hover:text-[#0f172a] bg-[#f8fafc] border border-[#e2e8f0]'
                   }`}
                 >
                   {ipo.symbol}
@@ -136,7 +143,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Calendar Sequence with all key dates */}
+          {/* Complete 6-Step Settlement Calendar */}
           <CalendarTimeline timeline={featuredIpo.timeline} />
 
           {/* High Precision Historical Trend & Past Performance Chart */}
@@ -148,33 +155,33 @@ export default function Home() {
           />
         </section>
 
-        {/* 5. IPO Grid List */}
-        <section className="space-y-3 pt-2">
+        {/* 5. IPO Grid Cards */}
+        <section className="space-y-3.5 pt-1">
           <div className="flex items-center justify-between">
-            <h2 className="text-xs font-mono font-bold uppercase tracking-wider text-zinc-300 flex items-center space-x-2">
-              <Layers className="h-3.5 w-3.5 text-zinc-400" />
-              <span>Public Offerings Overview ({filteredIpos.length})</span>
+            <h2 className="text-base font-bold text-[#0f172a] flex items-center space-x-2">
+              <Layers className="h-4 w-4 text-[#00d09c]" />
+              <span>Current Public Issues ({filteredIpos.length})</span>
             </h2>
-            <span className="text-[11px] font-mono text-zinc-500">Frequency: Realtime</span>
+            <span className="text-xs text-[#64748b] font-medium">Live Market Feed</span>
           </div>
 
           {filteredIpos.length === 0 ? (
-            <div className="rounded-xl border border-zinc-800 bg-zinc-950 p-10 text-center text-xs font-mono text-zinc-500">
-              No public offerings matched the selected filter criteria.
+            <div className="rounded-2xl border border-[#e2e8f0] bg-white p-10 text-center text-xs text-[#64748b] shadow-xs">
+              No IPOs matched your selected search criteria.
               <div className="mt-2">
                 <button
                   onClick={() => {
                     setSearchTerm('');
                     setActiveFilter('ALL');
                   }}
-                  className="font-bold text-zinc-300 underline"
+                  className="font-bold text-[#008767] underline"
                 >
-                  Reset Filter Parameters
+                  Reset All Filters
                 </button>
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {filteredIpos.map((ipo) => (
                 <IpoCard
                   key={ipo.id}
@@ -196,13 +203,13 @@ export default function Home() {
         </section>
       </main>
 
-      {/* 6. Institutional Footer */}
-      <footer className="border-t border-zinc-900 bg-zinc-950 py-5 text-center text-[11px] font-mono text-zinc-500">
-        <p className="text-zinc-400">
-          IPObud Institutional Analytics • National Stock Exchange & Bombay Stock Exchange Data Feed
+      {/* 6. Groww Style Footer */}
+      <footer className="border-t border-[#e2e8f0] bg-white py-6 text-center text-xs text-[#64748b]">
+        <p className="font-semibold text-[#0f172a]">
+          IPObud • Built for Indian Stock Market Investors & Traders
         </p>
-        <p className="mt-1 text-zinc-600">
-          Disclaimer: Grey market premiums are informal market consensus indicators and do not guarantee actual exchange listing prices.
+        <p className="mt-1 text-[11px] text-[#94a3b8] max-w-2xl mx-auto px-4">
+          Disclaimer: Grey market premium (GMP) is an unregulated market sentiment indicator. Past listing gains do not guarantee future returns. Check the official Red Herring Prospectus (RHP) before bidding.
         </p>
       </footer>
 

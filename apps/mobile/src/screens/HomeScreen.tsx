@@ -47,31 +47,31 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
       {/* Ticker tape */}
       <TickerBar ipos={ipos} />
 
-      {/* Search Bar */}
+      {/* Search Bar (Groww style) */}
       <View style={styles.searchContainer}>
         <View style={styles.searchBox}>
-          <Ionicons name="search" size={14} color="#71717a" style={styles.searchIcon} />
+          <Ionicons name="search" size={16} color="#8f98a8" style={styles.searchIcon} />
           <TextInput
-            placeholder="Search company or ticker..."
-            placeholderTextColor="#71717a"
+            placeholder="Search by company or symbol..."
+            placeholderTextColor="#8f98a8"
             value={search}
             onChangeText={setSearch}
             style={styles.searchInput}
           />
           {search.length > 0 && (
             <TouchableOpacity onPress={() => setSearch('')}>
-              <Ionicons name="close-circle" size={14} color="#71717a" />
+              <Ionicons name="close-circle" size={16} color="#8f98a8" />
             </TouchableOpacity>
           )}
         </View>
       </View>
 
-      {/* Filter Chips Bar (Plain financial labels, no emojis) */}
+      {/* Filter Chips Bar (Groww clean pills) */}
       <View style={styles.chipsRow}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {[
-            { id: 'ALL', label: 'All Issues' },
-            { id: 'ACTIVE', label: 'Bidding Open' },
+            { id: 'ALL', label: 'All IPOs' },
+            { id: 'ACTIVE', label: 'Open Now' },
             { id: 'UPCOMING', label: 'Upcoming' },
             { id: 'ALLOTTED', label: 'Allotment Out' },
             { id: 'LISTED', label: 'Recently Listed' },
@@ -115,7 +115,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
           <View style={styles.emptyBox}>
-            <Text style={styles.emptyTitle}>No IPOs matched filter criteria</Text>
+            <Text style={styles.emptyTitle}>No IPOs matched your search</Text>
             <TouchableOpacity
               onPress={() => {
                 setSearch('');
@@ -123,7 +123,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               }}
               style={styles.resetBtn}
             >
-              <Text style={styles.resetBtnText}>Reset Filter Parameters</Text>
+              <Text style={styles.resetBtnText}>Reset Filters</Text>
             </TouchableOpacity>
           </View>
         }
@@ -135,62 +135,61 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#090a0f',
+    backgroundColor: '#f8fafc',
   },
   searchContainer: {
-    paddingHorizontal: 14,
-    paddingTop: 8,
-    paddingBottom: 4,
+    paddingHorizontal: 16,
+    paddingTop: 10,
+    paddingBottom: 6,
   },
   searchBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#11131a',
-    borderRadius: 8,
+    backgroundColor: '#ffffff',
+    borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#1f2330',
-    paddingHorizontal: 10,
-    height: 38,
+    borderColor: '#e2e8f0',
+    paddingHorizontal: 12,
+    height: 42,
   },
   searchIcon: {
-    marginRight: 6,
+    marginRight: 8,
   },
   searchInput: {
     flex: 1,
-    color: '#ffffff',
-    fontSize: 12,
-    fontFamily: 'monospace',
+    color: '#0f172a',
+    fontSize: 13,
   },
   chipsRow: {
-    paddingVertical: 6,
-    paddingLeft: 14,
+    paddingVertical: 8,
+    paddingLeft: 16,
   },
   chip: {
-    backgroundColor: '#11131a',
+    backgroundColor: '#ffffff',
     borderWidth: 1,
-    borderColor: '#1f2330',
-    borderRadius: 6,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    marginRight: 6,
+    borderColor: '#e2e8f0',
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    marginRight: 8,
   },
   chipActive: {
-    backgroundColor: '#27272a',
-    borderColor: '#52525b',
+    backgroundColor: '#00d09c',
+    borderColor: '#00d09c',
   },
   chipText: {
-    color: '#a1a1aa',
-    fontSize: 10,
-    fontWeight: '700',
-    fontFamily: 'monospace',
+    color: '#64748b',
+    fontSize: 11,
+    fontWeight: '600',
   },
   chipTextActive: {
     color: '#ffffff',
+    fontWeight: '700',
   },
   listContent: {
-    paddingHorizontal: 14,
+    paddingHorizontal: 16,
     paddingTop: 6,
-    paddingBottom: 20,
+    paddingBottom: 24,
   },
   emptyBox: {
     alignItems: 'center',
@@ -198,21 +197,21 @@ const styles = StyleSheet.create({
     paddingVertical: 50,
   },
   emptyTitle: {
-    color: '#71717a',
-    fontSize: 12,
-    fontFamily: 'monospace',
+    color: '#64748b',
+    fontSize: 13,
   },
   resetBtn: {
     marginTop: 10,
-    backgroundColor: '#1f2330',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 6,
+    backgroundColor: '#ffffff',
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
   },
   resetBtnText: {
-    color: '#d4d4d8',
-    fontSize: 11,
+    color: '#008767',
+    fontSize: 12,
     fontWeight: '700',
-    fontFamily: 'monospace',
   },
 });

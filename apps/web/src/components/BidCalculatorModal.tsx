@@ -22,39 +22,39 @@ export const BidCalculatorModal: React.FC<BidCalculatorModalProps> = ({ ipo, onC
   const expectedTotalValue = investment + totalEstimatedProfit;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-150">
-      <div className="w-full max-w-md rounded-xl border border-zinc-800 bg-[#0c0e14] p-6 shadow-2xl text-zinc-100 font-sans">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-150">
+      <div className="w-full max-w-md rounded-2xl border border-[#e2e8f0] bg-white p-6 shadow-2xl text-[#0f172a]">
         {/* Header */}
-        <div className="flex items-start justify-between border-b border-zinc-800 pb-4">
+        <div className="flex items-start justify-between border-b border-[#f1f5f9] pb-4">
           <div className="flex items-center space-x-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-700 bg-zinc-900 text-zinc-200">
-              <Calculator className="h-4 w-4" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e6faf5] border border-[#b3f0df] text-[#008767]">
+              <Calculator className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-white tracking-tight">Bid Capital & P&L Calculator</h2>
-              <p className="text-xs text-zinc-400 font-mono">{ipo.companyName} ({ipo.symbol})</p>
+              <h2 className="text-lg font-bold text-[#0f172a] tracking-tight">Bid Capital & P&L Calculator</h2>
+              <p className="text-xs text-[#64748b]">{ipo.companyName} ({ipo.symbol})</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="rounded p-1 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+            className="rounded-lg p-1.5 text-[#64748b] hover:text-[#0f172a] hover:bg-[#f1f5f9] transition-colors"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="mt-5 space-y-4 text-xs font-mono">
+        <div className="mt-5 space-y-4 text-xs">
           {/* Category Selector */}
           <div>
-            <label className="block text-[10px] font-bold text-zinc-400 uppercase tracking-wider mb-1.5">
+            <label className="block text-xs font-semibold text-[#64748b] mb-1.5">
               Investor Bidding Category
             </label>
             <div className="grid grid-cols-3 gap-2">
               {[
-                { id: 'RETAIL', label: 'Retail (≤2L)' },
-                { id: 'sHNI', label: 'sHNI (2L-10L)' },
-                { id: 'bHNI', label: 'bHNI (>10L)' },
+                { id: 'RETAIL', label: 'Retail (≤₹2L)' },
+                { id: 'sHNI', label: 'sHNI (₹2L-10L)' },
+                { id: 'bHNI', label: 'bHNI (>₹10L)' },
               ].map((cat) => (
                 <button
                   key={cat.id}
@@ -65,10 +65,10 @@ export const BidCalculatorModal: React.FC<BidCalculatorModalProps> = ({ ipo, onC
                     else if (cat.id === 'bHNI') setLots(Math.ceil(1000000 / (ipo.priceBandHigh * ipo.lotSize)));
                     else setLots(1);
                   }}
-                  className={`rounded border py-1.5 px-2 text-[11px] font-bold transition-colors ${
+                  className={`rounded-xl border py-2 px-2 text-xs font-bold transition-all ${
                     category === cat.id
-                      ? 'border-zinc-500 bg-zinc-800 text-white'
-                      : 'border-zinc-800 bg-zinc-950 text-zinc-400 hover:text-white'
+                      ? 'border-[#00d09c] bg-[#e6faf5] text-[#008767] shadow-xs'
+                      : 'border-[#e2e8f0] bg-[#f8fafc] text-[#64748b] hover:text-[#0f172a]'
                   }`}
                 >
                   {cat.label}
@@ -80,18 +80,18 @@ export const BidCalculatorModal: React.FC<BidCalculatorModalProps> = ({ ipo, onC
           {/* Lots Stepper */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">
+              <label className="text-xs font-semibold text-[#64748b]">
                 Application Lots
               </label>
-              <span className="text-[11px] text-zinc-300 font-bold">
+              <span className="text-xs font-bold text-[#0f172a]">
                 {totalShares} total shares
               </span>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-3">
               <button
                 type="button"
                 onClick={() => setLots(Math.max(1, lots - 1))}
-                className="h-9 w-10 flex items-center justify-center rounded border border-zinc-700 bg-zinc-850 text-white font-bold text-base hover:bg-zinc-750"
+                className="h-10 w-12 flex items-center justify-center rounded-xl border border-[#e2e8f0] bg-[#f8fafc] text-[#0f172a] font-bold text-lg hover:bg-[#f1f5f9] transition-colors"
               >
                 -
               </button>
@@ -100,12 +100,12 @@ export const BidCalculatorModal: React.FC<BidCalculatorModalProps> = ({ ipo, onC
                 min={1}
                 value={lots}
                 onChange={(e) => setLots(Math.max(1, parseInt(e.target.value) || 1))}
-                className="w-full text-center rounded border border-zinc-800 bg-zinc-950 py-1.5 font-bold text-white focus:outline-none"
+                className="w-full text-center rounded-xl border border-[#e2e8f0] bg-[#f8fafc] py-2 font-bold text-[#0f172a] text-sm focus:outline-none focus:border-[#00d09c] focus:bg-white"
               />
               <button
                 type="button"
                 onClick={() => setLots(lots + 1)}
-                className="h-9 w-10 flex items-center justify-center rounded border border-zinc-700 bg-zinc-850 text-white font-bold text-base hover:bg-zinc-750"
+                className="h-10 w-12 flex items-center justify-center rounded-xl border border-[#e2e8f0] bg-[#f8fafc] text-[#0f172a] font-bold text-lg hover:bg-[#f1f5f9] transition-colors"
               >
                 +
               </button>
@@ -113,37 +113,37 @@ export const BidCalculatorModal: React.FC<BidCalculatorModalProps> = ({ ipo, onC
           </div>
 
           {/* Calculations Summary Card */}
-          <div className="rounded-lg border border-zinc-800 bg-zinc-950 p-3.5 space-y-2 text-xs">
-            <div className="flex items-center justify-between text-zinc-400">
+          <div className="rounded-xl border border-[#e2e8f0] bg-[#f8fafc] p-4 space-y-2.5 text-xs shadow-xs">
+            <div className="flex items-center justify-between text-[#64748b]">
               <span>Required UPI Bid Capital:</span>
-              <strong className="text-white">INR {investment.toLocaleString('en-IN')}</strong>
+              <strong className="text-[#0f172a] text-sm font-bold">₹{investment.toLocaleString('en-IN')}</strong>
             </div>
-            <div className="flex items-center justify-between text-zinc-400">
+            <div className="flex items-center justify-between text-[#64748b]">
               <span>Current Grey Market Premium:</span>
-              <span className="text-emerald-400 font-bold">INR {ipo.currentGmp} / share ({ipo.gainPercentage}%)</span>
+              <span className="text-[#008767] font-bold">₹{ipo.currentGmp} / share ({ipo.gainPercentage}%)</span>
             </div>
-            <div className="pt-2 border-t border-zinc-900 flex items-center justify-between">
-              <span className="text-zinc-200 font-bold">Est. Listing Gain (If Allotted):</span>
-              <strong className="text-emerald-400 font-bold text-sm">
-                +INR {totalEstimatedProfit.toLocaleString('en-IN')}
+            <div className="pt-2.5 border-t border-[#e2e8f0] flex items-center justify-between">
+              <span className="text-[#0f172a] font-bold">Est. Listing Gain (If Allotted):</span>
+              <strong className="text-[#008767] font-extrabold text-base">
+                +₹{totalEstimatedProfit.toLocaleString('en-IN')}
               </strong>
             </div>
-            <div className="flex items-center justify-between text-zinc-500 text-[11px]">
-              <span>Estimated Settlement Value:</span>
-              <span>INR {expectedTotalValue.toLocaleString('en-IN')}</span>
+            <div className="flex items-center justify-between text-[#64748b] text-[11px]">
+              <span>Estimated Portfolio Value:</span>
+              <span className="font-semibold text-[#0f172a]">₹{expectedTotalValue.toLocaleString('en-IN')}</span>
             </div>
           </div>
 
-          {/* Save Bid / Apply Action */}
+          {/* Action */}
           <button
             onClick={() => {
               alert('Bid parameters recorded for UPI allocation tracking.');
               onClose();
             }}
-            className="w-full flex items-center justify-center space-x-2 rounded-lg bg-zinc-100 hover:bg-white text-zinc-950 font-bold py-2 text-xs transition-colors"
+            className="w-full flex items-center justify-center space-x-2 rounded-xl bg-[#00d09c] hover:bg-[#00b887] text-white font-bold py-2.5 text-xs transition-all shadow-xs"
           >
-            <Check className="h-4 w-4" />
-            <span>Save to Personal Portfolio</span>
+            <Check className="h-4 w-4 stroke-[3]" />
+            <span>Save to Portfolio</span>
           </button>
         </div>
       </div>

@@ -50,35 +50,35 @@ export const AllotmentModal: React.FC<AllotmentModalProps> = ({ ipos, selectedIp
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-150">
-      <div className="w-full max-w-lg rounded-xl border border-zinc-800 bg-[#0c0e14] p-6 shadow-2xl text-zinc-100 font-sans">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-150">
+      <div className="w-full max-w-lg rounded-2xl border border-[#e2e8f0] bg-white p-6 shadow-2xl text-[#0f172a]">
         {/* Header */}
-        <div className="flex items-start justify-between border-b border-zinc-800 pb-4">
+        <div className="flex items-start justify-between border-b border-[#f1f5f9] pb-4">
           <div className="flex items-center space-x-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-700 bg-zinc-900 text-zinc-200">
-              <ShieldCheck className="h-4 w-4 text-emerald-400" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#eff6ff] border border-[#bfdbfe] text-[#1849a9]">
+              <ShieldCheck className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-white tracking-tight">
-                Universal Allotment Query
+              <h2 className="text-lg font-bold text-[#0f172a] tracking-tight">
+                Universal Allotment Status Query
               </h2>
-              <p className="text-xs text-zinc-400 font-mono">
-                Registrars: Link Intime, KFintech, Bigshare
+              <p className="text-xs text-[#64748b]">
+                Link Intime, KFintech, Bigshare & Skyline Integrations
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="rounded p-1 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+            className="rounded-lg p-1.5 text-[#64748b] hover:text-[#0f172a] hover:bg-[#f1f5f9] transition-colors"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
         {/* Form Body */}
-        <form onSubmit={handleSearch} className="mt-5 space-y-4 text-xs font-mono">
+        <form onSubmit={handleSearch} className="mt-5 space-y-4 text-xs">
           <div>
-            <label className="block text-[10px] font-bold text-zinc-400 uppercase tracking-wider mb-1.5">
+            <label className="block text-xs font-semibold text-[#64748b] mb-1.5">
               Select Public Issue
             </label>
             <select
@@ -87,10 +87,10 @@ export const AllotmentModal: React.FC<AllotmentModalProps> = ({ ipos, selectedIp
                 setActiveIpoId(e.target.value);
                 setSearchResult(null);
               }}
-              className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-xs text-white focus:border-zinc-500 focus:outline-none"
+              className="w-full rounded-xl border border-[#e2e8f0] bg-[#f8fafc] px-3.5 py-2.5 text-xs text-[#0f172a] font-medium focus:border-[#00d09c] focus:bg-white focus:outline-none"
             >
               {ipos.map((ipo) => (
-                <option key={ipo.id} value={ipo.id} className="bg-zinc-950 text-white">
+                <option key={ipo.id} value={ipo.id} className="text-[#0f172a]">
                   {ipo.companyName} ({ipo.symbol}) — {ipo.status}
                 </option>
               ))}
@@ -98,8 +98,8 @@ export const AllotmentModal: React.FC<AllotmentModalProps> = ({ ipos, selectedIp
           </div>
 
           <div>
-            <label className="block text-[10px] font-bold text-zinc-400 uppercase tracking-wider mb-1.5">
-              Applicant PAN (10-Digit Alphanumeric)
+            <label className="block text-xs font-semibold text-[#64748b] mb-1.5">
+              Applicant PAN (Permanent Account Number)
             </label>
             <input
               type="text"
@@ -108,27 +108,27 @@ export const AllotmentModal: React.FC<AllotmentModalProps> = ({ ipos, selectedIp
               onChange={(e) => setPan(e.target.value.toUpperCase())}
               maxLength={10}
               required
-              className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 font-mono text-sm tracking-wider uppercase text-white placeholder-zinc-600 focus:border-zinc-500 focus:outline-none"
+              className="w-full rounded-xl border border-[#e2e8f0] bg-[#f8fafc] px-3.5 py-2.5 text-sm tracking-wider uppercase text-[#0f172a] placeholder-[#94a3b8] focus:border-[#00d09c] focus:bg-white focus:outline-none"
             />
-            <p className="text-[10px] text-zinc-500 mt-1 font-sans">
-              Enter PAN. Values ending with &apos;A&apos; simulate a confirmed allocation outcome.
+            <p className="text-[11px] text-[#64748b] mt-1.5">
+              Enter PAN. Values ending with &apos;A&apos; simulate a confirmed allocation.
             </p>
           </div>
 
           {currentIpo && (
-            <div className="flex items-center justify-between rounded-lg bg-zinc-950 p-2.5 border border-zinc-850">
+            <div className="flex items-center justify-between rounded-xl bg-[#f8fafc] p-3 border border-[#e2e8f0]">
               <div>
-                <span className="text-[9px] uppercase font-bold text-zinc-500">Official Registrar</span>
-                <p className="font-semibold text-zinc-200 mt-0.5">{currentIpo.registrarName}</p>
+                <span className="text-[10px] font-bold text-[#64748b] uppercase">Official Registrar</span>
+                <p className="font-bold text-[#0f172a] mt-0.5">{currentIpo.registrarName}</p>
               </div>
               <a
                 href={currentIpo.registrarUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center space-x-1 text-zinc-400 hover:text-white font-semibold text-[11px]"
+                className="flex items-center space-x-1 text-[#1849a9] hover:underline font-bold text-xs"
               >
-                <span>Registrar Portal</span>
-                <ExternalLink className="h-3 w-3" />
+                <span>Direct Site</span>
+                <ExternalLink className="h-3.5 w-3.5" />
               </a>
             </div>
           )}
@@ -136,42 +136,42 @@ export const AllotmentModal: React.FC<AllotmentModalProps> = ({ ipos, selectedIp
           <button
             type="submit"
             disabled={isSearching}
-            className="w-full flex items-center justify-center space-x-1.5 rounded-lg bg-zinc-100 hover:bg-white text-zinc-950 font-bold py-2 text-xs transition-colors disabled:opacity-50"
+            className="w-full flex items-center justify-center space-x-2 rounded-xl bg-[#00d09c] hover:bg-[#00b887] text-white font-bold py-2.5 text-xs transition-all disabled:opacity-50 shadow-xs"
           >
-            <Search className="h-3.5 w-3.5" />
+            <Search className="h-4 w-4" />
             <span>{isSearching ? 'Verifying with Registrar...' : 'Fetch Allotment Status'}</span>
           </button>
         </form>
 
         {/* Outcome Display */}
         {searchResult && (
-          <div className="mt-4 pt-3 border-t border-zinc-850 font-mono text-xs">
+          <div className="mt-5 pt-3.5 border-t border-[#f1f5f9] text-xs">
             {searchResult.status === 'ALLOTTED' ? (
-              <div className="rounded-lg border border-emerald-800/60 bg-emerald-950/20 p-3.5">
-                <p className="text-emerald-400 font-bold">
+              <div className="rounded-xl border border-[#b3f0df] bg-[#e6faf5] p-4">
+                <p className="text-[#008767] font-bold text-sm">
                   Status: Allotment Confirmed
                 </p>
-                <div className="grid grid-cols-2 gap-2 mt-2">
-                  <div className="rounded bg-zinc-950 p-2 border border-emerald-900/40">
-                    <span className="text-zinc-500 text-[10px]">Shares Allocated</span>
-                    <p className="font-bold text-white mt-0.5">{searchResult.sharesAllotted} Shares</p>
+                <div className="grid grid-cols-2 gap-3 mt-3">
+                  <div className="rounded-lg bg-white p-2.5 border border-[#b3f0df] shadow-xs">
+                    <span className="text-[#64748b] text-[11px] font-semibold">Shares Allocated</span>
+                    <p className="font-bold text-[#0f172a] text-base mt-0.5">{searchResult.sharesAllotted} Shares</p>
                   </div>
-                  <div className="rounded bg-zinc-950 p-2 border border-emerald-900/40">
-                    <span className="text-zinc-500 text-[10px]">Listing Value at GMP</span>
-                    <p className="font-bold text-emerald-400 mt-0.5">
-                      +INR {((currentIpo?.currentGmp || 0) * (searchResult.sharesAllotted || 1)).toLocaleString('en-IN')}
+                  <div className="rounded-lg bg-white p-2.5 border border-[#b3f0df] shadow-xs">
+                    <span className="text-[#64748b] text-[11px] font-semibold">Est. Profit at Current GMP</span>
+                    <p className="font-bold text-[#008767] text-base mt-0.5">
+                      +₹{((currentIpo?.currentGmp || 0) * (searchResult.sharesAllotted || 1)).toLocaleString('en-IN')}
                     </p>
                   </div>
                 </div>
               </div>
             ) : (
-              <div className="rounded-lg border border-zinc-800 bg-zinc-950 p-3.5">
-                <p className="text-rose-400 font-bold">
+              <div className="rounded-xl border border-[#fecaca] bg-[#fef2f2] p-4">
+                <p className="text-[#b91c1c] font-bold text-sm">
                   Status: Not Allotted
                 </p>
-                <p className="text-xs text-zinc-400 mt-1 font-sans">
+                <p className="text-xs text-[#334155] mt-1.5 leading-relaxed">
                   UPI mandate unfreeze and bank refund will be processed on{' '}
-                  <strong className="text-zinc-200">
+                  <strong className="text-[#0f172a] font-bold">
                     {currentIpo?.timeline.refundsInitiation}
                   </strong>
                   .

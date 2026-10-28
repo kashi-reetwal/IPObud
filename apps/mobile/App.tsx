@@ -88,30 +88,30 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar style="light" backgroundColor="#090a0f" />
+      <StatusBar style="light" backgroundColor="#0f121d" />
 
-      {/* Institutional Mobile Header */}
+      {/* Top Header (Groww Style) */}
       <View style={styles.topHeader}>
         <View style={styles.brandRow}>
           <View style={styles.logoBadge}>
-            <Text style={styles.logoText}>IPO</Text>
+            <Ionicons name="trending-up" size={16} color="#00d09c" />
           </View>
           <View>
             <View style={styles.flexRow}>
               <Text style={styles.brandTitle}>IPObud</Text>
               <View style={styles.liveTag}>
-                <Text style={styles.liveTagText}>TERMINAL</Text>
+                <Text style={styles.liveTagText}>Market Live</Text>
               </View>
             </View>
-            <Text style={styles.marketSub}>NSE • BSE Mainboard & SME</Text>
+            <Text style={styles.marketSub}>NSE • BSE IPO Tracker</Text>
           </View>
         </View>
 
         <TouchableOpacity
-          onPress={() => alert('Alert notifications active for mandate closures and allotment releases.')}
+          onPress={() => alert('Notifications enabled for IPO schedules & allotment outcomes.')}
           style={styles.notifBtn}
         >
-          <Ionicons name="notifications-outline" size={16} color="#d4d4d8" />
+          <Ionicons name="notifications-outline" size={18} color="#8f98a8" />
         </TouchableOpacity>
       </View>
 
@@ -157,11 +157,11 @@ export default function App() {
       {/* Bottom Navigation Bar */}
       <View style={styles.bottomNav}>
         {[
-          { id: 'IPOS', label: 'Issues', icon: 'layers-outline', activeIcon: 'layers' },
+          { id: 'IPOS', label: 'IPOs', icon: 'layers-outline', activeIcon: 'layers' },
           { id: 'RADAR', label: 'GMP Radar', icon: 'trending-up-outline', activeIcon: 'trending-up' },
-          { id: 'AI', label: 'Verdict', icon: 'document-text-outline', activeIcon: 'document-text' },
+          { id: 'AI', label: 'AI Rating', icon: 'document-text-outline', activeIcon: 'document-text' },
           { id: 'ALLOTMENT', label: 'Allotment', icon: 'shield-checkmark-outline', activeIcon: 'shield-checkmark' },
-          { id: 'BIDS', label: 'Portfolio', icon: 'wallet-outline', activeIcon: 'wallet' },
+          { id: 'BIDS', label: 'My Bids', icon: 'wallet-outline', activeIcon: 'wallet' },
         ].map((tab) => {
           const isActive = activeTab === tab.id;
           return (
@@ -173,8 +173,8 @@ export default function App() {
             >
               <Ionicons
                 name={(isActive ? tab.activeIcon : tab.icon) as any}
-                size={18}
-                color={isActive ? '#ffffff' : '#71717a'}
+                size={20}
+                color={isActive ? '#00d09c' : '#8f98a8'}
               />
               <Text
                 style={[
@@ -206,80 +206,71 @@ export default function App() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#090a0f',
-    paddingTop: Platform.OS === 'android' ? 26 : 0,
+    backgroundColor: '#f8fafc',
+    paddingTop: Platform.OS === 'android' ? 28 : 0,
   },
   topHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    backgroundColor: '#090a0f',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    backgroundColor: '#ffffff',
     borderBottomWidth: 1,
-    borderBottomColor: '#1a1d28',
+    borderBottomColor: '#e2e8f0',
   },
   brandRow: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   logoBadge: {
-    width: 30,
-    height: 30,
-    borderRadius: 6,
-    backgroundColor: '#151822',
+    width: 34,
+    height: 34,
+    borderRadius: 10,
+    backgroundColor: '#e6faf5',
     borderWidth: 1,
-    borderColor: '#252b3d',
+    borderColor: '#b3f0df',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 8,
-  },
-  logoText: {
-    color: '#ffffff',
-    fontSize: 10,
-    fontWeight: '900',
-    fontFamily: 'monospace',
+    marginRight: 10,
   },
   flexRow: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   brandTitle: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '900',
-    letterSpacing: -0.5,
-    fontFamily: 'monospace',
+    color: '#0f172a',
+    fontSize: 18,
+    fontWeight: '800',
+    letterSpacing: -0.3,
   },
   liveTag: {
-    backgroundColor: '#181b26',
+    backgroundColor: '#e6faf5',
     borderWidth: 1,
-    borderColor: '#2e3447',
-    paddingHorizontal: 5,
-    paddingVertical: 1,
-    borderRadius: 4,
+    borderColor: '#b3f0df',
+    paddingHorizontal: 6,
+    paddingVertical: 1.5,
+    borderRadius: 6,
     marginLeft: 6,
   },
   liveTagText: {
-    color: '#a1a1aa',
-    fontSize: 8,
-    fontWeight: '800',
-    fontFamily: 'monospace',
+    color: '#008767',
+    fontSize: 9,
+    fontWeight: '700',
   },
   marketSub: {
-    color: '#71717a',
-    fontSize: 9,
-    fontWeight: '600',
-    fontFamily: 'monospace',
+    color: '#64748b',
+    fontSize: 11,
+    fontWeight: '500',
     marginTop: 1,
   },
   notifBtn: {
-    width: 32,
-    height: 32,
-    borderRadius: 6,
-    backgroundColor: '#151822',
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: '#f8fafc',
     borderWidth: 1,
-    borderColor: '#252b3d',
+    borderColor: '#e2e8f0',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -288,27 +279,27 @@ const styles = StyleSheet.create({
   },
   bottomNav: {
     flexDirection: 'row',
-    backgroundColor: '#0c0e14',
+    backgroundColor: '#ffffff',
     borderTopWidth: 1,
-    borderTopColor: '#1c202d',
-    paddingVertical: 5,
-    paddingHorizontal: 6,
+    borderTopColor: '#e2e8f0',
+    paddingVertical: 6,
+    paddingHorizontal: 8,
     justifyContent: 'space-around',
   },
   tabBtn: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 3,
+    paddingVertical: 4,
     flex: 1,
   },
   tabLabel: {
-    color: '#71717a',
-    fontSize: 9,
-    fontWeight: '700',
-    fontFamily: 'monospace',
-    marginTop: 2,
+    color: '#64748b',
+    fontSize: 10,
+    fontWeight: '600',
+    marginTop: 3,
   },
   tabLabelActive: {
-    color: '#ffffff',
+    color: '#008767',
+    fontWeight: '700',
   },
 });
